@@ -1,0 +1,45 @@
+#################################################################
+#
+# CGI.CFG - CGI Configuration File for Nagios 
+#
+#################################################################
+
+
+main_config_file=/etc/<%= target %>/nagios.cfg
+
+physical_html_path=/usr/share/nagios/htdocs
+url_html_path=/nagios
+
+show_context_help=1
+
+use_pending_states=1
+
+nagios_check_command=/usr/lib/nagios/plugins/check_nagios /var/cache/nagios/status.dat 5 '/usr/sbin/nagios'
+
+use_authentication=1
+use_ssl_authentication=0
+
+authorized_for_system_information=<%= http_users.keys.join(',') %>
+authorized_for_configuration_information=<%= http_users.keys.join(',') %>
+authorized_for_system_commands= <%= http_users.keys.join(',') %>
+
+
+authorized_for_all_services=<%= http_users.keys.join(',') %>
+authorized_for_all_hosts=<%= http_users.keys.join(',') %>
+authorized_for_all_service_commands=<%= http_users.keys.join(',') %>
+authorized_for_all_host_commands=<%= http_users.keys.join(',') %>
+
+default_statusmap_layout=5
+default_statuswrl_layout=4
+
+ping_syntax=/bin/ping -n -U -c 5 $HOSTADDRESS$
+
+refresh_rate=90
+escape_html_tags=1
+
+action_url_target=_blank
+notes_url_target=_blank
+
+lock_author_names=1
+
+

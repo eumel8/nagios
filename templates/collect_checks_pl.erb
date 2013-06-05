@@ -1,0 +1,101 @@
+#!/usr/bin/perl
+#
+# collect system processes for generate monitoring in nagios
+#
+
+use strict;
+
+my $ps = "/bin/ps -ef |";
+my $ns = "/bin/netstat -ntlp |";
+
+my $scfg = "/etc/nagios/nagios_ext_services.cfg";
+my $nrpe = "/etc/nagios/nagios_ext_nrpe.cfg";
+
+my $process;
+my $oprocess;
+my @processes;
+my @uprocesses;
+my @progs;
+my @uprogs;
+my $service;
+my @services;
+my $prog;
+my $oprog;
+my $port;
+
+open(CFG,">$scfg") ||  die "cant open $scfg: $!";
+open(NRP,">$nrpe") ||  die "cant open $nrpe: $!";
+
+open(PS,$ps) || die "cant start $ps: $!";
+ while(<PS>) {
+   (undef,undef,undef,undef,undef,undef,undef,$process) = split(/\s+/,$_,8);
+   chomp $process;
+   if (($process) && ($process !~ /(\[|\]|irqbalance|CMD|atd|bash|su|ps|getty|udev|init|collect_checks.pl|CRON|rpc|root\@pts|acpid)/)) {
+      push(@processes,$process);
+   }
+ }
+   @uprocesses = uniq(@processes);
+   for (@uprocesses) {
+     ($prog,undef) = split(/ /,$_,2);
+     my $i=rindex($prog,"/");
+     $prog=substr($prog,$i+1);
+     $prog =~ s/ //g;
+     $prog =~ tr/a-z/./c;
+     $prog =~ s/\.//g;
+     push(@progs,$prog);
+   }
+   @uprogs = uniq(@progs);
+   for (@uprogs) {
+     print NRP "command[check_$_]=/usr/lib/nagios/plugins/check_procs -w 1:10 -c 1:20 -a \"$_\"\n";
+     print CFG "define service {\n";
+     print CFG "  use	cloud-service\n";
+     print CFG "  host_name   <%= fqdn %>\n";
+     print CFG "  service_description Proc $_\n";
+     print CFG "  check_command       check_nrpe_1arg!check_$_\n";
+     print CFG "}\n";
+   }
+close(PS);
+
+
+open(NS,$ns) || "cant start $ns: $!";
+ while(<NS>) {
+   (undef,undef,undef,$service,undef,undef,$oprocess) = split(/\s+/,$_,7);
+   chomp $oprocess;
+   (undef,$process) = split(/\//,$oprocess);
+   chomp $process;
+     $process =~ s/ //g;
+     $process =~ tr/a-z/./c;
+     $process =~ s/\.//g;
+   print "porocess $process = $oprocess\ == $service\n";
+   if (($process) && ($process !~ /(rpc|PID|Program)/)) {
+     (undef,$port) = split(/:/,$service,2);
+     if ($service =~ /0.0.0.0/) {
+       print CFG "define service {\n";
+       print CFG "  use	cloud-service\n";
+       print CFG "  host_name  <%= fqdn %>\n";
+       print CFG "  service_description Service $process\n";
+       print CFG "  check_command       check_tcp!$port\n";
+       print CFG "}\n";
+    } elsif (($service =~ /127.0.0.1/) && ($port)) {
+       print NRP "command[check_$process]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p $port -w 5 -c 10 \n";
+       print CFG "define service {\n";
+       print CFG "  use	cloud-service\n";
+       print CFG "  host_name <%= fqdn %>\n";
+       print CFG "  service_description Localservice $process\n";
+       print CFG "  check_command       check_nrpe_1arg!check_$process\n";
+       print CFG "}\n";
+    }
+   }
+ }
+close(NS);
+close(CFG);
+close(NRP);
+
+sub uniq {
+    return keys %{{ map { $_ => 1 } @_ }};
+}
+
+####
+
+
+

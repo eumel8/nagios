@@ -1,0 +1,35 @@
+#!/usr/bin/perl
+
+# script for checking the time to a peer
+
+use strict;
+
+my $sntp = "/usr/bin/sntp";
+my $peer = $1;
+my $delay = 0;
+my $dl = 0;
+
+open(SN,$sntp." ".$peer."|") || die "cant open $sntp: $!";
+while(<SN>) {
+   if(/secs/) 
+    {
+     (undef,undef,undef,$dl,undef) = split(" ",$_,5);
+    }
+}
+close(SN);
+
+$delay = sprintf("%.0f",$dl);
+
+if ($delay < 5) {
+        print "Localtime is okay - $delay seconds delay\n";
+        exit(0); }
+elsif (($delay >= 5) && ($delay <= 10)) {
+        print "Localtime warning - $delay seconds delay!\n";
+        exit(1); }
+elsif ($delay > 10) {
+        print "Localtime critical - $delay seconds delay!\n";
+        exit(2); } 
+else { 
+        print "Localtime is unknown  - $delay \n";
+        exit(-1); } 
+exit -1;

@@ -41,7 +41,7 @@ Define service checks:
 Testing
 -------
 
-Developed for Ubuntu, will be expand. 
+Developed for Ubuntu and OpenSUSE, will be expand. 
 
 
 Contributing
