@@ -100,7 +100,7 @@ case $operatingsystem {
     exec { 'nrpe_add_include_dir':
       command   => 'echo "include=/etc/nagios/nrpe_cloud.cfg" >> /etc/nagios/nrpe.cfg',
       path      => '/bin:/usr/bin',
-      unless    => 'grep -e "^include=/etc/nagios/nrpe_cloudcfg" /etc/nagios/nrpe.cfg',
+      unless    => 'grep -e "^include=/etc/nagios/nrpe_cloud.cfg" /etc/nagios/nrpe.cfg',
       require   => Package['nagios-nrpe-server'],
       notify    => Service['nagios-nrpe-server'],
     }

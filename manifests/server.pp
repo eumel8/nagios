@@ -44,6 +44,13 @@ case $engine {
             enable   => true,
             require  => Package['nagios'],
           }
+          file {'/etc/nagios/apache2.conf':
+            ensure  => file,
+            source  => 'puppet:///modules/nagios/nagios/apache2.conf.opensuse',
+            force   => true,
+            require => Package['nagios'];
+          }
+
         }
 
         'Ubuntu': {
@@ -58,6 +65,12 @@ case $engine {
             enable   => true,
             require  => Package['nagios3'],
             alias    => 'nagios',
+          }
+          file {'/etc/nagios/apache2.conf':
+            ensure  => file,
+            source  => 'puppet:///modules/nagios/nagios/apache2.conf.ubuntu',
+            force   => true,
+            require => Package['nagios'];
           }
         }
 
@@ -91,8 +104,8 @@ case $engine {
         "/var/cache/$target/":
           ensure  => directory,
           require => Package[nagios],
-          owner   => nagios,
-          group   => nagios,
+#          owner   => nagios,
+#          group   => nagios,
           mode    => '0777';
 
         "/var/lib/$target/rw":
@@ -119,8 +132,8 @@ case $engine {
         "/var/lib/$target/spool/checkresults":
           ensure  => directory,
           require => File["/var/lib/$target/spool"],
-          owner   => nagios,
-          group   => nagios,
+#          owner   => nagios,
+#          group   => nagios,
           mode    => '0750';
 
         '/usr/share/nagios/htdocs':
@@ -144,8 +157,8 @@ case $engine {
           ensure  => file,
           source  => 'puppet:///modules/nagios/nagios/resource.cfg',
           force   => true,
-          require => Package['nagios'],
-          notify  => Service['nagios'];
+          require => Package['nagios'];
+#          notify  => Service['nagios'];
 
         "/etc/$target/cgi.cfg":
           ensure  => file,
@@ -156,12 +169,6 @@ case $engine {
         '/etc/nagios/htpasswd.users':
           ensure  => present,
           content => template('nagios/http_users.erb'),
-          force   => true,
-          require => Package['nagios'];
-
-        '/etc/nagios/apache2.conf':
-          ensure  => file,
-          source  => 'puppet:///modules/nagios/nagios/apache2.conf',
           force   => true,
           require => Package['nagios'];
 

@@ -12,13 +12,10 @@ Alias /nagios /usr/share/nagios/htdocs
 
 <DirectoryMatch (/usr/share/nagios/htdocs|/usr/lib/cgi-bin/nagios3)>
 	Options FollowSymLinks
-
 	DirectoryIndex index.php index.html
-
 	AllowOverride AuthConfig
 	Order Allow,Deny
 	Allow From All
-
 	AuthName "Nagios Access"
 	AuthType Basic
 	AuthUserFile /etc/nagios/htpasswd.users
@@ -28,13 +25,4 @@ Alias /nagios /usr/share/nagios/htdocs
 <Directory /usr/share/nagios/htdocs>
 	Options	+ExecCGI	
 </Directory>
-
-# Enable this ScriptAlias if you want to enable the grouplist patch.
-# See http://apan.sourceforge.net/download.html for more info
-# It allows you to see a clickable list of all hostgroups in the
-# left pane of the Nagios web interface
-# XXX This is not tested for nagios 2.x use at your own peril
-#ScriptAlias /nagios3/side.html /usr/lib/cgi-bin/nagios3/grouplist.cgi
-# nagios 1.x:
-#ScriptAlias /nagios/side.html /usr/lib/cgi-bin/nagios3/grouplist.cgi
 
