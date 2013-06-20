@@ -20,7 +20,7 @@ connection_timeout=300
 
 command[check_load]=/usr/lib/nagios/plugins/check_load -w $ARG1$,$ARG2$,$ARG3$ -c $ARG4$,$ARG5$,$ARG6$
 command[check_users]=/usr/lib/nagios/plugins/check_users -w $ARG1$ -c $ARG2$
-command[check_memory]=/usr/lib/nagios/plugins/check_memory -u b  -w $ARG1$ -c $ARG2$
+command[check_memory]=/usr/lib/nagios/plugins/check_mem  -u -w $ARG1$ -c $ARG2$
 command[check_conn]=/usr/lib/nagios/plugins/check_conn  -w $ARG1$ -c $ARG2$
 command[check_disk_root]=/usr/lib/nagios/plugins/check_disk -w $ARG1$ -c $ARG2$ -p /
 command[check_disk_usr]=/usr/lib/nagios/plugins/check_disk -w $ARG1$ -c $ARG2$ -p /usr

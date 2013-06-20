@@ -50,7 +50,7 @@ class nagios::checks::system {
 
   @@nagios_service { "check_memory_${::fqdn}":
     use                 => 'cloud-service',
-    check_command       => 'check_nrpe!check_memory!20% 10%',
+    check_command       => 'check_nrpe!check_memory!97 99',
     service_description => 'Memory',
     host_name           => $::fqdn,
   }
