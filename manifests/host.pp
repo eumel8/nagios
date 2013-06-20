@@ -30,11 +30,11 @@ class nagios::host {
     retain_status_information       => '1',
     retain_nonstatus_information    => '1',
     check_command                   => 'check-host-alive',
-    max_check_attempts              => '10',
-    notification_interval           => '0',
+    max_check_attempts              => '3',
+    notification_interval           => '90',
     notification_period             => '24x7',
     notification_options            => 'd,u,r',
-    contact_groups                  => 'admins2',
+    contact_groups                  => 'group_email',
     register                        => '0',
   }
 

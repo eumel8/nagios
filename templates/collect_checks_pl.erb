@@ -50,7 +50,7 @@ open(PS,$ps) || die "cant start $ps: $!";
      print CFG "define service {\n";
      print CFG "  use	cloud-service\n";
      print CFG "  host_name   <%= fqdn %>\n";
-     print CFG "  service_description Proc $_\n";
+     print CFG "  service_description Proc $progkeys\n";
      print CFG "  check_command       check_nrpe_1arg!check_$progkeys\n";
      print CFG "}\n";
    }
