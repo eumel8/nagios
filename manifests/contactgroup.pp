@@ -14,8 +14,14 @@
 
 class nagios::contactgroup {
 
-  nagios_contactgroup{'admins2':
-    members  => 'boot',
+  nagios_contactgroup{'group_email':
+    members  => 'email',
+  }
+  nagios_contactgroup{'group_sms':
+    members  => 'sms',
+  }
+  nagios_contactgroup{'group_voice':
+    members  => 'voice',
   }
 
 }

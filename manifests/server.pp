@@ -14,9 +14,13 @@
 
 class nagios::server (
 
-  $nagios_server_ip = '127.0.0.1',
-  $engine           = undef,
-  $http_users       = {}
+  $nagios_server_ip  = '127.0.0.1',
+  $engine            = undef,
+  $http_users        = {},
+  $twilio_account    = undef,
+  $twilio_identifier = undef,
+  $twilio_from       = undef,
+  $twilio_to         = undef
 
 ) {
 
@@ -26,6 +30,11 @@ file {
   ]:
     ensure  => directory,
     force   => true,
+}
+
+file {'/etc/nagios/scripts':
+  ensure  => directory,
+  require => File['/etc/nagios'],
 }
 
 case $engine {
@@ -172,6 +181,18 @@ case $engine {
           force   => true,
           require => Package['nagios'];
 
+        '/etc/nagios/scripts/twilio_sms.sh':
+          ensure  => present,
+          content => template('nagios/twilio_sms_sh.erb'),
+          mode    => '0755',
+          force   => true;
+
+        '/etc/nagios/scripts/twilio_voice.sh':
+          ensure  => present,
+          content => template('nagios/twilio_voice_sh.erb'),
+          mode    => '0755',
+          force   => true;
+
         '/etc/apache2':
           ensure  => directory;
 
@@ -315,6 +336,18 @@ case $engine {
         content => template('nagios/http_users.erb'),
         force   => true,
         require => Package['icinga'];
+
+      '/etc/nagios/scripts/twilio_sms.sh':
+        ensure  => present,
+        content => template('nagios/twilio_sms_sh.erb'),
+        mode    => '0755',
+        force   => true;
+
+      '/etc/nagios/scripts/twilio_voice.sh':
+        ensure  => present,
+        content => template('nagios/twilio_voice_sh.erb'),
+        mode    => '0755',
+        force   => true;
 
       '/etc/icinga/apache2.conf':
         ensure  => file,

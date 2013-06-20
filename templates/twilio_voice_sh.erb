@@ -1,0 +1,25 @@
+#!/bin/bash
+
+# calling twilio and say the message on a phone
+#
+
+command -v php > /dev/null 2>&1 || { echo >&2 "php required but it's not installed.  Aborting."; exit 1; }
+command -v curl > /dev/null 2>&1 || { echo >&2 "curl required but it's not installed.  Aborting."; exit 1; }
+
+gateway_uri="https://api.twilio.com/2010-04-01/Accounts/<%= twilio_account %>/Calls.json"
+identifier="<%= twilio_account %>:<%= twilio_identifier %>"
+from="From=<%= twilio_from %>"
+to="To=<%= twilio_to %>"
+message1="http://twimlets.com/echo?Twiml=%3CResponse%3E%3CSay%3E"
+message2=`echo "$1"`
+message3="%3C%2FSay%3E%3C%2FResponse%3E"
+message=`php -r "echo 'Url=' . urlencode('$message1') . urlencode(urlencode('$message2')) . urlencode('$message3');"`
+
+curl -X POST $gateway_uri \
+           -u $identifier \
+           -d $from \
+           -d $to \
+           -d $message > /dev/null 2>&1 \
+
+##############################################################
+

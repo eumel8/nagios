@@ -19,6 +19,24 @@ Install server and setup http authentication user:
           }
 	}
 
+Using Twilio for SMS and Voice notification:
+      twilio_account     => 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',  # your twilio account number
+      twilio_identifier  => 'abcdefghijklmnopqrstuvqxyz',  # your twilio secret identifier
+      twilio_from        => '%2B1123456790',               # your urlenode twilio number, e.g. +1 123 456 7890
+      twilio_to          => '%2B491721234567',             # your urlencode oncall number, e.g +49 172 123 4567
+
+You can register for Twilio services on https://www.twilio.com
+
+Using internal services cloud-service-sms and cloud-service-voice, e.g.:
+
+    @@nagios_service{"check_http_www.beispiel.de":
+     use                 => 'cloud-service-sms',
+     check_command       => 'check_http',
+     service_description => 'HTTP',
+     host_name           => 'www.beispiel.de',
+   }
+
+
 Define some default checks:
 
 	class {'nagios::checks::system':}
