@@ -12,7 +12,8 @@ identifier="<%= twilio_account %>:<%= twilio_identifier %>"
 from="From=<%= twilio_from %>"
 to="To=<%= twilio_to %>"
 message1=`echo "$1"`
-message=`php -r "echo 'Body=' . urlencode(urlencode('$message1')) ;"`
+message=`php -r "echo 'Body=' . rawurlencode('$message1') ;"`
+
 
 curl -X POST $gateway_uri \
            -u $identifier \
