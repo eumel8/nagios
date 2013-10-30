@@ -48,6 +48,9 @@ case $engine {
           package { 'nagios':
             ensure   => present,
           }
+          package { 'nagios-plugins-nrpe':
+            ensure   => present,
+          }
           service { 'nagios':
             ensure   => running,
             enable   => true,
@@ -68,6 +71,9 @@ case $engine {
           package { 'nagios3':
             ensure   => present,
             alias    => 'nagios',
+          }
+          package { 'nagios-plugins-nrpe':
+            ensure   => present,
           }
           service { 'nagios3':
             ensure   => running,
@@ -193,17 +199,17 @@ case $engine {
           mode    => '0755',
           force   => true;
 
-        '/etc/apache2':
-          ensure  => directory;
-
-        '/etc/apache2/conf.d':
-          ensure  => directory,
-          require => File['/etc/apache2'];
-
+#       '/etc/apache2':
+#         ensure  => directory;
+#
+#        '/etc/apache2/conf.d':
+#          ensure  => directory,
+#          require => File['/etc/apache2'];
+#
         '/etc/apache2/conf.d/nagios.conf':
           ensure  => 'link',
           target  => '/etc/nagios/apache2.conf',
-          require => File['/etc/apache2/conf.d'];
+#          require => File['/etc/apache2/conf.d'];
       }
   }
 
@@ -246,6 +252,9 @@ case $engine {
         ensure  => installed,
         alias   => 'icinga',
     }
+    package { 'nagios-plugins-nrpe':
+      ensure   => present,
+    }
 
     service {
       'icinga':
@@ -259,6 +268,13 @@ case $engine {
     file {
       '/usr/share/icinga':
         ensure  => directory;
+
+      '/var/lib/icinga/':
+        ensure  => directory,
+        require => Package[icinga],
+        owner   => nagios,
+        group   => nagios,
+        mode    => '0755';
 
       '/var/cache/icinga/':
         ensure  => directory,
@@ -274,7 +290,7 @@ case $engine {
         group   => nagios,
         mode    => '0750';
 
-      '/var/lib/nagios/rw':
+      '/var/lib/icinga/rw':
         ensure  => directory,
         require => Package[icinga],
         owner   => nagios,
@@ -356,17 +372,17 @@ case $engine {
         require => Package['icinga'],
         notify  => Service['icinga'];
 
-      '/etc/apache2':
-        ensure  => directory;
-
-      '/etc/apache2/conf.d':
-        ensure  => directory,
-        require => File['/etc/apache2'];
+#      '/etc/apache2':
+#        ensure  => directory;
+#
+#      '/etc/apache2/conf.d':
+#        ensure  => directory,
+#        require => File['/etc/apache2'];
 
       '/etc/apache2/conf.d/icinga.conf':
         ensure  => 'link',
-        target  => '/etc/icinga/apache2.conf',
-        require => File['/etc/apache2/conf.d'];
+        target  => '/etc/icinga/apache2.conf';
+#        require => File['/etc/apache2/conf.d'];
       }
   }
   default: {
