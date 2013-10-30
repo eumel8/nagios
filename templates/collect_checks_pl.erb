@@ -73,16 +73,16 @@ open(NS,$ns) || "cant start $ns: $!";
        print CFG "define service {\n";
        print CFG "  use	cloud-service\n";
        print CFG "  host_name  <%= fqdn %>\n";
-       print CFG "  service_description Service Net $process\n";
+       print CFG "  service_description Service Net $port $process\n";
        print CFG "  check_command       check_tcp!$port\n";
        print CFG "}\n";
     } elsif (($service =~ /127.0.0.1/) && ($port)) {
-       print NRP "command[check_net_$process]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p $port -w 5 -c 10 \n";
+       print NRP "command[check_net_".$port."_".$process."]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p $port -w 5 -c 10 \n";
        print CFG "define service {\n";
        print CFG "  use	cloud-service\n";
        print CFG "  host_name <%= fqdn %>\n";
-       print CFG "  service_description Localservice Net $process\n";
-       print CFG "  check_command       check_nrpe_1arg!check_net_$process\n";
+       print CFG "  service_description Localservice Net $port $process\n";
+       print CFG "  check_command       check_nrpe_1arg!check_net_".$port."_".$process."\n";
        print CFG "}\n";
     }
    }
