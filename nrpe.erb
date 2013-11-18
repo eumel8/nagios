@@ -1,0 +1,46 @@
+#############################################################################
+# NRPE Config File 
+#############################################################################
+
+log_facility=daemon
+pid_file=/var/run/nagios/nrpe.pid
+server_port=5666
+
+# must run as root for file status check in puppet
+nrpe_user=nagios
+nrpe_group=nagios
+
+allowed_hosts=<% if nrpe_allowed_hosts.class == Array then %><%= nrpe_allowed_hosts.flatten.join(',') %><% else %><%= nrpe_allowed_hosts %><% end %>
+ 
+dont_blame_nrpe=1
+
+debug=0
+command_timeout=60
+connection_timeout=300
+
+command[check_load]=/usr/lib/nagios/plugins/check_load -w $ARG1$,$ARG2$,$ARG3$ -c $ARG4$,$ARG5$,$ARG6$
+command[check_users]=/usr/lib/nagios/plugins/check_users -w $ARG1$ -c $ARG2$
+command[check_memory]=/usr/lib/nagios/plugins/check_mem  -u -w $ARG1$ -c $ARG2$
+command[check_conn]=/usr/lib/nagios/plugins/check_conn  -w $ARG1$ -c $ARG2$
+command[check_disk_root]=/usr/lib/nagios/plugins/check_disk -w $ARG1$ -c $ARG2$ -p /
+command[check_disk]=/usr/lib/nagios/plugins/check_disk -w $ARG1$ -c $ARG2$ -p $ARG3$
+command[check_zombie_procs]=/usr/lib/nagios/plugins/check_procs -w $ARG1$ -c $ARG2$ -s Z
+command[check_total_procs]=/usr/lib/nagios/plugins/check_procs -w $ARG1$ -c $ARG2$
+command[check_local_time]=/usr/lib/nagios/plugins/check_ntp_time -H localhost
+command[check_local_tcp]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p $ARG1$ -w $ARG2$ -c $ARG3$
+command[check_tcp]=/usr/lib/nagios/plugins/check_tcp -H $ARG4$ -p $ARG1$ -w $ARG2$ -c $ARG3$
+
+command[check_chev]=/usr/local/chev/bin/chev -f /var/log/chev.log
+
+command[check_puppet_agent_proc]=/usr/lib/nagios/plugins/check_procs -w 1:2 -c 1:2 -a "/usr/bin/puppet agent"
+command[check_puppet_agent]=/usr/lib/nagios/plugins/check_puppet-agent -s /var/lib/puppet/state/last_run_summary.yaml
+
+command[check_proc]=/usr/lib/nagios/plugins/check_procs -w $ARG2$ -c $ARG3$ -a $ARG1$
+
+command[check_ntp_peer]=/usr/lib/nagios/plugins/check_ntp_peer -H <%= timeserver %>
+command[check_ntp_time]=/usr/lib/nagios/plugins/check_ntp_time -H <%= timeserver %>
+
+#
+include=/etc/nagios/nagios_ext_nrpe.cfg
+##########################################################################
+

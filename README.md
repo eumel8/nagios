@@ -59,6 +59,21 @@ Define service checks:
 	class {'nagios::checks::smtp':}
 	class {'nagios::checks::chev':}
 
+Define individual nrpe checks:
+
+    @@nagios_service {"check_sqlgrey_${::fqdn}":
+      use                 => 'cloud-service',
+      check_command       => 'check_nrpe!check_local_tcp! 2501 5 10',
+      service_description => 'SQLGREY Service',
+      host_name           => $::fqdn,
+    }
+
+    @@nagios_service {"check_puppet_agent_${::fqdn}":
+      use                 => 'cloud-service',
+      check_command       => 'check_nrpe!check_proc! "/usr/bin/puppet agent" 1:2 1:2',
+      service_description => 'Puppet Agent',
+      host_name           => $::fqdn,
+    }
 
 Testing
 -------
