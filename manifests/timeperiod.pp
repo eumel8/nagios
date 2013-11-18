@@ -24,4 +24,3 @@ class nagios::timeperiod {
     saturday     => '00:00-24:00',
   }
 }
- 

@@ -406,31 +406,31 @@ include nagios::service
 include nagios::host
 
 # collect resources and populate /etc/nagios/nagios_*'cfg
-Nagios_host <<||>> { 
+Nagios_host <<||>> {
   target => "/etc/$target/nagios_host.cfg",
-  notify => Service['nagios'] 
+  notify => Service['nagios']
 }
-Nagios_service <<||>> { 
+Nagios_service <<||>> {
   target => "/etc/$target/nagios_service.cfg",
   notify => Service['nagios'],
 }
-Nagios_hostextinfo <<||>> { 
+Nagios_hostextinfo <<||>> {
   target => "/etc/$target/nagios_hostextinfo.cfg",
   notify => Service['nagios'],
 }
-Nagios_timeperiod <<||>> { 
+Nagios_timeperiod <<||>> {
   target => "/etc/$target/nagios_timeperiod.cfg",
   notify => Service['nagios'],
 }
-Nagios_command <<||>> { 
+Nagios_command <<||>> {
   target => "/etc/$target/nagios_command.cfg",
   notify => Service['nagios'],
 }
-Nagios_contact <<||>> { 
+Nagios_contact <<||>> {
   target => "/etc/$target/nagios_contact.cfg",
   notify => Service['nagios'],
 }
-Nagios_contactgroup <<||>> { 
+Nagios_contactgroup <<||>> {
   target => "/etc/$target/nagios_contactgroup.cfg",
   notify => Service['nagios'],
 }

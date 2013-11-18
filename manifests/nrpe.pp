@@ -18,7 +18,7 @@ class nagios::nrpe (
   $nrpe_conf_overwrite = 0
   )
   {
-case $operatingsystem {
+case $::operatingsystem {
 
     'OpenSuSE': {
       package { 'nagios-nrpe':
