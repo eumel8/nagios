@@ -43,7 +43,7 @@ class nagios::checks::system {
 
   @@nagios_service { "check_disk_root_${::fqdn}":
     use                 => 'cloud-service',
-    check_command       => 'check_nrpe!check_disk_root!20% 10% /',
+    check_command       => 'check_nrpe!check_disk!20% 10% /',
     service_description => 'Disk /',
     host_name           => $::fqdn,
   }

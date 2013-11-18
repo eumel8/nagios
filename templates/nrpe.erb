@@ -23,40 +23,22 @@ command[check_users]=/usr/lib/nagios/plugins/check_users -w $ARG1$ -c $ARG2$
 command[check_memory]=/usr/lib/nagios/plugins/check_mem  -u -w $ARG1$ -c $ARG2$
 command[check_conn]=/usr/lib/nagios/plugins/check_conn  -w $ARG1$ -c $ARG2$
 command[check_disk_root]=/usr/lib/nagios/plugins/check_disk -w $ARG1$ -c $ARG2$ -p /
-command[check_disk_usr]=/usr/lib/nagios/plugins/check_disk -w $ARG1$ -c $ARG2$ -p /usr
-command[check_disk_var]=/usr/lib/nagios/plugins/check_disk -w $ARG1$ -c $ARG2$ -p /var
-command[check_disk_data]=/usr/lib/nagios/plugins/check_disk -w $ARG1$ -c $ARG2$ -p /data
-command[check_disk_backup]=/usr/lib/nagios/plugins/check_disk -w $ARG1$ -c $ARG2$ -p /backup
+command[check_disk]=/usr/lib/nagios/plugins/check_disk -w $ARG1$ -c $ARG2$ -p $ARG3$
 command[check_zombie_procs]=/usr/lib/nagios/plugins/check_procs -w $ARG1$ -c $ARG2$ -s Z
 command[check_total_procs]=/usr/lib/nagios/plugins/check_procs -w $ARG1$ -c $ARG2$
 command[check_local_time]=/usr/lib/nagios/plugins/check_ntp_time -H localhost
-command[check_peer_time]=/usr/lib/nagios/plugins/check_peer_time.pl 
+command[check_local_tcp]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p $ARG1$ -w $ARG2$ -c $ARG3$
+command[check_tcp]=/usr/lib/nagios/plugins/check_tcp -H $ARG4$ -p $ARG1$ -w $ARG2$ -c $ARG3$
 
-command[check_vm]=/usr/lib/nagios/plugins/check_vm.pl
-command[check_vm_net]=/usr/lib/nagios/plugins/check_vm_net.sh
-command[check_kvm]=/usr/lib/nagios/plugins/check_kvm
 command[check_chev]=/usr/local/chev/bin/chev -f /var/log/chev.log
-
-command[check_mysql_backup1]=/usr/lib/nagios/plugins/check_file_age -w 88400 -c 173800 -W 0 -C 0 -f /var/log/backup_mysql.log
-command[check_mysql_backup2]=/usr/lib/nagios/plugins/check_file_age -w 88400 -c 173800 -W 0 -C 0 -f /var/log/backup_mysql.log
-
-command[check_file_var]=/usr/lib/nagios/plugins/check_file_age -w 900 -c 1800 -W 0 -C 0 -f /var/log/nagios.check
-command[check_file_srv]=/usr/lib/nagios/plugins/check_file_age -w 900 -c 1800 -W 0 -C 0 -f /srv/nagios.check
-command[check_file_mysql]=/usr/lib/nagios/plugins/check_file_age -w 900 -c 1800 -W 0 -C 0 -f /var/lib/mysql/nagios.check
-command[check_file_hdd2]=/usr/lib/nagios/plugins/check_file_age -w 900 -c 1800 -W 0 -C 0 -f /hdd2/nagios.check
-command[check_file_postgresql]=/usr/lib/nagios/plugins/check_file_age -w 900 -c 1800 -W 0 -C 0 -f /var/lib/postgresql/nagios.check
-command[check_file_backup]=/usr/lib/nagios/plugins/check_file_age -w 900 -c 1800 -W 0 -C 0 -f /BACKUP/nagios.check
 
 command[check_puppet_agent_proc]=/usr/lib/nagios/plugins/check_procs -w 1:2 -c 1:2 -a "/usr/bin/puppet agent"
 command[check_puppet_agent]=/usr/lib/nagios/plugins/check_puppet-agent -s /var/lib/puppet/state/last_run_summary.yaml
 
-command[check_java_proc]=/usr/lib/nagios/plugins/check_procs -w 2:5 -c 1:5 -a "java"
+command[check_proc]=/usr/lib/nagios/plugins/check_procs -w $ARG2$ -c $ARG3$ -a $ARG1$
 
 command[check_ntp_peer]=/usr/lib/nagios/plugins/check_ntp_peer -H <%= timeserver %>
 command[check_ntp_time]=/usr/lib/nagios/plugins/check_ntp_time -H <%= timeserver %>
-
-command[check_log_kern]=/usr/lib/nagios/plugins/check_log -F /var/log/kern.log -O /var/lib/nagios/kern.log.nagios -q "error|Trace|Oops|Fault|with own address"
-command[check_log_syslog]=/usr/lib/nagios/plugins/check_log -F /var/log/syslog -O /var/lib/nagios/syslog.nagios -q "error|Trace|Oops|Fault|with own address"
 
 #
 include=/etc/nagios/nagios_ext_nrpe.cfg
