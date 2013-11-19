@@ -29,7 +29,7 @@ class nagios::checks::system {
 
   @@nagios_service { "check_total_procs_${::fqdn}":
     use                 => 'cloud-service',
-    check_command       => 'check_nrpe!check_total_procs!150 250',
+    check_command       => 'check_nrpe!check_total_procs!500 1000',
     service_description => 'Procs',
     host_name           => $::fqdn,
   }
