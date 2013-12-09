@@ -21,21 +21,28 @@ class nagios::nrpe (
 case $::operatingsystem {
 
     'OpenSuSE': {
-      package { 'nagios-nrpe':
-        ensure   => present,
-        alias    => 'nagios-nrpe-server',
+      $nrpe_package = $::operatingsystemrelease ? {
+        /12.1/           => 'nagios-nrpe',
+        /12.2|12.3|13.1/ => 'nrpe',
       }
+
+      package { "nrpe_package":
+        ensure   => present,
+        name     => $nrpe_package,
+      }
+
       service { 'nrpe':
         ensure   => running,
         enable   => true,
-        require  => Package['nagios-nrpe-server'],
+        require  => Package['nrpe_package'],
         alias    => 'nagios-nrpe-server',
       }
     }
 
     'Ubuntu': {
-      package { 'nagios-nrpe-server':
+      package { 'nrpe_package':
         ensure   => present,
+        name     => 'nagios-nrpe-server'
       }
       package { 'libnagios-plugin-perl':
         ensure   => present,
@@ -87,7 +94,7 @@ case $::operatingsystem {
     file { '/etc/nagios/nrpe.cfg':
       ensure    => file,
       content   => template('nagios/nrpe.erb'),
-      require   => Package['nagios-nrpe-server'],
+      require   => Package['nrpe_package'],
       notify    => Service['nagios-nrpe-server']
     }
 
@@ -96,7 +103,7 @@ case $::operatingsystem {
     file { '/etc/nagios/nrpe_cloud.cfg':
       ensure    => file,
       content   => template('nagios/nrpe.erb'),
-      require   => Package['nagios-nrpe-server'],
+      require   => Package['nrpe_package'],
       notify    => Service['nagios-nrpe-server']
     }
 
@@ -105,7 +112,7 @@ case $::operatingsystem {
       command   => 'echo "include=/etc/nagios/nrpe_cloud.cfg" >> /etc/nagios/nrpe.cfg',
       path      => '/bin:/usr/bin',
       unless    => 'grep -e "^include=/etc/nagios/nrpe_cloud.cfg" /etc/nagios/nrpe.cfg',
-      require   => Package['nagios-nrpe-server'],
+      require   => Package['nrpe_package'],
       notify    => Service['nagios-nrpe-server'],
     }
   }
