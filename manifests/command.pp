@@ -57,9 +57,9 @@ class nagios::command {
     command_line  => '/etc/nagios/scripts/twilio_sms.sh "NOC Message. $NOTIFICATIONTYPE$ Host Alert: $HOSTNAME$ is $HOSTSTATE$ **"',
   }
 
-  nagios_command{'notify-service-by-sms':
-    command_line  => '/etc/nagios/scripts/twilio_sms.sh "NOC Message. $NOTIFICATIONTYPE$ Service Alert: $HOSTALIAS$/$SERVICEDESC$ is $SERVICESTATE$ **"',
-  }
+#  nagios_command{'notify-service-by-sms':
+#    command_line  => '/etc/nagios/scripts/twilio_sms.sh "NOC Message. $NOTIFICATIONTYPE$ Service Alert: $HOSTALIAS$/$SERVICEDESC$ is $SERVICESTATE$ **"',
+#  }
 
   nagios_command{'process-host-perfdata':
     command_line  => '/usr/bin/printf "%b" "$LASTHOSTCHECK$\t$HOSTNAME$\t$HOSTSTATE$\t$HOSTATTEMPT$\t$HOSTSTATETYPE$\t$HOSTEXECUTIONTIME$\t$HOSTOUTPUT$\t$HOSTPERFDATA$\n" >> /var/lib/nagios3/host-perfdata.out',
