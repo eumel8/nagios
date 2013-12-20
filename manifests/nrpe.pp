@@ -89,6 +89,11 @@ case $::operatingsystem {
       require => File['/usr/local/bin/collect_checks_pl'],
   }
 
+  file { '/etc/nrpe.cfg':
+    ensure => 'link',
+    target => '/etc/nagios/nrpe.cfg',
+  }
+
   if ($nrpe_conf_overwrite == 1) {
 
     file { '/etc/nagios/nrpe.cfg':
