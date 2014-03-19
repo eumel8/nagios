@@ -14,13 +14,15 @@
 
 class nagios::server (
 
+  $nd                = {},
   $nagios_server_ip  = '127.0.0.1',
   $engine            = undef,
+  $distribution      = {},
   $http_users        = {},
   $twilio_account    = undef,
   $twilio_identifier = undef,
   $twilio_from       = undef,
-  $twilio_to         = undef
+  $twilio_to         = undef,
 
 ) {
 
@@ -63,6 +65,7 @@ case $engine {
             require => Package['nagios'];
           }
 
+
         }
 
         'Ubuntu': {
@@ -93,24 +96,6 @@ case $engine {
           error('No supported operating system')
         }
       }
-
-      file {
-        [ "/etc/$target/nagios_command.cfg",
-          "/etc/$target/nagios_contact.cfg",
-          "/etc/$target/nagios_host.cfg",
-          "/etc/$target/nagios_timeperiod.cfg",
-          "/etc/$target/nagios_hostextinfo.cfg",
-          "/etc/$target/nagios_contactgroup.cfg",
-          "/etc/$target/nagios_service.cfg",
-        ]:
-          ensure  => file,
-          force   => true,
-          owner   => root,
-          group   => root,
-          mode    => '0644',
-          require => File['/etc/nagios'],
-      }
-
 
       file {
         "/usr/share/nagios":
@@ -147,19 +132,19 @@ case $engine {
         "/var/lib/$target/spool/checkresults":
           ensure  => directory,
           require => File["/var/lib/$target/spool"],
-#          owner   => nagios,
-#          group   => nagios,
+          owner   => nagios,
+          group   => nagios,
           mode    => '0750';
 
-        '/usr/share/nagios/htdocs':
-          ensure  => directory,
-          source  => 'puppet:///modules/nagios/htdocs/nagios/',
-          owner   => root,
-          group   => root,
-          mode    => '0644',
-          recurse => true,
-          force   => true,
-          require => File['/usr/share/nagios'];
+#        '/usr/share/nagios/htdocs':
+#          ensure  => directory,
+#          source  => 'puppet:///modules/nagios/htdocs/nagios/',
+#          owner   => root,
+#          group   => root,
+#          mode    => '0644',
+#          recurse => true,
+#          force   => true,
+#          require => File['/usr/share/nagios'];
 
         "/etc/$target/nagios.cfg":
           ensure  => file,
@@ -199,17 +184,48 @@ case $engine {
           mode    => '0755',
           force   => true;
 
-#       '/etc/apache2':
-#         ensure  => directory;
-#
-#        '/etc/apache2/conf.d':
-#          ensure  => directory,
-#          require => File['/etc/apache2'];
-#
         '/etc/apache2/conf.d/nagios.conf':
           ensure  => 'link',
           target  => '/etc/nagios/apache2.conf',
-#          require => File['/etc/apache2/conf.d'];
+      }
+
+      case $distribution['member'] {
+        'client': {
+          package { 'nagios-nsca-client':
+            ensure   => present,
+          }
+          file {"/etc/$target/send_nsca.cfg":
+            ensure  => file,
+            content => template('nagios/nagios/send_nsca_cfg.erb'),
+            force   => true,
+            require => Package['nagios-nsca-client'];
+          }
+          file {"/etc/$target/submit_service_check":
+            ensure  => file,
+            content => template('nagios/nagios/submit_service_check.erb'),
+            force   => true,
+            require => Package['nagios-nsca-client'];
+          }
+        }
+        'master': {
+          package { 'nagios-nsca':
+            ensure   => present,
+          }
+          file {"/etc/$target/nsca.cfg":
+            ensure  => file,
+            content => template('nagios/nagios/nsca_cfg.erb'),
+            force   => true,
+            require => Package['nagios-nsca'];
+          }
+          file {'/etc/xinetd.d/nsca':
+            ensure  => file,
+            source  => 'puppet:///modules/nagios/nagios/nsca',
+            force   => true,
+            require => Package['nagios-nsca'];
+          }
+        }
+        default: {
+        }
       }
   }
 
@@ -230,27 +246,13 @@ case $engine {
       }
     }
 
-      file {
-        [ "/etc/$target/nagios_command.cfg",
-          "/etc/$target/nagios_contact.cfg",
-          "/etc/$target/nagios_host.cfg",
-          "/etc/$target/nagios_timeperiod.cfg",
-          "/etc/$target/nagios_hostextinfo.cfg",
-          "/etc/$target/nagios_contactgroup.cfg",
-          "/etc/$target/nagios_service.cfg",
-        ]:
-          ensure  => file,
-          force   => true,
-          owner   => root,
-          group   => root,
-          mode    => '0644',
-          require => File['/etc/nagios'],
-      }
-
+    package { 'icinga':
+      ensure  => installed,
+      alias   => 'nagios',
+    }
     package {
-      'icinga':
+      [ 'icinga-doc', 'icinga-www' ]:
         ensure  => installed,
-        alias   => 'icinga',
     }
     package { 'nagios-plugins-nrpe':
       ensure   => present,
@@ -304,15 +306,15 @@ case $engine {
         group   => nagios,
         mode    => '0750';
 
-      '/usr/share/icinga/htdocs':
-        ensure  => directory,
-        source  => 'puppet:///modules/nagios/htdocs/icinga/',
-        owner   => root,
-        group   => root,
-        mode    => '0644',
-        recurse => true,
-        force   => true,
-        require => File['/usr/share/icinga'];
+#      '/usr/share/icinga/htdocs':
+#        ensure  => directory,
+#        source  => 'puppet:///modules/nagios/htdocs/icinga/',
+#        owner   => root,
+#        group   => root,
+#        mode    => '0644',
+#        recurse => true,
+#        force   => true,
+#        require => File['/usr/share/icinga'];
 
       '/etc/icinga/':
         ensure  => directory,
@@ -372,17 +374,48 @@ case $engine {
         require => Package['icinga'],
         notify  => Service['icinga'];
 
-#      '/etc/apache2':
-#        ensure  => directory;
-#
-#      '/etc/apache2/conf.d':
-#        ensure  => directory,
-#        require => File['/etc/apache2'];
-
       '/etc/apache2/conf.d/icinga.conf':
         ensure  => 'link',
         target  => '/etc/icinga/apache2.conf';
-#        require => File['/etc/apache2/conf.d'];
+      }
+
+      case $distribution['member'] {
+        'client': {
+          package { 'nagios-nsca-client':
+            ensure   => present,
+          }
+          file {"/etc/$target/send_nsca.cfg":
+            ensure  => file,
+            content => template('nagios/nagios/send_nsca_cfg.erb'),
+            force   => true,
+            require => Package['nagios-nsca-client'];
+          }
+          file {"/etc/$target/submit_service_check":
+            ensure  => file,
+            content => template('nagios/nagios/submit_service_check.erb'),
+            force   => true,
+            require => Package['nagios-nsca-client'];
+          }
+        }
+        'master': {
+          package { 'nagios-nsca':
+            ensure   => present,
+          }
+          file {"/etc/$target/nsca.cfg":
+            ensure  => file,
+            content => template('nagios/nagios/nsca_cfg.erb'),
+            force   => true,
+            require => Package['nagios-nsca'];
+          }
+          file {'/etc/xinetd.d/nsca':
+            ensure  => file,
+            source  => 'puppet:///modules/nagios/nagios/nsca',
+            force   => true,
+            require => Package['nagios-nsca'];
+          }
+        }
+        default: {
+        }
       }
   }
   default: {
@@ -390,55 +423,52 @@ case $engine {
   }
 }
 
-#   file { '/etc/nagios3/ext':
-#     ensure  => directory,
-#     mode    => '0777',
-#     content => template('nagios/nagios_ext_services.erb'),
-#     force   => true,
-#   }
+  file { "/etc/$target/nagios_host.cfg":
+    ensure  => file,
+    content => template('nagios/nagios/nagios_host.erb'),
+    force   => true,
+    notify  => Service['nagios']
+  }
 
+  file { "/etc/$target/nagios_service.cfg":
+    ensure  => file,
+    content => template('nagios/nagios/nagios_service.erb'),
+    force   => true,
+    notify  => Service['nagios']
+  }
 
-include nagios::command
-include nagios::timeperiod
-include nagios::contact
-include nagios::contactgroup
-include nagios::service
-include nagios::host
+  file { "/etc/$target/nagios_contactgroup.cfg":
+    ensure  => file,
+    content => template('nagios/nagios/nagios_contactgroup.erb'),
+    force   => true,
+    notify  => Service['nagios']
+  }
 
-# collect resources and populate /etc/nagios/nagios_*'cfg
-Nagios_host <<||>> {
-  target => "/etc/$target/nagios_host.cfg",
-  notify => Service['nagios']
-}
-Nagios_service <<||>> {
-  target => "/etc/$target/nagios_service.cfg",
-  notify => Service['nagios'],
-}
-Nagios_hostextinfo <<||>> {
-  target => "/etc/$target/nagios_hostextinfo.cfg",
-  notify => Service['nagios'],
-}
-Nagios_timeperiod <<||>> {
-  target => "/etc/$target/nagios_timeperiod.cfg",
-  notify => Service['nagios'],
-}
-Nagios_command <<||>> {
-  target => "/etc/$target/nagios_command.cfg",
-  notify => Service['nagios'],
-}
-Nagios_contact <<||>> {
-  target => "/etc/$target/nagios_contact.cfg",
-  notify => Service['nagios'],
-}
-Nagios_contactgroup <<||>> {
-  target => "/etc/$target/nagios_contactgroup.cfg",
-  notify => Service['nagios'],
-}
-# Nagios_contact <<||>> { tag => 'server' }
-# Nagios_contactgroup <<||>> { tag => 'server' }
-File <<| tag == 'nagios_ext_services' |>> {
-  notify => Service['nagios']
-}
-# Package <<||>>
+  file { "/etc/$target/nagios_contact.cfg":
+    ensure  => file,
+    content => template('nagios/nagios/nagios_contact.erb'),
+    force   => true,
+    notify  => Service['nagios']
+  }
 
+  file { "/etc/$target/nagios_timeperiod.cfg":
+    ensure  => file,
+    content => template('nagios/nagios/nagios_timeperiod.erb'),
+    force   => true,
+    notify  => Service['nagios']
+  }
+
+#  file { "/etc/$target/nagios_hostextinfo.cfg":
+#    ensure  => file,
+#    content => template('nagios/nagios/nagios_hostextinfo.erb'),
+#    force   => true,
+#    notify  => Service['nagios']
+#  }
+
+  file { "/etc/$target/nagios_command.cfg":
+    ensure  => file,
+    content => template('nagios/nagios/nagios_command.erb'),
+    force   => true,
+    notify  => Service['nagios']
+  }
 }

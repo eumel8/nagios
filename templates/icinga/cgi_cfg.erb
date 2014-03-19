@@ -28,18 +28,18 @@ first_day_of_week=0
 use_authentication=1
 use_ssl_authentication=0
 
-authorized_for_system_information=<%= http_users.keys.join(',') %>
-authorized_for_system_information=<%= http_users.keys.join(',') %>
-authorized_for_configuration_information=<%= http_users.keys.join(',') %>
-authorized_for_full_command_resolution=<%= http_users.keys.join(',') %>
-authorized_for_system_commands=<%= http_users.keys.join(',') %>
+authorized_for_system_information=<%= @http_users.keys.join(',') %>
+authorized_for_system_information=<%= @http_users.keys.join(',') %>
+authorized_for_configuration_information=<%= @http_users.keys.join(',') %>
+authorized_for_full_command_resolution=<%= @http_users.keys.join(',') %>
+authorized_for_system_commands=<%= @http_users.keys.join(',') %>
 
 
-authorized_for_all_services=<%= http_users.keys.join(',') %>
-authorized_for_all_hosts=<%= http_users.keys.join(',') %>
+authorized_for_all_services=<%= @http_users.keys.join(',') %>
+authorized_for_all_hosts=<%= @http_users.keys.join(',') %>
 
-authorized_for_all_service_commands=<%= http_users.keys.join(',') %>
-authorized_for_all_host_commands=<%= http_users.keys.join(',') %>
+authorized_for_all_service_commands=<%= @http_users.keys.join(',') %>
+authorized_for_all_host_commands=<%= @http_users.keys.join(',') %>
 
 show_all_services_host_is_authorized_for=1
 show_partial_hostgroups=0

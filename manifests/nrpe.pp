@@ -77,18 +77,6 @@ case $::operatingsystem {
       require  => Package['nagios-plugins'],
   }
 
-  file { '/usr/local/bin/collect_checks_pl':
-      ensure    => file,
-      mode      => '1755',
-      content   => template('nagios/collect_checks_pl.erb'),
-  }
-
-  exec { 'create_ext_services':
-      command => '/usr/local/bin/collect_checks_pl',
-      creates => '/etc/nagios/nagios_ext_services.cfg',
-      require => File['/usr/local/bin/collect_checks_pl'],
-  }
-
   file { '/etc/nrpe.cfg':
     ensure => 'link',
     target => '/etc/nagios/nrpe.cfg',
@@ -121,13 +109,4 @@ case $::operatingsystem {
       notify    => Service['nagios-nrpe-server'],
     }
   }
-
-    file { '/etc/nagios/ext':
-      ensure  => directory,
-    }
-
-    @@file { "/etc/nagios/ext/$::fqdn.cfg":
-      content => $::nagios_ext_services,
-      tag     => 'nagios_ext_services',
-    }
 }

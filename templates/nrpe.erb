@@ -30,7 +30,6 @@ command[check_local_time]=/usr/lib/nagios/plugins/check_ntp_time -H localhost
 command[check_local_tcp]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p $ARG1$ -w $ARG2$ -c $ARG3$
 command[check_tcp]=/usr/lib/nagios/plugins/check_tcp -H $ARG4$ -p $ARG1$ -w $ARG2$ -c $ARG3$
 
-command[check_chev]=/usr/local/chev/bin/chev -f /var/log/chev.log
 
 command[check_puppet_agent_proc]=/usr/lib/nagios/plugins/check_procs -w 1:2 -c 1:2 -a "/usr/bin/puppet agent"
 command[check_puppet_agent]=/usr/lib/nagios/plugins/check_puppet-agent -s /var/lib/puppet/state/last_run_summary.yaml
@@ -41,6 +40,5 @@ command[check_ntp_peer]=/usr/lib/nagios/plugins/check_ntp_peer -H <%= timeserver
 command[check_ntp_time]=/usr/lib/nagios/plugins/check_ntp_time -H <%= timeserver %>
 
 #
-include=/etc/nagios/nagios_ext_nrpe.cfg
 ##########################################################################
 

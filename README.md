@@ -31,19 +31,31 @@ Using Twilio for SMS and Voice notification:
 
 You can register for Twilio services on https://www.twilio.com
 
-Using internal services cloud-service-sms and cloud-service-voice, e.g.:
+This version doesn't use exported resources in puppet. So all hosts must configured in an array:
 
-    @@nagios_service{"check_http_www.beispiel.de":
-      use                 => 'cloud-service-sms',
-      check_command       => 'check_http',
-      service_description => 'HTTP',
-      host_name           => 'www.beispiel.de',
-    }
-
-
-Define some default checks:
-
-	class {'nagios::checks::system':}
+    nd => {
+      nagios => {
+        'ip'       => '192.168.0.100',
+        'domain'   => 'beispiel.de',
+        'services' => {
+          'Ping' => 'check_ping!200.0,60%!500.0,95%',
+          'Load' => 'check_nrpe!check_load!15 10 5 30 25 20',
+        },
+      },
+      ns => {
+        'ip'       => '192.168.0.10',
+        'domain'   => 'beispiel.de',
+        'services' => {
+          'Ping' => 'check_ping!200.0,60%!500.0,95%',
+        },
+      },
+      gw => {
+        'ip'       => '192.168.0.1',
+        'domain'   => 'beispiel.de',
+        'services' => {
+          'Ping' => 'check_ping!400.0,80%!500.0,95%',
+        },
+      },
 
 Install NRPE and configure allowed hosts:
 
@@ -53,27 +65,14 @@ Install NRPE and configure allowed hosts:
           nrpe_conf_overwrite => 1,
 	}
 
-Define service checks:
+Use distribted monitor system with NSCA:
 
-	class {'nagios::checks::http':}
-	class {'nagios::checks::smtp':}
-	class {'nagios::checks::chev':}
+    distribution       => {
+      member             => 'client',        # possible values: client, master
+      host               => '192.168.0.110', # master host ip address
+      nsca_password      => '12345678',      # password for communication
+    },
 
-Define individual nrpe checks:
-
-    @@nagios_service {"check_sqlgrey_${::fqdn}":
-      use                 => 'cloud-service',
-      check_command       => 'check_nrpe!check_local_tcp! 2501 5 10',
-      service_description => 'SQLGREY Service',
-      host_name           => $::fqdn,
-    }
-
-    @@nagios_service {"check_puppet_agent_${::fqdn}":
-      use                 => 'cloud-service',
-      check_command       => 'check_nrpe!check_proc! "/usr/bin/puppet agent" 1:2 1:2',
-      service_description => 'Puppet Agent',
-      host_name           => $::fqdn,
-    }
 
 Testing
 -------

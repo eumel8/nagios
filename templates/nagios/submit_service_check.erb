@@ -1,0 +1,12 @@
+#!/bin/bash
+# Skript submit_service_check
+PRINTF="/usr/bin/printf"
+NAGIOS_SERVER="<%= @distribution['host'] %>"
+CMD="/usr/bin/send_nsca"
+CFG="/etc/nagios/send_nsca.cfg "
+HOST=$1
+SRV=$2
+RESULT=$3
+OUTPUT=$4
+$PRINTF "%b" "$HOST\t$SRV\t$RESULT\t$OUTPUT\n" |
+$CMD -H $NAGIOS_SERVER -c $CFG
