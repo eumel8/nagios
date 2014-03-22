@@ -75,7 +75,7 @@ case $engine {
             ensure   => present,
             alias    => 'nagios',
           }
-          package { 'nagios-plugins-nrpe':
+          package { 'nagios-nrpe-plugin':
             ensure   => present,
           }
           service { 'nagios3':
@@ -235,10 +235,38 @@ case $engine {
 
       'OpenSuSE': {
         $target = 'nagios'
+    
+        package { 'icinga':
+          ensure  => installed,
+          alias   => 'nagios',
+        }
+        package {
+        [ 'icinga-doc', 'icinga-www' ]:
+          ensure  => installed,
+        }
+        package { 'nagios-plugins-nrpe':
+          ensure   => present,
+        }
       }
 
       'Ubuntu': {
         $target = 'nagios3'
+
+        file {'/etc/nagios3':
+          ensure  => directory,
+          force   => true,
+        }
+        package { 'icinga':
+          ensure  => installed,
+          alias   => 'nagios',
+        }
+        package {
+        [ 'icinga-core', 'icinga-cgi' ]:
+          ensure  => installed,
+        }
+        package { 'nagios-nrpe-plugin':
+          ensure   => present,
+        }
       }
 
       default: {
@@ -246,17 +274,6 @@ case $engine {
       }
     }
 
-    package { 'icinga':
-      ensure  => installed,
-      alias   => 'nagios',
-    }
-    package {
-      [ 'icinga-doc', 'icinga-www' ]:
-        ensure  => installed,
-    }
-    package { 'nagios-plugins-nrpe':
-      ensure   => present,
-    }
 
     service {
       'icinga':

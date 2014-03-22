@@ -30,6 +30,9 @@ case $::operatingsystem {
         ensure   => present,
         name     => $nrpe_package,
       }
+      package { 'nagios-plugins-mem':
+        ensure   => present,
+      }
 
       service { 'nrpe':
         ensure   => running,
@@ -47,6 +50,9 @@ case $::operatingsystem {
       package { 'libnagios-plugin-perl':
         ensure   => present,
       }
+      package { 'logaricheck':
+        ensure   => present,
+      }
       service { 'nagios-nrpe-server':
         ensure   => running,
         enable   => true,
@@ -59,9 +65,6 @@ case $::operatingsystem {
   }
 }
 
-  package { 'nagios-plugins-mem':
-      ensure   => present,
-  }
 
   package { 'nagios-plugins':
       ensure   => present,
