@@ -247,6 +247,13 @@ case $engine {
         package { 'nagios-plugins-nrpe':
           ensure   => present,
         }
+        file {'/etc/icinga/apache2.conf':
+          ensure  => file,
+          source  => 'puppet:///modules/nagios/icinga/apache2_opensuse.conf',
+          force   => true,
+          require => Package['icinga'],
+          notify  => Service['icinga'];
+        }
       }
 
       'Ubuntu': {
@@ -266,6 +273,13 @@ case $engine {
         }
         package { 'nagios-nrpe-plugin':
           ensure   => present,
+        }
+        file {'/etc/icinga/apache2.conf':
+          ensure  => file,
+          source  => 'puppet:///modules/nagios/icinga/apache2_ubuntu.conf',
+          force   => true,
+          require => Package['icinga'],
+          notify  => Service['icinga'];
         }
       }
 
@@ -384,12 +398,6 @@ case $engine {
         mode    => '0755',
         force   => true;
 
-      '/etc/icinga/apache2.conf':
-        ensure  => file,
-        source  => 'puppet:///modules/nagios/icinga/apache2.conf',
-        force   => true,
-        require => Package['icinga'],
-        notify  => Service['icinga'];
 
       '/etc/apache2/conf.d/icinga.conf':
         ensure  => 'link',
