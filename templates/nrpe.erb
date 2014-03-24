@@ -30,15 +30,16 @@ command[check_total_procs]=/usr/lib/nagios/plugins/check_procs -w $ARG1$ -c $ARG
 command[check_local_time]=/usr/lib/nagios/plugins/check_ntp_time -H localhost
 command[check_local_tcp]=/usr/lib/nagios/plugins/check_tcp -H 127.0.0.1 -p $ARG1$ -w $ARG2$ -c $ARG3$
 command[check_tcp]=/usr/lib/nagios/plugins/check_tcp -H $ARG4$ -p $ARG1$ -w $ARG2$ -c $ARG3$
-
-
-command[check_puppet_agent_proc]=/usr/lib/nagios/plugins/check_procs -w 1:2 -c 1:2 -a "/usr/bin/puppet agent"
-command[check_puppet_agent]=/usr/lib/nagios/plugins/check_puppet-agent -s /var/lib/puppet/state/last_run_summary.yaml
+command[check_dns]=/usr/lib/nagios/plugins/check_dns  -s $ARG1$ -H $ARG2$
+command[check_log]=/usr/lib/nagios/plugins/check_log -F $ARG1$ -O $ARG2$ -q $ARG3$
+command[check_http]=/usr/lib/nagios/plugins/check_http  -I $ARG1$ -p $ARG2$ -u $ARG3$ -s $ARG4$
+command[check_mysql]=/usr/lib/nagios/plugins/check_mysql -h 127.0.0.1 -u '$ARG1$' -p '$ARG2$' -d '$ARG3$'
+command[check_mysql_replication]=/usr/lib/nagios/plugins/check_replication.pl -s 127.0.0.1 -m '$ARG1$' -u '$ARG2$' -p '$ARG3$'
 
 command[check_proc]=/usr/lib/nagios/plugins/check_procs -w $ARG2$ -c $ARG3$ -a $ARG1$
 
-command[check_ntp_peer]=/usr/lib/nagios/plugins/check_ntp_peer -H <%= timeserver %>
-command[check_ntp_time]=/usr/lib/nagios/plugins/check_ntp_time -H <%= timeserver %>
+command[check_ntp_peer]=/usr/lib/nagios/plugins/check_ntp_peer -H $ARG1$ -w $ARG2$ -c $ARG3$ 
+command[check_ntp_time]=/usr/lib/nagios/plugins/check_ntp_time -H $ARG1$ -w $ARG2$ -c $ARG3$ 
 
 #
 ##########################################################################

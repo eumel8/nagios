@@ -62,6 +62,16 @@ define command {
 }
 
 define command {
+        command_line                   /usr/lib/nagios/plugins/check_dns -s $ARG1$ -H $ARG2$
+        command_name                   check_dns
+}
+
+define command {
+        command_line                   /usr/lib/nagios/plugins/check_log -F $ARG1$ -O $ARG2$ -q $ARG3$
+        command_name                   check_log
+}
+
+define command {
         command_line                   /usr/lib/nagios/plugins/check_ping -H $HOSTADDRESS$ -w $ARG1$ -c $ARG2$
         command_name                   check_ping
 }

@@ -15,6 +15,7 @@ cfg_file=/etc/<%= @target %>/nagios_host.cfg
 # cfg_file=/etc/<%= @target %>/nagios_hostextinfo.cfg  
 cfg_file=/etc/<%= @target %>/nagios_service.cfg
 # cfg_dir=/etc/nagios/ext
+# cfg_dir=<% case @operatingsystem when "Ubuntu" then %>/etc/nagios-plugins/config<% end %>
 
 
 object_cache_file=/var/cache/icinga/objects.cache

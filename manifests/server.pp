@@ -90,6 +90,16 @@ case $engine {
             force   => true,
             require => Package['nagios'];
           }
+
+          exec { 'run_nagiosfile1_purger':
+            command => '/etc/init.d/nagios3 stop;/usr/sbin/dpkg-statoverride --update --add nagios www-data 2710 /var/lib/nagios3/rw; /etc/init.d/nagios3 start',
+            onlyif  => '/usr/bin/stat /var/lib/nagios3/rw | grep -c drwx------',
+          }
+          exec { 'run_nagiosfile2_purger':
+            command => '/etc/init.d/nagios3 stop;/usr/sbin/dpkg-statoverride --update --add nagios nagios 751 /var/lib/nagios3; /etc/init.d/nagios3 start',
+            onlyif  => '/usr/bin/stat /var/lib/nagios3 | grep -c drwxr-x---',
+          }
+
         }
 
         default: {
@@ -281,6 +291,15 @@ case $engine {
           require => Package['icinga'],
           notify  => Service['icinga'];
         }
+        exec { 'run_icingafile1_purger':
+          command => '/etc/init.d/icinga stop;/usr/sbin/dpkg-statoverride --update --add nagios www-data 2710 /var/lib/icinga/rw; /etc/init.d/icinga start',
+          onlyif  => '/usr/bin/stat /var/lib/icinga/rw | grep -c drwx------',
+        }
+#        exec { 'run_icingafile2_purger':
+#          command => '/etc/init.d/icinga stop;/usr/sbin/dpkg-statoverride --update --add nagios nagios 751 /var/lib/icinga; /etc/init.d/icinga start',
+#          onlyif  => '/usr/bin/stat /var/lib/icinga | grep -c drwxr-x---',
+#        }
+
       }
 
       default: {

@@ -13,9 +13,10 @@
 #
 
 class nagios::nrpe (
-  $nrpe_allowed_hosts  = '127.0.0.1',
-  $timeserver          = '127.0.0.1',
-  $nrpe_conf_overwrite = 0
+  $nrpe_allowed_hosts   = '127.0.0.1',
+  $timeserver           = '127.0.0.1',
+  $nrpe_conf_overwrite  = 0,
+  $monitor_puppet_agent = 0,
   )
   {
 case $::operatingsystem {
@@ -83,6 +84,24 @@ case $::operatingsystem {
   file { '/etc/nrpe.cfg':
     ensure => 'link',
     target => '/etc/nagios/nrpe.cfg',
+  }
+
+  if ($monitor_puppet_agent == 1) {
+    cron {'monitor-puppet-agent':
+      ensure  => present,
+      command => '/usr/lib/nagios/plugins/check_puppet-agent > /tmp/check_puppet_agent.log',
+      user    => 'root',
+      minute  => [0,5,10,15,20,25,30,35,40,45,50,55],
+      require => File['/usr/lib/nagios/plugins'],
+    }
+    
+    exec {'check_puppet-agent_extra_run':
+      command => '/usr/lib/nagios/plugins/check_puppet-agent > /tmp/check_puppet_agent.log',
+      path    => '/bin:/usr/bin:/usr/lib',
+      creates => '/tmp/check_puppet_agent.log',
+      require => File['/usr/lib/nagios/plugins'],
+    }
+  
   }
 
   if ($nrpe_conf_overwrite == 1) {
