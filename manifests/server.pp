@@ -415,37 +415,37 @@ case $engine {
 #        }
         case $distribution['member'] {
           'client': {
-            package { 'nagios-nsca-client':
+            package { 'nsca-client':
               ensure   => present,
             }
             file {"/etc/$target/send_nsca.cfg":
               ensure  => file,
               content => template('nagios/nagios/send_nsca_cfg.erb'),
               force   => true,
-              require => Package['nagios-nsca-client'];
+              require => Package['nsca-client'];
             }
             file {"/etc/$target/submit_service_check":
               ensure  => file,
               content => template('nagios/nagios/submit_service_check.erb'),
               force   => true,
-              require => Package['nagios-nsca-client'];
+              require => Package['nsca-client'];
             }
           }
           'master': {
-            package { 'nagios-nsca':
+            package { 'nsca':
               ensure   => present,
             }
             file {"/etc/$target/nsca.cfg":
               ensure  => file,
               content => template('nagios/nagios/nsca_cfg.erb'),
               force   => true,
-              require => Package['nagios-nsca'];
+              require => Package['nsca'];
             }
             file {'/etc/xinetd.d/nsca':
               ensure  => file,
               source  => 'puppet:///modules/nagios/nagios/nsca',
               force   => true,
-              require => Package['nagios-nsca'];
+              require => Package['nsca'];
             }
           }
           default: {
