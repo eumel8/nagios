@@ -424,8 +424,9 @@ case $engine {
               force   => true,
               require => Package['nsca-client'];
             }
-            file {"/etc/$target/submit_service_check":
+            file {"/etc/nagios/submit_service_check":
               ensure  => file,
+              mode    => '0755',
               content => template('nagios/nagios/submit_service_check_ubuntu.erb'),
               force   => true,
               require => Package['nsca-client'];
