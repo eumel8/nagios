@@ -77,7 +77,7 @@ case $engine {
               }
               file {"/etc/$target/submit_service_check":
                 ensure  => file,
-                content => template('nagios/nagios/submit_service_check.erb'),
+                content => template('nagios/nagios/submit_service_check_opensuse.erb'),
                 force   => true,
                 require => Package['nagios-nsca-client'];
               }
@@ -149,7 +149,7 @@ case $engine {
               }
               file {"/etc/$target/submit_service_check":
                 ensure  => file,
-                content => template('nagios/nagios/submit_service_check.erb'),
+                content => template('nagios/nagios/submit_service_check_ubuntu.erb'),
                 force   => true,
                 require => Package['nsca-client'];
               }
@@ -287,7 +287,7 @@ case $engine {
           }
           file {"/etc/$target/submit_service_check":
             ensure  => file,
-            content => template('nagios/nagios/submit_service_check.erb'),
+            content => template('nagios/nagios/submit_service_check_opensuse.erb'),
             force   => true,
             require => Package['nagios-nsca-client'];
           }
@@ -352,7 +352,7 @@ case $engine {
             }
             file {"/etc/$target/submit_service_check":
               ensure  => file,
-              content => template('nagios/nagios/submit_service_check.erb'),
+              content => template('nagios/nagios/submit_service_check_opensuse.erb'),
               force   => true,
               require => Package['nagios-nsca-client'];
             }
@@ -426,7 +426,7 @@ case $engine {
             }
             file {"/etc/$target/submit_service_check":
               ensure  => file,
-              content => template('nagios/nagios/submit_service_check.erb'),
+              content => template('nagios/nagios/submit_service_check_ubuntu.erb'),
               force   => true,
               require => Package['nsca-client'];
             }
