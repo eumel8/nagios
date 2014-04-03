@@ -64,6 +64,44 @@ case $engine {
             force   => true,
             require => Package['nagios'];
           }
+          case $distribution['member'] {
+            'client': {
+              package { 'nagios-nsca-client':
+                ensure   => present,
+              }
+              file {"/etc/$target/send_nsca.cfg":
+                ensure  => file,
+                content => template('nagios/nagios/send_nsca_cfg.erb'),
+                force   => true,
+                require => Package['nagios-nsca-client'];
+              }
+              file {"/etc/$target/submit_service_check":
+                ensure  => file,
+                content => template('nagios/nagios/submit_service_check.erb'),
+                force   => true,
+                require => Package['nagios-nsca-client'];
+              }
+            }
+            'master': {
+              package { 'nagios-nsca':
+                ensure   => present,
+              }
+              file {"/etc/$target/nsca.cfg":
+                ensure  => file,
+                content => template('nagios/nagios/nsca_cfg.erb'),
+                force   => true,
+                require => Package['nagios-nsca'];
+              }
+              file {'/etc/xinetd.d/nsca':
+                ensure  => file,
+                source  => 'puppet:///modules/nagios/nagios/nsca',
+                force   => true,
+                require => Package['nagios-nsca'];
+              }
+            }
+            default: {
+            }
+          }
 
 
         }
@@ -90,7 +128,6 @@ case $engine {
             force   => true,
             require => Package['nagios'];
           }
-
           exec { 'run_nagiosfile1_purger':
             command => '/etc/init.d/nagios3 stop;/usr/sbin/dpkg-statoverride --update --add nagios www-data 2710 /var/lib/nagios3/rw; /etc/init.d/nagios3 start',
             onlyif  => '/usr/bin/stat /var/lib/nagios3/rw | grep -c drwx------',
@@ -98,6 +135,44 @@ case $engine {
           exec { 'run_nagiosfile2_purger':
             command => '/etc/init.d/nagios3 stop;/usr/sbin/dpkg-statoverride --update --add nagios nagios 751 /var/lib/nagios3; /etc/init.d/nagios3 start',
             onlyif  => '/usr/bin/stat /var/lib/nagios3 | grep -c drwxr-x---',
+          }
+          case $distribution['member'] {
+            'client': {
+              package { 'nsca-client':
+                ensure   => present,
+              }
+              file {"/etc/$target/send_nsca.cfg":
+                ensure  => file,
+                content => template('nagios/nagios/send_nsca_cfg.erb'),
+                force   => true,
+                require => Package['nsca-client'];
+              }
+              file {"/etc/$target/submit_service_check":
+                ensure  => file,
+                content => template('nagios/nagios/submit_service_check.erb'),
+                force   => true,
+                require => Package['nsca-client'];
+              }
+            }
+            'master': {
+              package { 'nsca':
+                ensure   => present,
+              }
+              file {"/etc/$target/nsca.cfg":
+                ensure  => file,
+                content => template('nagios/nagios/nsca_cfg.erb'),
+                force   => true,
+                require => Package['nsca'];
+              }
+              file {'/etc/xinetd.d/nsca':
+                ensure  => file,
+                source  => 'puppet:///modules/nagios/nagios/nsca',
+                force   => true,
+                require => Package['nsca'];
+              }
+            }
+            default: {
+            }
           }
 
         }
@@ -264,6 +339,45 @@ case $engine {
           require => Package['icinga'],
           notify  => Service['icinga'];
         }
+        case $distribution['member'] {
+          'client': {
+            package { 'nagios-nsca-client':
+              ensure   => present,
+            }
+            file {"/etc/$target/send_nsca.cfg":
+              ensure  => file,
+              content => template('nagios/nagios/send_nsca_cfg.erb'),
+              force   => true,
+              require => Package['nagios-nsca-client'];
+            }
+            file {"/etc/$target/submit_service_check":
+              ensure  => file,
+              content => template('nagios/nagios/submit_service_check.erb'),
+              force   => true,
+              require => Package['nagios-nsca-client'];
+            }
+          }
+          'master': {
+            package { 'nagios-nsca':
+              ensure   => present,
+            }
+            file {"/etc/$target/nsca.cfg":
+              ensure  => file,
+              content => template('nagios/nagios/nsca_cfg.erb'),
+              force   => true,
+              require => Package['nagios-nsca'];
+            }
+            file {'/etc/xinetd.d/nsca':
+              ensure  => file,
+              source  => 'puppet:///modules/nagios/nagios/nsca',
+              force   => true,
+              require => Package['nagios-nsca'];
+            }
+          }
+          default: {
+            }
+          }
+
       }
 
       'Ubuntu': {
@@ -299,6 +413,44 @@ case $engine {
 #          command => '/etc/init.d/icinga stop;/usr/sbin/dpkg-statoverride --update --add nagios nagios 751 /var/lib/icinga; /etc/init.d/icinga start',
 #          onlyif  => '/usr/bin/stat /var/lib/icinga | grep -c drwxr-x---',
 #        }
+        case $distribution['member'] {
+          'client': {
+            package { 'nagios-nsca-client':
+              ensure   => present,
+            }
+            file {"/etc/$target/send_nsca.cfg":
+              ensure  => file,
+              content => template('nagios/nagios/send_nsca_cfg.erb'),
+              force   => true,
+              require => Package['nagios-nsca-client'];
+            }
+            file {"/etc/$target/submit_service_check":
+              ensure  => file,
+              content => template('nagios/nagios/submit_service_check.erb'),
+              force   => true,
+              require => Package['nagios-nsca-client'];
+            }
+          }
+          'master': {
+            package { 'nagios-nsca':
+              ensure   => present,
+            }
+            file {"/etc/$target/nsca.cfg":
+              ensure  => file,
+              content => template('nagios/nagios/nsca_cfg.erb'),
+              force   => true,
+              require => Package['nagios-nsca'];
+            }
+            file {'/etc/xinetd.d/nsca':
+              ensure  => file,
+              source  => 'puppet:///modules/nagios/nagios/nsca',
+              force   => true,
+              require => Package['nagios-nsca'];
+            }
+          }
+          default: {
+          }
+        }
 
       }
 
@@ -423,44 +575,6 @@ case $engine {
         target  => '/etc/icinga/apache2.conf';
       }
 
-      case $distribution['member'] {
-        'client': {
-          package { 'nagios-nsca-client':
-            ensure   => present,
-          }
-          file {"/etc/$target/send_nsca.cfg":
-            ensure  => file,
-            content => template('nagios/nagios/send_nsca_cfg.erb'),
-            force   => true,
-            require => Package['nagios-nsca-client'];
-          }
-          file {"/etc/$target/submit_service_check":
-            ensure  => file,
-            content => template('nagios/nagios/submit_service_check.erb'),
-            force   => true,
-            require => Package['nagios-nsca-client'];
-          }
-        }
-        'master': {
-          package { 'nagios-nsca':
-            ensure   => present,
-          }
-          file {"/etc/$target/nsca.cfg":
-            ensure  => file,
-            content => template('nagios/nagios/nsca_cfg.erb'),
-            force   => true,
-            require => Package['nagios-nsca'];
-          }
-          file {'/etc/xinetd.d/nsca':
-            ensure  => file,
-            source  => 'puppet:///modules/nagios/nagios/nsca',
-            force   => true,
-            require => Package['nagios-nsca'];
-          }
-        }
-        default: {
-        }
-      }
   }
   default: {
     warning('You have to define an engine')
