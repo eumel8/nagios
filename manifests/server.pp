@@ -590,9 +590,23 @@ case $engine {
     notify  => Service['nagios']
   }
 
+  file { "/etc/$target/nagios_hostgroups.cfg":
+    ensure  => file,
+    content => template('nagios/nagios/nagios_hostgroups.erb'),
+    force   => true,
+    notify  => Service['nagios']
+  }
+
   file { "/etc/$target/nagios_service.cfg":
     ensure  => file,
     content => template('nagios/nagios/nagios_service.erb'),
+    force   => true,
+    notify  => Service['nagios']
+  }
+
+  file { "/etc/$target/nagios_servicegroups.cfg":
+    ensure  => file,
+    content => template('nagios/nagios/nagios_servicegroups.erb'),
     force   => true,
     notify  => Service['nagios']
   }
