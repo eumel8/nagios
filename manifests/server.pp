@@ -392,7 +392,7 @@ case $engine {
           alias   => 'nagios',
         }
         package {
-        [ 'icinga-core', 'icinga-cgi' ]:
+        [ 'icinga-core', 'icinga-cgi', 'icinga-doc' ]:
           ensure  => installed,
         }
         package { 'nagios-nrpe-plugin':
