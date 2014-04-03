@@ -94,7 +94,7 @@ case $engine {
               }
               file {'/etc/xinetd.d/nsca':
                 ensure  => file,
-                source  => 'puppet:///modules/nagios/nagios/nsca',
+                source  => 'puppet:///modules/nagios/nagios/nsca.opensuse',
                 force   => true,
                 require => Package['nagios-nsca'];
               }
@@ -166,7 +166,7 @@ case $engine {
               }
               file {'/etc/xinetd.d/nsca':
                 ensure  => file,
-                source  => 'puppet:///modules/nagios/nagios/nsca',
+                source  => 'puppet:///modules/nagios/nagios/nsca.ubuntu',
                 force   => true,
                 require => Package['nsca'];
               }
@@ -304,7 +304,7 @@ case $engine {
           }
           file {'/etc/xinetd.d/nsca':
             ensure  => file,
-            source  => 'puppet:///modules/nagios/nagios/nsca',
+            source  => 'puppet:///modules/nagios/nagios/nsca.opensuse',
             force   => true,
             require => Package['nagios-nsca'];
           }
@@ -369,7 +369,7 @@ case $engine {
             }
             file {'/etc/xinetd.d/nsca':
               ensure  => file,
-              source  => 'puppet:///modules/nagios/nagios/nsca',
+              source  => 'puppet:///modules/nagios/nagios/nsca.opensuse',
               force   => true,
               require => Package['nagios-nsca'];
             }
@@ -443,7 +443,7 @@ case $engine {
             }
             file {'/etc/xinetd.d/nsca':
               ensure  => file,
-              source  => 'puppet:///modules/nagios/nagios/nsca',
+              source  => 'puppet:///modules/nagios/nagios/nsca.ubuntu',
               force   => true,
               require => Package['nsca'];
             }
