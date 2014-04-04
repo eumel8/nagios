@@ -91,3 +91,8 @@ define command {
 	command_name 			submit_service_check
 }
 
+define command {
+        command_line                    /etc/nagios/submit_host_check "$HOSTNAME$" "$HOSTSTATES$" "$HOSTOUTPUTS$"
+        command_name                    submit_host_check
+}
+

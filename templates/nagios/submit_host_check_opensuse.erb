@@ -1,0 +1,11 @@
+#!/bin/bash
+# Skript submit_host_check
+PRINTF="/usr/bin/printf"
+NAGIOS_SERVER="<%= @distribution['host'] %>"
+CMD="/usr/bin/send_nsca"
+CFG="/etc/nagios/send_nsca.cfg "
+HOST=$1
+RESULT=$2
+OUTPUT=$3
+$PRINTF "%b" "$HOST\t$RESULT\t$OUTPUT\n" |
+$CMD -H $NAGIOS_SERVER -c $CFG
