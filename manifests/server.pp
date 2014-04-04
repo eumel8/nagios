@@ -81,6 +81,12 @@ case $engine {
                 force   => true,
                 require => Package['nagios-nsca-client'];
               }
+              file {"/etc/$target/submit_host_check":
+                ensure  => file,
+                content => template('nagios/nagios/submit_host_check_opensuse.erb'),
+                force   => true,
+                require => Package['nagios-nsca-client'];
+              }
             }
             'master': {
               package { 'nagios-nsca':
@@ -151,6 +157,13 @@ case $engine {
                 ensure  => file,
                 mode    => '0755',
                 content => template('nagios/nagios/submit_service_check_ubuntu.erb'),
+                force   => true,
+                require => Package['nsca-client'];
+              }
+              file {"/etc/nagios/submit_host_check":
+                ensure  => file,
+                mode    => '0755',
+                content => template('nagios/nagios/submit_host_check_ubuntu.erb'),
                 force   => true,
                 require => Package['nsca-client'];
               }
@@ -292,6 +305,12 @@ case $engine {
             force   => true,
             require => Package['nagios-nsca-client'];
           }
+          file {"/etc/$target/submit_host_check":
+            ensure  => file,
+            content => template('nagios/nagios/submit_host_check_opensuse.erb'),
+            force   => true,
+            require => Package['nagios-nsca-client'];
+          }
         }
         'master': {
           package { 'nagios-nsca':
@@ -354,6 +373,12 @@ case $engine {
             file {"/etc/$target/submit_service_check":
               ensure  => file,
               content => template('nagios/nagios/submit_service_check_opensuse.erb'),
+              force   => true,
+              require => Package['nagios-nsca-client'];
+            }
+            file {"/etc/$target/submit_host_check":
+              ensure  => file,
+              content => template('nagios/nagios/submit_host_check_opensuse.erb'),
               force   => true,
               require => Package['nagios-nsca-client'];
             }
@@ -429,6 +454,13 @@ case $engine {
               ensure  => file,
               mode    => '0755',
               content => template('nagios/nagios/submit_service_check_ubuntu.erb'),
+              force   => true,
+              require => Package['nsca-client'];
+            }
+            file {"/etc/nagios/submit_host_check":
+              ensure  => file,
+              mode    => '0755',
+              content => template('nagios/nagios/submit_host_check_ubuntu.erb'),
               force   => true,
               require => Package['nsca-client'];
             }
