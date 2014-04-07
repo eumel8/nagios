@@ -38,24 +38,27 @@ This version doesn't use exported resources in puppet. So all hosts must configu
         'ip'       => '192.168.0.100',
         'domain'   => 'beispiel.de',
         'services' => {
-          'Ping' => 'check_ping!200.0,60%!500.0,95%',
-          'Load' => 'check_nrpe!check_load!15 10 5 30 25 20',
+          'Ping' => { check => 'check_ping!200.0,60%!500.0,95%', notes => 'group_sms' }, 
+          'Load' => { check => 'check_nrpe!check_load!15 10 5 30 25 20', notes => 'group_email,group_sms,group_voice'},
         },
       },
       ns => {
         'ip'       => '192.168.0.10',
         'domain'   => 'beispiel.de',
         'services' => {
-          'Ping' => 'check_ping!200.0,60%!500.0,95%',
+          'Ping' => { check => 'check_ping!200.0,60%!500.0,95%'},
         },
       },
       gw => {
         'ip'       => '192.168.0.1',
         'domain'   => 'beispiel.de',
         'services' => {
-          'Ping' => 'check_ping!400.0,80%!500.0,95%',
+          'Ping' => { check => 'check_ping!400.0,80%!500.0,95%'},
         },
       },
+
+'notes' are optional for services for additional notification SMS + Voice (delivered by Twilio).
+Default notification for all services is email
 
 Install NRPE and configure allowed hosts:
 

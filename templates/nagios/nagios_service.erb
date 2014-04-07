@@ -87,7 +87,10 @@ define service {
   use cloud-service
   host_name <%= k %>.<%= v['domain'] %>
   service_description            <%= e %>
-  check_command                  <%= c %>
+  check_command                  <%= c['check'] %>
+<% if c['notes'] -%>
+  contact_groups                 <%= c['notes'] %>
+<% end -%>
 }
 <% end -%>
 <% end -%>
