@@ -113,7 +113,7 @@ process_performance_data=0
 
 <% if @distribution['member'] == 'client' %>
 ocsp_command=submit_service_check
-ocsp_command=submit_host_check
+# ocsp_command=submit_host_check
 obsess_over_services=1
 obsess_over_hosts=1
 <%   else %>
@@ -123,7 +123,7 @@ obsess_over_services=0
 obsess_over_hosts=0
 <% end %>
 #
-translate_passive_host_checks=0
+translate_passive_host_checks=1
 passive_host_checks_are_soft=0
 
 check_for_orphaned_services=1
