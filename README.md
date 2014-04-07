@@ -1,9 +1,25 @@
 Nagios/Icinga/Nrpe Modul for Puppet
 ===================================
 
-This module provides distributed configuration from Nagios/Icinga. It can define
-"central service" monitor like accessibility of a server and can also collect
-"discovered" services. It's used exported resources in Puppet.
+This module provides distributed configuration from Nagios/Icinga. 
+
+Features
+--------
+Nagios engine / Icinga engine configurable
+Web access user configurable
+Install core engine on monitor host and nrpe service on clients
+Configre allowed hosts on nrpe and usage of expand conf or overwrite existing conf
+Standard service checks with NRPE provided by nagios-plugins
+Some plugin check extensions called 'local' checks
+Multiple plugin check extensions included as sub module (e.g. mongodb check)
+Distributed monitoring with NSCA
+Service freshness in passive checks and translating host checks activated
+SMS + Voice notification with Twilio service
+
+Non-Features
+------------
+Exported resources are deleted in this version due the different requirements
+Service discovering are deleted due the excessive false possitives
 
 Usage
 -----
@@ -27,6 +43,7 @@ Using Twilio for SMS and Voice notification:
       twilio_identifier  => 'abcdefghijklmnopqrstuvqxyz',  # your twilio secret identifier
       twilio_from        => '%2B1123456790',               # your urlenode twilio number, e.g. +1 123 456 7890
       twilio_to          => '%2B491721234567',             # your urlencode oncall number, e.g +49 172 123 4567
+      notification       => ['root@localhost','nagios@localhost'], # single or multiple email addresses
     }
 
 You can register for Twilio services on https://www.twilio.com

@@ -5,7 +5,7 @@ define contact {
         service_notification_options   w,u,c,r
         host_notification_commands     notify-host-by-email
         service_notification_commands  notify-service-by-email
-        email                          root@localhost
+        email                          <% if notification.class == Array then %><%= notification.flatten.join(',') %><% else %><%= notification %><% end %>
         contact_name                   email
 }
 

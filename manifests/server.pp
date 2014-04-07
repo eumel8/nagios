@@ -23,6 +23,7 @@ class nagios::server (
   $twilio_identifier = undef,
   $twilio_from       = undef,
   $twilio_to         = undef,
+  $notification      = 'root@localhost',
 
 ) {
 
