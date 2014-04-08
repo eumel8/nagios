@@ -5,16 +5,16 @@ This module provides distributed configuration from Nagios/Icinga.
 
 Features
 --------
-Nagios engine / Icinga engine configurable
-Web access user configurable
-Install core engine on monitor host and nrpe service on clients
-Configre allowed hosts on nrpe and usage of expand conf or overwrite existing conf
-Standard service checks with NRPE provided by nagios-plugins
-Some plugin check extensions called 'local' checks
-Multiple plugin check extensions included as sub module (e.g. mongodb check)
-Distributed monitoring with NSCA
-Service freshness in passive checks and translating host checks activated
-SMS + Voice notification with Twilio service
+- Nagios engine / Icinga engine configurable
+- Web access user configurable
+- Install core engine on monitor host and nrpe service on clients
+- Configre allowed hosts on nrpe and usage of expand conf or overwrite existing conf
+- Standard service checks with NRPE provided by nagios-plugins
+- Some plugin check extensions called 'local' checks
+- Multiple plugin check extensions included as sub module (e.g. mongodb check)
+- Distributed monitoring with NSCA
+- Service freshness in passive checks and translating host checks activated
+- SMS + Voice notification with Twilio service
 
 Non-Features
 ------------
