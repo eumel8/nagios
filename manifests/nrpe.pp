@@ -94,14 +94,13 @@ case $::operatingsystem {
       minute  => [0,5,10,15,20,25,30,35,40,45,50,55],
       require => File['/usr/lib/nagios/plugins'],
     }
-    
+   
     exec {'check_puppet-agent_extra_run':
-      command => '/usr/lib/nagios/plugins/local/check_puppet-agent > /tmp/check_puppet_agent.log',
+      command => '/bin/echo "OK Init..." > /tmp/check_puppet_agent.log',
       path    => '/bin:/usr/bin:/usr/lib',
       creates => '/tmp/check_puppet_agent.log',
-      require => File['/usr/lib/nagios/plugins'],
     }
-  
+ 
   }
 
   if ($nrpe_conf_overwrite == 1) {
