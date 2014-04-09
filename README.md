@@ -50,7 +50,7 @@ You can register for Twilio services on https://www.twilio.com
 
 This version doesn't use exported resources in puppet. So all hosts must configured in an array:
 
-    nd => {
+    'nd.beispiel.de' => {
       nagios => {
         'ip'       => '192.168.0.100',
         'domain'   => 'beispiel.de',
@@ -59,14 +59,14 @@ This version doesn't use exported resources in puppet. So all hosts must configu
           'Load' => { check => 'check_nrpe!check_load!15 10 5 30 25 20', notes => 'group_email,group_sms,group_voice'},
         },
       },
-      ns => {
+      'ns.beispiel.de' => {
         'ip'       => '192.168.0.10',
         'domain'   => 'beispiel.de',
         'services' => {
           'Ping' => { check => 'check_ping!200.0,60%!500.0,95%'},
         },
       },
-      gw => {
+      'gw.beispiel.de' => {
         'ip'       => '192.168.0.1',
         'domain'   => 'beispiel.de',
         'services' => {
