@@ -143,6 +143,11 @@ case $engine {
             command => '/etc/init.d/nagios3 stop;/usr/sbin/dpkg-statoverride --update --add nagios nagios 751 /var/lib/nagios3; /etc/init.d/nagios3 start',
             onlyif  => '/usr/bin/stat /var/lib/nagios3 | grep -c drwxr-x---',
           }
+          exec { 'run_nagiosgroup_purger':
+            path    => '/bin:/usr/bin:/usr/sbin',
+            command => 'usermod -a -G nagios $(ps axho user,comm|grep -E \'httpd|apache\'|uniq|grep -v root|awk \'END {if ($1) print $1}\')',
+            unless  => 'id $(ps axho user,comm|grep -E \'httpd|apache\'|uniq|grep -v root|awk \'END {if ($1) print $1}\') | grep -c nagios',
+          }
           case $distribution['member'] {
             'client': {
               package { 'nsca-client':
@@ -440,6 +445,11 @@ case $engine {
 #          command => '/etc/init.d/icinga stop;/usr/sbin/dpkg-statoverride --update --add nagios nagios 751 /var/lib/icinga; /etc/init.d/icinga start',
 #          onlyif  => '/usr/bin/stat /var/lib/icinga | grep -c drwxr-x---',
 #        }
+        exec { 'run_icingagroup_purger':
+          path    => '/bin:/usr/bin:/usr/sbin',
+          command => 'usermod -a -G nagios $(ps axho user,comm|grep -E \'httpd|apache\'|uniq|grep -v root|awk \'END {if ($1) print $1}\')',
+          unless  => 'id $(ps axho user,comm|grep -E \'httpd|apache\'|uniq|grep -v root|awk \'END {if ($1) print $1}\') | grep -c nagios',
+        }
         case $distribution['member'] {
           'client': {
             package { 'nsca-client':
