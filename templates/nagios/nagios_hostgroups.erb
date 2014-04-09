@@ -7,7 +7,7 @@
 <% @vhosts = [ ] -%>
 <% @nd.each_pair do |k, v| -%>
 <% if (v['domain'] || "") == x -%>
-<% @vhosts << k + '.' + v['domain'] -%>
+<% @vhosts << k -%>
 <% end -%>
 <% end -%>
 <% if @vhosts.length > 0 -%>

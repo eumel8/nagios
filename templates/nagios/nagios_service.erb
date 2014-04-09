@@ -37,7 +37,7 @@ define service {
 <% l.each_pair do |e, c| -%>
 define service {
   use cloud-service
-  host_name <%= k %>.<%= v['domain'] %>
+  host_name <%= k %>
   service_description            <%= e %>
   check_command                  <%= c['check'] %>
 <% if c['notes'] -%>

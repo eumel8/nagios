@@ -28,7 +28,7 @@ define host {
 <% @nd.each_pair do |k, v| -%>
 define host {
   use cloud-host
-      host_name <%= k %>.<%= v['domain'] %>
+      host_name <%= k %>
       address   <%= v['ip'] %>
 }
 <% end -%>
