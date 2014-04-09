@@ -11,6 +11,7 @@ define host {
         check_command                  check-host-alive
         max_check_attempts             3
         active_checks_enabled          <%= @ace %>
+        check_freshness                1
         passive_checks_enabled         1
         event_handler_enabled          1
         flap_detection_enabled         1
