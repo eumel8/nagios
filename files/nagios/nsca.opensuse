@@ -13,5 +13,6 @@ service nsca
         server_args     = -c /etc/nagios/nsca.cfg --inetd
        	log_on_failure  += USERID
         disable         = no
+	cps             = 250 10
 #	only_from       = 127.0.0.1
 }
