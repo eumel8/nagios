@@ -145,8 +145,8 @@ case $engine {
           }
           exec { 'run_nagiosgroup_purger':
             path    => '/bin:/usr/bin:/usr/sbin',
-            command => 'usermod -a -G nagios $(ps axho user,comm|grep -E \'httpd|apache\'|uniq|grep -v root|awk \'END {if ($1) print $1}\')',
-            unless  => 'id $(ps axho user,comm|grep -E \'httpd|apache\'|uniq|grep -v root|awk \'END {if ($1) print $1}\') | grep -c nagios',
+            command => 'usermod -a -G nagios `getent passwd $(ps axhno user,comm|grep -E \'httpd|apache\'|uniq|grep -v root|awk \'END {if ($1) print $1}\')|awk -F: \'{print $1}\'`',
+            unless  => 'id `getent passwd $(ps axhno user,comm|grep -E \'httpd|apache\'|uniq|grep -v root|awk \'END {if ($1) print $1}\') | awk -F: \'{print $1}\'` | grep -c nagios',
           }
           case $distribution['member'] {
             'client': {
@@ -441,15 +441,12 @@ case $engine {
           command => '/etc/init.d/icinga stop;/usr/sbin/dpkg-statoverride --update --add nagios www-data 2710 /var/lib/icinga/rw; /etc/init.d/icinga start',
           onlyif  => '/usr/bin/stat /var/lib/icinga/rw | grep -c drwx------',
         }
-#        exec { 'run_icingafile2_purger':
-#          command => '/etc/init.d/icinga stop;/usr/sbin/dpkg-statoverride --update --add nagios nagios 751 /var/lib/icinga; /etc/init.d/icinga start',
-#          onlyif  => '/usr/bin/stat /var/lib/icinga | grep -c drwxr-x---',
-#        }
         exec { 'run_icingagroup_purger':
           path    => '/bin:/usr/bin:/usr/sbin',
-          command => 'usermod -a -G nagios $(ps axho user,comm|grep -E \'httpd|apache\'|uniq|grep -v root|awk \'END {if ($1) print $1}\')',
-          unless  => 'id $(ps axho user,comm|grep -E \'httpd|apache\'|uniq|grep -v root|awk \'END {if ($1) print $1}\') | grep -c nagios',
+          command => 'usermod -a -G nagios `getent passwd $(ps axhno user,comm|grep -E \'httpd|apache\'|uniq|grep -v root|awk \'END {if ($1) print $1}\')|awk -F: \'{print $1}\'`',
+          unless  => 'id `getent passwd $(ps axhno user,comm|grep -E \'httpd|apache\'|uniq|grep -v root|awk \'END {if ($1) print $1}\') | awk -F: \'{print $1}\'` | grep -c nagios',
         }
+
         case $distribution['member'] {
           'client': {
             package { 'nsca-client':
