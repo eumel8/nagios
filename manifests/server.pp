@@ -91,7 +91,14 @@ case $engine {
             }
             'master': {
               package { 'nagios-nsca':
-                ensure   => present,
+                ensure  => present,
+              }
+              package { 'xinetd':
+                ensure  => present,
+              }
+              service  { 'xinetd':
+                ensure  => running,
+                require => Package['xinetd'];
               }
               file {"/etc/$target/nsca.cfg":
                 ensure  => file,
@@ -104,6 +111,7 @@ case $engine {
                 source  => 'puppet:///modules/nagios/nagios/nsca.opensuse',
                 force   => true,
                 require => Package['nagios-nsca'];
+                notify  => Service['xinetd'];
               }
             }
             default: {
@@ -176,7 +184,14 @@ case $engine {
             }
             'master': {
               package { 'nsca':
-                ensure   => present,
+                ensure  => present,
+              }
+              package { 'xinetd':
+                ensure  => present,
+              }
+              service  { 'xinetd':
+                ensure  => running,
+                require => Package['xinetd'];
               }
               file {"/etc/$target/nsca.cfg":
                 ensure  => file,
@@ -189,6 +204,7 @@ case $engine {
                 source  => 'puppet:///modules/nagios/nagios/nsca.ubuntu',
                 force   => true,
                 require => Package['nsca'];
+                notify  => Service['xinetd'];
               }
             }
             default: {
