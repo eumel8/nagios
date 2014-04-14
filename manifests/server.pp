@@ -110,7 +110,7 @@ case $engine {
                 ensure  => file,
                 source  => 'puppet:///modules/nagios/nagios/nsca.opensuse',
                 force   => true,
-                require => Package['nagios-nsca'];
+                require => Package['nagios-nsca'],
                 notify  => Service['xinetd'];
               }
             }
@@ -203,7 +203,7 @@ case $engine {
                 ensure  => file,
                 source  => 'puppet:///modules/nagios/nagios/nsca.ubuntu',
                 force   => true,
-                require => Package['nsca'];
+                require => Package['nsca'],
                 notify  => Service['xinetd'];
               }
             }
