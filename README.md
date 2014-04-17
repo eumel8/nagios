@@ -48,10 +48,10 @@ Using Twilio for SMS and Voice notification:
 
 You can register for Twilio services on https://www.twilio.com
 
-This version doesn't use exported resources in puppet. So all hosts must configured in an array:
+This version doesn't use exported resources in puppet. So all hosts must configured in a hash:
 
-    'nd.beispiel.de' => {
-      nagios => {
+nd => {
+      'ab.beispiel.de' => {
         'ip'       => '192.168.0.100',
         'domain'   => 'beispiel.de',
         'services' => {
@@ -73,6 +73,7 @@ This version doesn't use exported resources in puppet. So all hosts must configu
           'Ping' => { check => 'check_ping!400.0,80%!500.0,95%'},
         },
       },
+    }
 
 'notes' are optional for services for additional notification SMS + Voice (delivered by Twilio).
 Default notification for all services is email
