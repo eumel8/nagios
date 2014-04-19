@@ -34,6 +34,9 @@ case $::operatingsystem {
       package { 'nagios-plugins-mem':
         ensure   => present,
       }
+      package { 'nagios-plugins-mysql':
+        ensure   => present,
+      }
 
       service { 'nrpe':
         ensure   => running,
