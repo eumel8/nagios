@@ -34,7 +34,7 @@ case $::operatingsystem {
       package { 'nagios-plugins-mem':
         ensure   => present,
       }
-      package { 'nagios-plugins-mysql':
+      package { 'nagios-plugins-all':
         ensure   => present,
       }
 
