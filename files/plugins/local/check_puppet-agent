@@ -99,7 +99,7 @@ done
 
 # check puppet daemon:
 # I only know the cmd lines for Debian and CentOS/RedHat:
-[ "$(ps axf|egrep "/usr/bin/ruby /usr/sbin/puppetd|/usr/bin/ruby1.8 /usr/bin/puppet agent")" ] || result 4
+[ "$(ps axf|egrep "/usr/bin/ruby /usr/sbin/puppetd|/usr/bin/ruby1.8|/usr/bin/ruby1.9 /usr/bin/puppet agent")" ] || result 4
 
 # check when last run happened
 line="$(grep last_run: ${statefile})"
