@@ -46,7 +46,7 @@ puppetversion=$(/usr/bin/puppet --version)
 
 if ! echo $puppetversion | grep -q "^2"
 then
-	statefile=$(/usr/bin/puppet config print lastrunreport)
+	statefile=$(/usr/bin/puppet config print lastrunfile)
 else
 	statefile=$(/usr/bin/puppet --configprint statedir)/last_run_summary.yaml
 fi
