@@ -1,3 +1,6 @@
 [submodule "files/plugins/remote/nagios-plugin-mongodb"]
 	path = files/plugins/remote/nagios-plugin-mongodb
 	url = https://github.com/mzupan/nagios-plugin-mongodb
+[submodule "files/plugins/remote/nagios-plugin-puppet-agent"]
+	path = files/plugins/remote/nagios-plugin-puppet-agent
+	url = https://github.com/aswen/nagios-plugins
