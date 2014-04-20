@@ -37,11 +37,19 @@
 # 20120126	A.Swen	    created.
 # 20120214  trey85stang Modified, added getopts, usage, defaults
 # 20120220  A.Swen      Statefile can be overriden
+# 20140420  F. Kloeker  Puppet 3 support
 
 # SETTINGS
 CRIT=7200
 WARN=3600
-statefile=$(/usr/bin/puppet --configprint statedir)/last_run_summary.yaml
+puppetversion=$(/usr/bin/puppet --version)
+
+if ! echo $puppetversion | grep -q "^2"
+then
+	statefile=$(/usr/bin/puppet config print lastrunreport)
+else
+	statefile=$(/usr/bin/puppet --configprint statedir)/last_run_summary.yaml
+fi
 
 # FUNCTIONS
 result () {
