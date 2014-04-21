@@ -1,10 +1,23 @@
 # == Class: nagios::nrpe
 #
 # Maintaining nagios and icinga environments
-#
-# === Parameters
+# Configure NRPE Servoce
 #
 # === Variables
+#
+# [*nrpe_allowed_hosts*]
+# String or array of allowed ipaddresses to connect nrpe service 
+#
+# [*timeserver*]
+# Which timeserver should I use for compare ntp service 
+#
+# [*nrpe_conf_overwrite*]
+# 0 = create nrpe_cloud.cfg and include this and the end of nrpe.cfg
+# 1 = write all automatic configured entries in nrpe.cfg
+#
+# [*monitor_puppet_agent*]
+# 0 = do nothing
+# 1 = setup nrep check + cron for un-root monitoring puppet agent 
 #
 # === Authors
 #

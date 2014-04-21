@@ -1,10 +1,51 @@
 # == Class: nagios::server
 #
 # Maintaining nagios and icinga environments
-#
-# === Parameters
+# Configure Nagios/Icinga server
 #
 # === Variables
+# [*nd*]
+# Hash of nodes to monitor
+#    nd => {
+#      '<host>.<domain>' => {
+#        'ip'       => '<ipaddress>,
+#        'domain'   => '<domain>',
+#        'services' => {
+#          '<service description>'       => { check => '<check_command>', notes=> '<notification_service>'},
+#        }
+#      }
+#    }
+#
+# [*engine*]
+# String of monitor service (nagios, icinga)
+#
+# [*distribution*]
+# Hash of distrubtion service (client, master)
+#   [*member*] 
+#      client = Client, send monitor data
+#      master = Master, receive monitor data
+#   [*host*]
+#      string = Master hostname 
+#   [*nsca_password*]
+#      string = password for encrypted communiation
+#
+# [*http_users*]
+# Hash of username/password combinations to use the web frontend
+#
+# [*twilio_account*]
+# String of the account name for Twilio service (SMS/Voice notifications)
+#
+# [*twilio_identifier*]
+# String of the account identifierle for Twilio service (SMS/Voice notifications)
+#
+# [*twilio_from*]
+# String of url-encoded phone number in Twilio service (SMS/Voice notifications)
+#
+# [*twilio_to*]
+# String of url-encoded phone number to send notifications with Twilio
+#
+# [*notifications*]
+# String/Array of email addresses for Email notification
 #
 # === Authors
 #
@@ -15,7 +56,6 @@
 class nagios::server (
 
   $nd                = {},
-  $nagios_server_ip  = '127.0.0.1',
   $engine            = undef,
   $distribution      = {},
   $http_users        = {},
