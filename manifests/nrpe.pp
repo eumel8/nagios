@@ -32,7 +32,7 @@ case $::operatingsystem {
         name     => $nrpe_package,
       }
       package {
-      [ 'nagios-plugins-tcp','nagios-plugins-mem','nagios-pluginns-clamav','nagios-plugins-disk','nagios-plugins-diskio','nagios-plugins-dns','nagios-plugins-http','nagios-plugins-load','nagios-plugins-logfiles','nagios-plugins-mailq','nagios-plugins-mysql','nagios-plugins-nrpe','nagios-plugins-ntp_peer','nagios-plugins-ntp_time','nagios-plugins-openvpn','nagios-plugins-pgscap','nagios-plugins-procs','nagios-plugins-tcp','nagios-plugins-time','nagios-plugins-users','nagios-plugins-smtp','nagios-plugins-swap','nagios-plugins-log','nagios-plugins-md_raid' ]:
+      [ 'nagios-plugins-mem','nagios-pluginns-clamav','nagios-plugins-disk','nagios-plugins-diskio','nagios-plugins-dns','nagios-plugins-http','nagios-plugins-load','nagios-plugins-logfiles','nagios-plugins-mailq','nagios-plugins-mysql','nagios-plugins-nrpe','nagios-plugins-ntp_peer','nagios-plugins-ntp_time','nagios-plugins-openvpn','nagios-plugins-pgscap','nagios-plugins-procs','nagios-plugins-tcp','nagios-plugins-time','nagios-plugins-users','nagios-plugins-smtp','nagios-plugins-swap','nagios-plugins-log','nagios-plugins-md_raid' ]:
         ensure   => installed,
         require  => Package['nagios-plugins'],
       }
