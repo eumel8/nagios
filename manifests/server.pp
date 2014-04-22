@@ -195,6 +195,7 @@ case $engine {
             path    => '/bin:/usr/bin:/usr/sbin',
             command => 'usermod -a -G nagios `getent passwd $(ps axhno user,comm|grep -E \'httpd|apache\'|uniq|grep -v root|awk \'END {if ($1) print $1}\')|awk -F: \'{print $1}\'`',
             unless  => 'id `getent passwd $(ps axhno user,comm|grep -E \'httpd|apache\'|uniq|grep -v root|awk \'END {if ($1) print $1}\') | awk -F: \'{print $1}\'` | grep -c nagios',
+            require => Package['nagios'];
           }
           case $distribution['member'] {
             'client': {
@@ -501,6 +502,7 @@ case $engine {
           path    => '/bin:/usr/bin:/usr/sbin',
           command => 'usermod -a -G nagios `getent passwd $(ps axhno user,comm|grep -E \'httpd|apache\'|uniq|grep -v root|awk \'END {if ($1) print $1}\')|awk -F: \'{print $1}\'`',
           unless  => 'id `getent passwd $(ps axhno user,comm|grep -E \'httpd|apache\'|uniq|grep -v root|awk \'END {if ($1) print $1}\') | awk -F: \'{print $1}\'` | grep -c nagios',
+          require => Package['icinga'],
         }
 
         case $distribution['member'] {
