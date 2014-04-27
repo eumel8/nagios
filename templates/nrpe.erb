@@ -45,6 +45,7 @@ command[check_proc_cpu]=/usr/lib/nagios/plugins/check_procs -w $ARG1$ -c $ARG2$ 
 command[check_proc_user]=/usr/lib/nagios/plugins/check_procs -w $ARG1$ -c $ARG2$ -a $ARG3$ -u $ARG4$
 command[check_mailq]=/usr/lib/nagios/plugins/check_mailq -w $ARG1$ -c $ARG2$ -M $ARG3$
 command[check_file_content]=/usr/lib/nagios/plugins/local/check_file_content.pl -f $ARG1$ -i $ARG2$ -e $ARG3$ -n $ARG4$
+command[check_file_age]=/usr/lib/nagios/plugins/check_file_age -f $ARG1$ -w $ARG2$ -c $ARG3$ -W $ARG4$ -C $ARG5$
 command[check_ntp_peer]=/usr/lib/nagios/plugins/check_ntp_peer -H $ARG1$ -w $ARG2$ -c $ARG3$ 
 command[check_ntp_time]=/usr/lib/nagios/plugins/check_ntp_time -H $ARG1$ -w $ARG2$ -c $ARG3$ 
 command[check_nntp]=/usr/lib/nagios/plugins/check_nntp -H $ARG1$ -p $ARG2$ -w $ARG3$ -c $ARG4$
