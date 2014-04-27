@@ -50,6 +50,7 @@ You can register for Twilio services on https://www.twilio.com
 
 This version doesn't use exported resources in puppet. So all hosts must configured in a hash:
 
+
 nd => {
       'ab.beispiel.de' => {
         'ip'       => '192.168.0.100',
