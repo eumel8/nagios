@@ -21,11 +21,11 @@
 #
 # [*distribution*]
 # Hash of distrubtion service (client, master)
-#   [*member*] 
+#   [*member*]
 #      client = Client, send monitor data
 #      master = Master, receive monitor data
 #   [*host*]
-#      string = Master hostname 
+#      string = Master hostname
 #   [*nsca_password*]
 #      string = password for encrypted communiation
 #
@@ -403,7 +403,7 @@ case $engine {
 
       'OpenSuSE': {
         $target = 'nagios'
-    
+
         package { 'icinga':
           ensure  => installed,
           alias   => 'nagios',

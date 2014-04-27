@@ -6,10 +6,10 @@
 # === Variables
 #
 # [*nrpe_allowed_hosts*]
-# String or array of allowed ipaddresses to connect nrpe service 
+# String or array of allowed ipaddresses to connect nrpe service
 #
 # [*timeserver*]
-# Which timeserver should I use for compare ntp service 
+# Which timeserver should I use for compare ntp service
 #
 # [*nrpe_conf_overwrite*]
 # 0 = create nrpe_cloud.cfg and include this and the end of nrpe.cfg
@@ -17,7 +17,7 @@
 #
 # [*monitor_puppet_agent*]
 # 0 = do nothing
-# 1 = setup nrep check + cron for un-root monitoring puppet agent 
+# 1 = setup nrep check + cron for un-root monitoring puppet agent
 #
 # === Authors
 #
@@ -109,13 +109,12 @@ case $::operatingsystem {
       minute  => [0,5,10,15,20,25,30,35,40,45,50,55],
       require => File['/usr/lib/nagios/plugins'],
     }
-   
+
     exec {'check_puppet-agent_extra_run':
       command => '/bin/echo "OK Init..." > /tmp/check_puppet_agent.log',
       path    => '/bin:/usr/bin:/usr/lib',
       creates => '/tmp/check_puppet_agent.log',
     }
- 
   }
 
   if ($nrpe_conf_overwrite == 1) {
