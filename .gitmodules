@@ -4,3 +4,6 @@
 [submodule "files/plugins/remote/nagios-plugin-puppet-agent"]
 	path = files/plugins/remote/nagios-plugin-puppet-agent
 	url = https://github.com/aswen/nagios-plugins
+[submodule "files/plugins/remote/nagios-plugin-activemq"]
+	path = files/plugins/remote/nagios-plugin-activemq
+	url = https://github.com/ranl/monitor-utils
