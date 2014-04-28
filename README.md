@@ -15,6 +15,7 @@ Features
 - Distributed monitoring with NSCA
 - Service freshness in passive checks and translating host checks activated
 - SMS + Voice notification with Twilio service
+- RRD stats support with pnp4nagios
 
 Non-Features
 ------------
@@ -94,6 +95,16 @@ Use distribted monitor system with NSCA:
       host               => '192.168.0.110', # master host ip address
       nsca_password      => '12345678',      # password for communication
     },
+
+Let perfom permance graphs via pnp4nagios
+
+    class {'nagios::server':
+      pnp4nagios         => 1,
+      pnp4nagios_rrdbase => "/data/pnp4nagios",
+    }
+
+Note: Package pnp4nagios is not in offical OpenSUSE packages. You need to setup additional repo like
+      http://download.opensuse.org/repositories/server:/monitoring/openSUSE_12.3/
 
 
 Testing

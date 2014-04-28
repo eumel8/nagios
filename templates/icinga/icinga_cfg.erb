@@ -38,7 +38,6 @@ lock_file=/var/run/icinga/icinga.pid
 temp_file=/var/cache/icinga/icinga.tmp
 temp_path=/tmp
 
-event_broker_options=-1
 log_rotation_method=d
 log_archive_path=/var/log/icinga/archives
 use_daemon_log=1
@@ -85,7 +84,6 @@ host_check_timeout=30
 event_handler_timeout=30
 notification_timeout=30
 ocsp_timeout=5
-perfdata_timeout=5
 
 retain_state_information=1
 state_retention_file=/var/lib/icinga/retention.dat
@@ -113,7 +111,27 @@ accept_passive_host_checks=1
 
 enable_notifications=1
 enable_event_handlers=1
+event_broker_options=-1
+
+<% if @pnp4nagios == '1' %>
+broker_module=/usr/lib/npcdmod.o config_file=/etc/pnp4nagios/npcd.cfg
+process_performance_data=1
+perfdata_timeout=5
+
+service_perfdata_file=/var/log/pnp4nagios/service-perfdata
+service_perfdata_file_template=DATATYPE::SERVICEPERFDATA\tTIMET::$TIMET$\tHOSTNAME::$HOSTNAME$\tSERVICEDESC::$SERVICEDESC$\tSERVICEPERFDATA::$SERVICEPERFDATA$\tSERVICECHECKCOMMAND::$SERVICECHECKCOMMAND$\tHOSTSTATE::$HOSTSTATE$\tHOSTSTATETYPE::$HOSTSTATETYPE$\tSERVICESTATE::$SERVICESTATE$\tSERVICESTATETYPE::$SERVICESTATETYPE$
+service_perfdata_file_mode=a
+service_perfdata_file_processing_interval=15
+service_perfdata_file_processing_command=process-service-perfdata-file
+
+host_perfdata_file=/var/log/pnp4nagios/host-perfdata
+host_perfdata_file_template=DATATYPE::HOSTPERFDATA\tTIMET::$TIMET$\tHOSTNAME::$HOSTNAME$\tHOSTPERFDATA::$HOSTPERFDATA$\tHOSTCHECKCOMMAND::$HOSTCHECKCOMMAND$\tHOSTSTATE::$HOSTSTATE$\tHOSTSTATETYPE::$HOSTSTATETYPE$
+host_perfdata_file_mode=a
+host_perfdata_file_processing_interval=15
+host_perfdata_file_processing_command=process-host-perfdata-file
+<%  else %>
 process_performance_data=0
+<% end %>
 
 <% if @distribution['member'] == 'client' %>
 ocsp_command=submit_service_check

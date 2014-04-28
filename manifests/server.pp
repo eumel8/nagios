@@ -19,6 +19,12 @@
 # [*engine*]
 # String of monitor service (nagios, icinga)
 #
+# [*pnp4nagios*]
+# String of pnp4nagios service (1,0)
+#
+# [*pnp4nagios_rrdbase*]
+# String of path for rrd file performed by  pnp4nagios 
+#
 # [*distribution*]
 # Hash of distrubtion service (client, master)
 #   [*member*]
@@ -55,11 +61,13 @@
 
 class nagios::server (
 
-  $nd                = {},
-  $engine            = undef,
-  $distribution      = {},
-  $http_users        = {},
-  $twilio_account    = undef,
+  $nd                 = {},
+  $engine             = undef,
+  $pnp4nagios         = undef,
+  $pnp4nagios_rrdbase = "/var/lib/pnp4nagios/perfdata/",
+  $distribution       = {},
+  $http_users         = {},
+  $twilio_account     = undef,
   $twilio_identifier = undef,
   $twilio_from       = undef,
   $twilio_to         = undef,
@@ -103,7 +111,17 @@ case $engine {
             ensure  => file,
             source  => 'puppet:///modules/nagios/nagios/apache2.conf.opensuse',
             force   => true,
-            require => Package['nagios'];
+            require => Package['nagios'],
+            notify  => Service['apache2'];
+          }
+          if ($pnp4nagios == 1) {
+            file {'/etc/pnp4nagios/apache2.conf':
+              ensure  => file,
+              source  => 'puppet:///modules/nagios/nagios/pnp4nagios.conf.opensuse',
+              force   => true,
+              require => Package['pnp4nagios'],
+              notify  => Service['apache2'];
+            }
           }
           case $distribution['member'] {
             'client': {
@@ -118,12 +136,14 @@ case $engine {
               }
               file {"/etc/$target/submit_service_check":
                 ensure  => file,
+                mode    => '0755',
                 content => template('nagios/nagios/submit_service_check_opensuse.erb'),
                 force   => true,
                 require => Package['nagios-nsca-client'];
               }
               file {"/etc/$target/submit_host_check":
                 ensure  => file,
+                mode    => '0755',
                 content => template('nagios/nagios/submit_host_check_opensuse.erb'),
                 force   => true,
                 require => Package['nagios-nsca-client'];
@@ -181,7 +201,17 @@ case $engine {
             ensure  => file,
             source  => 'puppet:///modules/nagios/nagios/apache2.conf.ubuntu',
             force   => true,
-            require => Package['nagios'];
+            require => Package['nagios'],
+            notify  => Service['apache2'];
+          }
+          if ($pnp4nagios == 1) {
+            file {'/etc/pnp4nagios/apache2.conf':
+              ensure  => file,
+              source  => 'puppet:///modules/nagios/nagios/pnp4nagios.conf.ubuntu',
+              force   => true,
+              require => Package['pnp4nagios'],
+              notify  => Service['apache2'];
+            }
           }
           exec { 'run_nagiosfile1_purger':
             command => '/etc/init.d/nagios3 stop;/usr/sbin/dpkg-statoverride --update --add nagios www-data 2710 /var/lib/nagios3/rw; /etc/init.d/nagios3 start',
@@ -349,6 +379,7 @@ case $engine {
         '/etc/apache2/conf.d/nagios.conf':
           ensure  => 'link',
           target  => '/etc/nagios/apache2.conf',
+          notify  => Service['apache2'];
       }
 
       case $distribution['member'] {
@@ -364,12 +395,14 @@ case $engine {
           }
           file {"/etc/$target/submit_service_check":
             ensure  => file,
+            mode    => '0755',
             content => template('nagios/nagios/submit_service_check_opensuse.erb'),
             force   => true,
             require => Package['nagios-nsca-client'];
           }
           file {"/etc/$target/submit_host_check":
-            ensure  => file,
+            ensure  => file, 
+            mode    => '0755',
             content => template('nagios/nagios/submit_host_check_opensuse.erb'),
             force   => true,
             require => Package['nagios-nsca-client'];
@@ -417,10 +450,19 @@ case $engine {
         }
         file {'/etc/icinga/apache2.conf':
           ensure  => file,
-          source  => 'puppet:///modules/nagios/icinga/apache2_opensuse.conf',
+          source  => 'puppet:///modules/nagios/icinga/apache2.conf.opensuse',
           force   => true,
           require => Package['icinga'],
-          notify  => Service['icinga'];
+          notify  => Service['apache2'];
+        }
+        if ($pnp4nagios == 1) {
+          file {'/etc/pnp4nagios/apache2.conf':
+            ensure  => file,
+            source  => 'puppet:///modules/nagios/icinga/pnp4nagios.conf.opensuse',
+            force   => true,
+            require => Package['pnp4nagios'],
+            notify  => Service['apache2'];
+          }
         }
         case $distribution['member'] {
           'client': {
@@ -435,12 +477,14 @@ case $engine {
             }
             file {"/etc/$target/submit_service_check":
               ensure  => file,
+              mode    => '0755',
               content => template('nagios/nagios/submit_service_check_opensuse.erb'),
               force   => true,
               require => Package['nagios-nsca-client'];
             }
             file {"/etc/$target/submit_host_check":
               ensure  => file,
+              mode    => '0755',
               content => template('nagios/nagios/submit_host_check_opensuse.erb'),
               force   => true,
               require => Package['nagios-nsca-client'];
@@ -489,10 +533,19 @@ case $engine {
         }
         file {'/etc/icinga/apache2.conf':
           ensure  => file,
-          source  => 'puppet:///modules/nagios/icinga/apache2_ubuntu.conf',
+          source  => 'puppet:///modules/nagios/icinga/apache2.conf.ubuntu',
           force   => true,
           require => Package['icinga'],
-          notify  => Service['icinga'];
+          notify  => Service['apache2'];
+        }
+        if ($pnp4nagios == 1) {
+          file {'/etc/pnp4nagios/apache2.conf':
+            ensure  => file,
+            source  => 'puppet:///modules/nagios/icinga/pnp4nagios.conf.ubuntu',
+            force   => true,
+            require => Package['pnp4nagios'],
+            notify  => Service['apache2'];
+          }
         }
         exec { 'run_icingafile1_purger':
           command => '/etc/init.d/icinga stop;/usr/sbin/dpkg-statoverride --update --add nagios www-data 2710 /var/lib/icinga/rw; /etc/init.d/icinga start',
@@ -672,7 +725,8 @@ case $engine {
 
       '/etc/apache2/conf.d/icinga.conf':
         ensure  => 'link',
-        target  => '/etc/icinga/apache2.conf';
+        target  => '/etc/icinga/apache2.conf',
+        notify  => Service['apache2'];
       }
 
   }
@@ -680,6 +734,14 @@ case $engine {
     warning('You have to define an engine')
   }
 }
+  package { 'apache2':
+    ensure  => present,
+  }
+
+  service  { 'apache2':
+    ensure  => running,
+    require => Package['apache2'];
+  }
 
   file { "/etc/$target/nagios_host.cfg":
     ensure  => file,
@@ -743,4 +805,67 @@ case $engine {
     force   => true,
     notify  => Service['nagios']
   }
+
+  if ($pnp4nagios == 1) {
+
+    package { 'pnp4nagios':
+      ensure   => present,
+    }
+
+    service  { 'npcd':
+      ensure  => running,
+      require => Package['pnp4nagios'];
+    }
+
+    file { "/etc/pnp4nagios":
+      ensure  => directory,
+      owner   => nagios,
+      group   => nagios,
+    }
+
+    file { [ "/var/log/pnp4nagios", "/var/spool/pnp4nagios" ]:
+      ensure  => directory,
+      owner   => nagios,
+      group   => nagios,
+      require => Package['pnp4nagios'];
+    }
+
+    exec { 'mkdir_pnp4nagios_rrdbase':
+      path    => [ '/bin', '/usr/bin' ],
+      command => "mkdir -p $pnp4nagios_rrdbase",
+      unless  => "test -d $pnp4nagios_rrdbase",
+    }
+
+    file { $pnp4nagios_rrdbase:
+      ensure  => directory,
+      owner   => nagios,
+      group   => nagios,
+      require => Exec['mkdir_pnp4nagios_rrdbase'],
+    }
+
+    file { "/etc/pnp4nagios/process_perfdata.cfg":
+      ensure  => file,
+      content => template('nagios/pnp4nagios/process_perfdata_cfg.erb'),
+      force   => true,
+    }
+    
+    file { "/etc/pnp4nagios/config_local.php":
+      ensure  => file,
+      content => template('nagios/pnp4nagios/config_php.erb'),
+      force   => true,
+    }
+    
+    file { "/etc/pnp4nagios/config.php":
+      ensure  => file,
+      content => template('nagios/pnp4nagios/config_php.erb'),
+      force   => true,
+    }
+    
+    file { "/etc/apache2/conf.d/pnp4nagios.conf":
+      ensure  => 'link',
+      target  => '/etc/pnp4nagios/apache2.conf',
+      notify  => Service['apache2'];
+    }
+  }
+
 }

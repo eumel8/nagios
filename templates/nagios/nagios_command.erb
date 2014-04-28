@@ -31,14 +31,26 @@ define command {
         command_name                   check_http
 }
 
+# PNP4NAGIOS Default mode
 define command {
-        command_line                   /usr/bin/printf "%b" "$LASTSERVICECHECK$\t$HOSTNAME$\t$SERVICEDESC$\t$SERVICESTATE$\t$SERVICEATTEMPT$\t$SERVICESTATETYPE$\t$SERVICEEXECUTIONTIME$\t$SERVICELATENCY$\t$SERVICEOUTPUT$\t$SERVICEPERFDATA$\n" >> /var/lib/nagios3/service-perfdata.out
-        command_name                   process-service-perfdata
+       command_name    process-service-perfdata
+       command_line    $USER1$/process_perfdata.pl
 }
 
 define command {
-        command_line                   /usr/bin/printf "%b" "$LASTHOSTCHECK$\t$HOSTNAME$\t$HOSTSTATE$\t$HOSTATTEMPT$\t$HOSTSTATETYPE$\t$HOSTEXECUTIONTIME$\t$HOSTOUTPUT$\t$HOSTPERFDATA$\n" >> /var/lib/nagios3/host-perfdata.out
-        command_name                   process-host-perfdata
+       command_name    process-host-perfdata
+       command_line    $USER1$/process_perfdata.pl -d HOSTPERFDATA
+}
+
+# PNP4NAGIOS Bulk mode
+define command {
+        command_name    process-service-perfdata-file
+        command_line /bin/mv /var/spool/pnp4nagios/service-perfdata /var/spool/pnp4nagios/service-perfdata.$TIMET$
+}
+
+define command {
+        command_name    process-host-perfdata-file
+        command_line /bin/mv /var/spool/pnp4nagios/host-perfdata /var/spool/pnp4nagios/host-perfdata.$TIMET$
 }
 
 define command {
@@ -92,7 +104,7 @@ define command {
 }
 
 define command {
-        command_line                    /etc/nagios/submit_host_check "$HOSTNAME$" "$HOSTSTATES$" "$HOSTOUTPUTS$"
+        command_line                    /etc/nagios/submit_host_check "$HOSTNAME$" "$HOSTSTATE$" "$HOSTOUTPUT$"
         command_name                    submit_host_check
 }
 
