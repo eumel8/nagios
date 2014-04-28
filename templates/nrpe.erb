@@ -67,10 +67,12 @@ command[check_smtp_auth]=/usr/lib/nagios/plugins/check_smtp -H $ARG1$ -p $ARG2$ 
 command[check_smtp_ssl]=/usr/lib/nagios/plugins/check_smtp -H $ARG1$ -p $ARG2$ -w $ARG3$ -c $ARG4$ -D $ARG5$ -S
 command[check_smtp_extend]=/usr/lib/nagios/plugins/check_smtp -H $ARG1$ -p $ARG2$ -w $ARG3$ -c $ARG4$ -f $ARG5$ -C '$ARG6$' -e $ARG7$
 #
-#
 # Nagios-MongoDB
 command[check_mongodb]=/usr/lib/nagios/plugins/remote/nagios-plugin-mongodb/check_mongodb.py -H 127.0.0.1 -A $ARG1$ -P $ARG2$ -W $ARG3$ -C $ARG4$
 command[check_mongodb_query]=/usr/lib/nagios/plugins/remote/nagios-plugin-mongodb/check_mongodb.py -H 127.0.0.1 -A $ARG1$ -P $ARG2$ -W $ARG3$ -C $ARG4$ -q $ARG5$
 #
+# Nagios-ActiveMQ
+# files/plugins/remote/nagios-plugin-activemq/nagios/check_activemq.py
+command[check_activemq_queue]=/usr/lib/nagios/plugins/remote/nagios-plugin-activemq/nagios/check_activemq.py -H $ARG1$ -p $ARG2$ -U $ARG3$ -P $ARG4$ -T queues
 ##########################################################################
 
