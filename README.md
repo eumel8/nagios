@@ -100,7 +100,7 @@ Let perfom permance graphs via pnp4nagios
 
     class {'nagios::server':
       pnp4nagios         => 1,
-      pnp4nagios_rrdbase => "/data/pnp4nagios",
+      pnp4nagios_rrdbase => "/data/pnp4nagios/",  # needs the slash at the end
     }
 
 Note: Package pnp4nagios is not in offical OpenSUSE packages. You need to setup additional repo like
