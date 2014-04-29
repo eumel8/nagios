@@ -112,7 +112,7 @@ case $engine {
             source  => 'puppet:///modules/nagios/nagios/apache2.conf.opensuse',
             force   => true,
             require => Package['nagios'],
-            notify  => Service['apache2'];
+#            notify  => Service['apache2'];
           }
           if ($pnp4nagios == 1) {
             file {'/etc/pnp4nagios/apache2.conf':
@@ -120,7 +120,12 @@ case $engine {
               source  => 'puppet:///modules/nagios/nagios/pnp4nagios.conf.opensuse',
               force   => true,
               require => Package['pnp4nagios'],
-              notify  => Service['apache2'];
+#              notify  => Service['apache2'];
+            }
+            file { "/etc/apache2/conf.d/pnp4nagios.conf":
+              ensure  => 'link',
+              target  => '/etc/pnp4nagios/apache2.conf',
+#              notify  => Service['apache2'];
             }
           }
           case $distribution['member'] {
@@ -202,7 +207,7 @@ case $engine {
             source  => 'puppet:///modules/nagios/nagios/apache2.conf.ubuntu',
             force   => true,
             require => Package['nagios'],
-            notify  => Service['apache2'];
+#            notify  => Service['apache2'];
           }
           if ($pnp4nagios == 1) {
             file {'/etc/pnp4nagios/apache2.conf':
@@ -210,7 +215,12 @@ case $engine {
               source  => 'puppet:///modules/nagios/nagios/pnp4nagios.conf.ubuntu',
               force   => true,
               require => Package['pnp4nagios'],
-              notify  => Service['apache2'];
+#              notify  => Service['apache2'];
+            }
+            file { "/etc/apache2/conf.d/pnp4nagios.conf":
+              ensure  => 'link',
+              target  => '/etc/pnp4nagios/apache.conf',
+#              notify  => Service['apache2'];
             }
           }
           exec { 'run_nagiosfile1_purger':
@@ -379,7 +389,7 @@ case $engine {
         '/etc/apache2/conf.d/nagios.conf':
           ensure  => 'link',
           target  => '/etc/nagios/apache2.conf',
-          notify  => Service['apache2'];
+#          notify  => Service['apache2'];
       }
 
       case $distribution['member'] {
@@ -453,7 +463,7 @@ case $engine {
           source  => 'puppet:///modules/nagios/icinga/apache2.conf.opensuse',
           force   => true,
           require => Package['icinga'],
-          notify  => Service['apache2'];
+#          notify  => Service['apache2'];
         }
         if ($pnp4nagios == 1) {
           file {'/etc/pnp4nagios/apache2.conf':
@@ -461,7 +471,12 @@ case $engine {
             source  => 'puppet:///modules/nagios/icinga/pnp4nagios.conf.opensuse',
             force   => true,
             require => Package['pnp4nagios'],
-            notify  => Service['apache2'];
+#            notify  => Service['apache2'];
+          }
+          file { "/etc/apache2/conf.d/pnp4nagios.conf":
+            ensure  => 'link',
+            target  => '/etc/pnp4nagios/apache2.conf',
+#            notify  => Service['apache2'];
           }
         }
         case $distribution['member'] {
@@ -536,7 +551,7 @@ case $engine {
           source  => 'puppet:///modules/nagios/icinga/apache2.conf.ubuntu',
           force   => true,
           require => Package['icinga'],
-          notify  => Service['apache2'];
+#          notify  => Service['apache2'];
         }
         if ($pnp4nagios == 1) {
           file {'/etc/pnp4nagios/apache2.conf':
@@ -544,7 +559,12 @@ case $engine {
             source  => 'puppet:///modules/nagios/icinga/pnp4nagios.conf.ubuntu',
             force   => true,
             require => Package['pnp4nagios'],
-            notify  => Service['apache2'];
+#            notify  => Service['apache2'];
+          }
+          file { "/etc/apache2/conf.d/pnp4nagios.conf":
+            ensure  => 'link',
+            target  => '/etc/pnp4nagios/apache.conf',
+#            notify  => Service['apache2'];
           }
         }
         exec { 'run_icingafile1_purger':
@@ -734,14 +754,16 @@ case $engine {
     warning('You have to define an engine')
   }
 }
-  package { 'apache2':
-    ensure  => present,
-  }
 
-  service  { 'apache2':
-    ensure  => running,
-    require => Package['apache2'];
-  }
+# caused in errors in duplicate definitions in other modules
+#  package { 'apache2':
+#    ensure  => present,
+#  }
+#
+#  service  { 'apache2':
+#    ensure  => running,
+#    require => Package['apache2'];
+#  }
 
   file { "/etc/$target/nagios_host.cfg":
     ensure  => file,
@@ -861,11 +883,6 @@ case $engine {
       force   => true,
     }
     
-    file { "/etc/apache2/conf.d/pnp4nagios.conf":
-      ensure  => 'link',
-      target  => '/etc/pnp4nagios/apache2.conf',
-      notify  => Service['apache2'];
-    }
   }
 
 }
