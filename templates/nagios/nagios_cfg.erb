@@ -110,7 +110,12 @@ enable_notifications=1
 enable_event_handlers=1
 
 <% if @pnp4nagios == '1' %>
+<% if @operatingsystem == 'OpenSuSE' %>
 broker_module=/usr/lib/npcdmod.o config_file=/etc/pnp4nagios/npcd.cfg
+<% end %>
+<% if @operatingsystem == 'Ubuntu' %>
+broker_module=/usr/lib/pnp4nagios/npcdmod.o config_file=/etc/pnp4nagios/npcd.cfg
+<% end %>
 process_performance_data=1
 perfdata_timeout=5
 
