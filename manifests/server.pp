@@ -210,7 +210,7 @@ case $engine {
 #            notify  => Service['apache2'];
           }
           if ($pnp4nagios == 1) {
-            file {'/etc/pnp4nagios/apache2.conf':
+            file {'/etc/pnp4nagios/apache.conf':
               ensure  => file,
               source  => 'puppet:///modules/nagios/nagios/pnp4nagios.conf.ubuntu',
               force   => true,
@@ -554,7 +554,7 @@ case $engine {
 #          notify  => Service['apache2'];
         }
         if ($pnp4nagios == 1) {
-          file {'/etc/pnp4nagios/apache2.conf':
+          file {'/etc/pnp4nagios/apache.conf':
             ensure  => file,
             source  => 'puppet:///modules/nagios/icinga/pnp4nagios.conf.ubuntu',
             force   => true,
