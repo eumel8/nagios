@@ -744,7 +744,7 @@ case $engine {
       '/etc/apache2/conf.d/icinga.conf':
         ensure  => 'link',
         target  => '/etc/icinga/apache2.conf',
-        notify  => Service['apache2'];
+#        notify  => Service['apache2'];
       }
 
   }
