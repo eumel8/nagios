@@ -29,7 +29,7 @@ class nagios::nrpe (
   $nrpe_allowed_hosts   = '127.0.0.1',
   $timeserver           = '127.0.0.1',
   $nrpe_conf_overwrite  = 0,
-  $monitor_puppet_agent = 0,
+  $monitor_puppet_agent = 0
   )
   {
 case $::operatingsystem {

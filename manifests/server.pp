@@ -60,7 +60,6 @@
 #
 
 class nagios::server (
-
   $nd                 = {},
   $engine             = undef,
   $pnp4nagios         = undef,
@@ -68,11 +67,10 @@ class nagios::server (
   $distribution       = {},
   $http_users         = {},
   $twilio_account     = undef,
-  $twilio_identifier = undef,
-  $twilio_from       = undef,
-  $twilio_to         = undef,
-  $notification      = 'root@localhost',
-
+  $twilio_identifier  = undef,
+  $twilio_from        = undef,
+  $twilio_to          = undef,
+  $notification       = 'root@localhost'
 ) {
 
 file {
