@@ -1,3 +1,5 @@
+# needs facter variable + FWDN
+
 node default {
 
   class {'nagios::nrpe':
@@ -11,7 +13,7 @@ node default {
     engine             => 'icinga',
     notesurl           => 'http://pastebin.com/?host=$HOSTNAME$&srv=$SERVICEDESC$',
     http_users         => {
-      admin => { 'password' => '$apr1$NRcUwBfc$txMxL8iSF4m2eB2l4IAeq.' }, # admin
+      admin => { 'password' => '$apr1$NRcUwBfc$txMxL8iSF4m2eB2l4IAeq.' }, # password: admin
       },
     twilio_account     => 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
     twilio_identifier  => 'abcdefghijklmnopqrstuvqxyz',
