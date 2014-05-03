@@ -100,12 +100,17 @@ Let perfom permance graphs via pnp4nagios
 
     class {'nagios::server':
       pnp4nagios         => 1,
-      pnp4nagios_rrdbase => "/data/pnp4nagios/",  # needs the slash at the end
+      pnp4nagios_rrdbase => '/data/pnp4nagios/',  # needs the slash at the end
     }
 
 Note: Package pnp4nagios is not in offical OpenSUSE packages. You need to setup additional repo like
       http://download.opensuse.org/repositories/server:/monitoring/openSUSE_12.3/
 
+Describe the service in an external Wiki or link to an existing operation manual
+
+    class {'nagios::server':
+      notesurl           => 'http://wiki.example.de/index.php/?host=$HOSTNAME$&srv=$SERVICEDESC$'
+    }
 
 Testing
 -------

@@ -53,6 +53,9 @@
 # [*notifications*]
 # String/Array of email addresses for Email notification
 #
+# [*notesurl*]
+# String/Array of (external) service url for service descripzion (i.e. Wiki)
+#
 # === Authors
 #
 # Frank Kloeker <f.kloeker@t-online.de>
@@ -64,6 +67,7 @@ class nagios::server (
   $engine             = undef,
   $pnp4nagios         = undef,
   $pnp4nagios_rrdbase = "/var/lib/pnp4nagios/perfdata/",
+  $notesurl           = undef,
   $distribution       = {},
   $http_users         = {},
   $twilio_account     = undef,
