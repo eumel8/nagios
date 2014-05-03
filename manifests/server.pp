@@ -682,7 +682,7 @@ case $engine {
         require => File['/var/lib/icinga/spool'],
         owner   => nagios,
         group   => nagios,
-        mode    => '0750';
+        mode    => '0750',
         notify  => Service['icinga'];
 
 #      '/usr/share/icinga/htdocs':
