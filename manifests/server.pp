@@ -334,7 +334,7 @@ case $engine {
           require => File["/var/lib/$target/spool"],
           owner   => nagios,
           group   => nagios,
-          mode    => '0750';
+          mode    => '0750',
           notify  => Service['nagios'];
 
 #        '/usr/share/nagios/htdocs':
