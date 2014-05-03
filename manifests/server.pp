@@ -335,6 +335,7 @@ case $engine {
           owner   => nagios,
           group   => nagios,
           mode    => '0750';
+          notify  => Service['nagios'];
 
 #        '/usr/share/nagios/htdocs':
 #          ensure  => directory,
@@ -678,6 +679,7 @@ case $engine {
         owner   => nagios,
         group   => nagios,
         mode    => '0750';
+        notify  => Service['icinga'];
 
 #      '/usr/share/icinga/htdocs':
 #        ensure  => directory,
@@ -867,6 +869,7 @@ case $engine {
       ensure  => file,
       content => template('nagios/pnp4nagios/process_perfdata_cfg.erb'),
       force   => true,
+      notify  => Service['nagios']
     }
     
     file { "/etc/pnp4nagios/config_local.php":
