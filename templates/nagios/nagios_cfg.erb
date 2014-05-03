@@ -87,7 +87,12 @@ notification_timeout=30
 ocsp_timeout=5
 
 retain_state_information=1
+<% if @operatingsystem == 'OpenSuSE' %>
+state_retention_file=/var/lib/nagios/retention.dat
+<% end %>
+<% if @operatingsystem == 'Ubuntu' %>
 state_retention_file=/var/lib/nagios3/retention.dat
+<% end %>
 retention_update_interval=60
 use_retained_program_state=1
 use_retained_scheduling_info=1
