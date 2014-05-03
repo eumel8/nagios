@@ -101,6 +101,9 @@ case $engine {
           package { 'nagios':
             ensure   => present,
           }
+          package { 'nagios-www':
+            ensure   => present,
+          }
           package { 'nagios-plugins-nrpe':
             ensure   => present,
           }
@@ -340,16 +343,6 @@ case $engine {
           group   => nagios,
           mode    => '0750',
           notify  => Service['nagios'];
-
-#        '/usr/share/nagios/htdocs':
-#          ensure  => directory,
-#          source  => 'puppet:///modules/nagios/htdocs/nagios/',
-#          owner   => root,
-#          group   => root,
-#          mode    => '0644',
-#          recurse => true,
-#          force   => true,
-#          require => File['/usr/share/nagios'];
 
         "/etc/$target/nagios.cfg":
           ensure  => file,
@@ -684,16 +677,6 @@ case $engine {
         group   => nagios,
         mode    => '0750',
         notify  => Service['icinga'];
-
-#      '/usr/share/icinga/htdocs':
-#        ensure  => directory,
-#        source  => 'puppet:///modules/nagios/htdocs/icinga/',
-#        owner   => root,
-#        group   => root,
-#        mode    => '0644',
-#        recurse => true,
-#        force   => true,
-#        require => File['/usr/share/icinga'];
 
       '/etc/icinga/':
         ensure  => directory,
