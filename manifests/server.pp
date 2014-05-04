@@ -683,8 +683,6 @@ case $engine {
         owner   => root,
         group   => root,
         mode    => '0644',
-        recurse => true,
-        force   => true,
         notify  => Service['icinga'];
 
       '/etc/icinga/icinga.cfg':
