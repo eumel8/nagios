@@ -7,10 +7,10 @@ command -v php 2>&1 || { echo >&2 "php required but it's not installed.  Abortin
 command -v curl 2>&1 || { echo >&2 "curl required but it's not installed.  Aborting."; exit 1; }
 
 
-gateway_uri="https://api.twilio.com/2010-04-01/Accounts/<%= twilio_account %>/SMS/Messages.json"
-identifier="<%= twilio_account %>:<%= twilio_identifier %>"
-from="From=<%= twilio_from %>"
-to="To=<%= twilio_to %>"
+gateway_uri="https://api.twilio.com/2010-04-01/Accounts/<%= @twilio_account %>/SMS/Messages.json"
+identifier="<%= @twilio_account %>:<%= @twilio_identifier %>"
+from="From=<%= @twilio_from %>"
+to="To=<%= @twilio_to %>"
 message1=`echo "$1"`
 message=`php -r "echo 'Body=' . rawurlencode('$message1') ;"`
 

@@ -7,14 +7,17 @@
 
 log_file=/var/log/icinga/icinga.log
 
-cfg_file=/etc/<%= target %>/nagios_command.cfg  
-cfg_file=/etc/<%= target %>/nagios_contact.cfg
-cfg_file=/etc/<%= target %>/nagios_contactgroup.cfg
-cfg_file=/etc/<%= target %>/nagios_timeperiod.cfg
-cfg_file=/etc/<%= target %>/nagios_host.cfg     
-cfg_file=/etc/<%= target %>/nagios_hostextinfo.cfg  
-cfg_file=/etc/<%= target %>/nagios_service.cfg
-cfg_dir=/etc/nagios/ext
+cfg_file=/etc/<%= @target %>/nagios_command.cfg  
+cfg_file=/etc/<%= @target %>/nagios_contact.cfg
+cfg_file=/etc/<%= @target %>/nagios_contactgroup.cfg
+cfg_file=/etc/<%= @target %>/nagios_timeperiod.cfg
+cfg_file=/etc/<%= @target %>/nagios_host.cfg     
+cfg_file=/etc/<%= @target %>/nagios_hostgroups.cfg     
+# cfg_file=/etc/<%= @target %>/nagios_hostextinfo.cfg  
+cfg_file=/etc/<%= @target %>/nagios_service.cfg
+cfg_file=/etc/<%= @target %>/nagios_servicegroups.cfg
+# cfg_dir=/etc/nagios/ext
+# cfg_dir=<% case @operatingsystem when "Ubuntu" then %>/etc/nagios-plugins/config<% end %>
 
 
 object_cache_file=/var/cache/icinga/objects.cache
@@ -35,7 +38,6 @@ lock_file=/var/run/icinga/icinga.pid
 temp_file=/var/cache/icinga/icinga.tmp
 temp_path=/tmp
 
-event_broker_options=-1
 log_rotation_method=d
 log_archive_path=/var/log/icinga/archives
 use_daemon_log=1
@@ -82,7 +84,6 @@ host_check_timeout=30
 event_handler_timeout=30
 notification_timeout=30
 ocsp_timeout=5
-perfdata_timeout=5
 
 retain_state_information=1
 state_retention_file=/var/lib/icinga/retention.dat
@@ -110,11 +111,46 @@ accept_passive_host_checks=1
 
 enable_notifications=1
 enable_event_handlers=1
-process_performance_data=0
+event_broker_options=-1
 
+<% if @pnp4nagios == '1' %>
+<% if @operatingsystem == 'OpenSuSE' %>
+broker_module=/usr/lib/npcdmod.o config_file=/etc/pnp4nagios/npcd.cfg
+<% end %>
+<% if @operatingsystem == 'Ubuntu' %>
+broker_module=/usr/lib/pnp4nagios/npcdmod.o config_file=/etc/pnp4nagios/npcd.cfg
+<% end %>
+process_performance_data=1
+perfdata_timeout=5
+
+service_perfdata_file=/var/log/pnp4nagios/service-perfdata
+service_perfdata_file_template=DATATYPE::SERVICEPERFDATA\tTIMET::$TIMET$\tHOSTNAME::$HOSTNAME$\tSERVICEDESC::$SERVICEDESC$\tSERVICEPERFDATA::$SERVICEPERFDATA$\tSERVICECHECKCOMMAND::$SERVICECHECKCOMMAND$\tHOSTSTATE::$HOSTSTATE$\tHOSTSTATETYPE::$HOSTSTATETYPE$\tSERVICESTATE::$SERVICESTATE$\tSERVICESTATETYPE::$SERVICESTATETYPE$
+service_perfdata_file_mode=a
+service_perfdata_file_processing_interval=15
+service_perfdata_file_processing_command=process-service-perfdata-file
+
+host_perfdata_file=/var/log/pnp4nagios/host-perfdata
+host_perfdata_file_template=DATATYPE::HOSTPERFDATA\tTIMET::$TIMET$\tHOSTNAME::$HOSTNAME$\tHOSTPERFDATA::$HOSTPERFDATA$\tHOSTCHECKCOMMAND::$HOSTCHECKCOMMAND$\tHOSTSTATE::$HOSTSTATE$\tHOSTSTATETYPE::$HOSTSTATETYPE$
+host_perfdata_file_mode=a
+host_perfdata_file_processing_interval=15
+host_perfdata_file_processing_command=process-host-perfdata-file
+<%  else %>
+process_performance_data=0
+<% end %>
+
+<% if @distribution['member'] == 'client' %>
+ocsp_command=submit_service_check
+ochp_command=submit_host_check
+obsess_over_services=1
+obsess_over_hosts=1
+<%   else %>
+# ocsp_command=submit_service_check
+# ocsp_command=submit_host_check
 obsess_over_services=0
 obsess_over_hosts=0
-translate_passive_host_checks=0
+<% end %>
+
+translate_passive_host_checks=1
 passive_host_checks_are_soft=0
 check_for_orphaned_services=1
 check_for_orphaned_hosts=1
@@ -134,7 +170,7 @@ high_host_flap_threshold=20.0
 
 date_format=iso8601
 
-p1_file=/usr/share/icinga/p1.pl
+p1_file=<% case @operatingsystem when "Ubuntu" then %>/usr/lib/icinga/p1.pl<% when "OpenSuSE" then %>/usr/share/icinga/p1.pl<% end %>
 
 enable_embedded_perl=1
 use_embedded_perl_implicitly=1
