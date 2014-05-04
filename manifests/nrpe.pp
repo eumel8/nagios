@@ -1,10 +1,23 @@
 # == Class: nagios::nrpe
 #
 # Maintaining nagios and icinga environments
-#
-# === Parameters
+# Configure NRPE Servoce
 #
 # === Variables
+#
+# [*nrpe_allowed_hosts*]
+# String or array of allowed ipaddresses to connect nrpe service
+#
+# [*timeserver*]
+# Which timeserver should I use for compare ntp service
+#
+# [*nrpe_conf_overwrite*]
+# 0 = create nrpe_cloud.cfg and include this and the end of nrpe.cfg
+# 1 = write all automatic configured entries in nrpe.cfg
+#
+# [*monitor_puppet_agent*]
+# 0 = do nothing
+# 1 = setup nrep check + cron for un-root monitoring puppet agent
 #
 # === Authors
 #
@@ -13,9 +26,10 @@
 #
 
 class nagios::nrpe (
-  $nrpe_allowed_hosts  = '127.0.0.1',
-  $timeserver          = '127.0.0.1',
-  $nrpe_conf_overwrite = 0
+  $nrpe_allowed_hosts   = '127.0.0.1',
+  $timeserver           = '127.0.0.1',
+  $nrpe_conf_overwrite  = 0,
+  $monitor_puppet_agent = 0
   )
   {
 case $::operatingsystem {
@@ -26,9 +40,14 @@ case $::operatingsystem {
         /12.2|12.3|13.1/ => 'nrpe',
       }
 
-      package { "nrpe_package":
+      package { 'nrpe_package':
         ensure   => present,
         name     => $nrpe_package,
+      }
+      package {
+      [ 'nagios-plugins-mem','nagios-plugins-disk','nagios-plugins-dns','nagios-plugins-http','nagios-plugins-load','nagios-plugins-mailq','nagios-plugins-mysql','nagios-plugins-ntp_peer','nagios-plugins-ntp_time','nagios-plugins-procs','nagios-plugins-tcp','nagios-plugins-time','nagios-plugins-users','nagios-plugins-smtp','nagios-plugins-swap','nagios-plugins-log' ]:
+        ensure   => installed,
+        require  => Package['nagios-plugins'],
       }
 
       service { 'nrpe':
@@ -47,6 +66,9 @@ case $::operatingsystem {
       package { 'libnagios-plugin-perl':
         ensure   => present,
       }
+      package { 'logaricheck':
+        ensure   => present,
+      }
       service { 'nagios-nrpe-server':
         ensure   => running,
         enable   => true,
@@ -59,9 +81,6 @@ case $::operatingsystem {
   }
 }
 
-  package { 'nagios-plugins-mem':
-      ensure   => present,
-  }
 
   package { 'nagios-plugins':
       ensure   => present,
@@ -77,21 +96,25 @@ case $::operatingsystem {
       require  => Package['nagios-plugins'],
   }
 
-  file { '/usr/local/bin/collect_checks_pl':
-      ensure    => file,
-      mode      => '1755',
-      content   => template('nagios/collect_checks_pl.erb'),
-  }
-
-  exec { 'create_ext_services':
-      command => '/usr/local/bin/collect_checks_pl',
-      creates => '/etc/nagios/nagios_ext_services.cfg',
-      require => File['/usr/local/bin/collect_checks_pl'],
-  }
-
   file { '/etc/nrpe.cfg':
     ensure => 'link',
     target => '/etc/nagios/nrpe.cfg',
+  }
+
+  if ($monitor_puppet_agent == 1) {
+    cron {'monitor-puppet-agent':
+      ensure  => present,
+      command => '/usr/lib/nagios/plugins/local/check_puppet-agent > /tmp/check_puppet_agent.log',
+      user    => 'root',
+      minute  => [0,5,10,15,20,25,30,35,40,45,50,55],
+      require => File['/usr/lib/nagios/plugins'],
+    }
+
+    exec {'check_puppet-agent_extra_run':
+      command => '/bin/echo "OK Init..." > /tmp/check_puppet_agent.log',
+      path    => '/bin:/usr/bin:/usr/lib',
+      creates => '/tmp/check_puppet_agent.log',
+    }
   }
 
   if ($nrpe_conf_overwrite == 1) {
@@ -121,13 +144,4 @@ case $::operatingsystem {
       notify    => Service['nagios-nrpe-server'],
     }
   }
-
-    file { '/etc/nagios/ext':
-      ensure  => directory,
-    }
-
-    @@file { "/etc/nagios/ext/$::fqdn.cfg":
-      content => $::nagios_ext_services,
-      tag     => 'nagios_ext_services',
-    }
 }

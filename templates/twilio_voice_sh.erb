@@ -6,10 +6,10 @@
 command -v php > /dev/null 2>&1 || { echo >&2 "php required but it's not installed.  Aborting."; exit 1; }
 command -v curl > /dev/null 2>&1 || { echo >&2 "curl required but it's not installed.  Aborting."; exit 1; }
 
-gateway_uri="https://api.twilio.com/2010-04-01/Accounts/<%= twilio_account %>/Calls.json"
-identifier="<%= twilio_account %>:<%= twilio_identifier %>"
-from="From=<%= twilio_from %>"
-to="To=<%= twilio_to %>"
+gateway_uri="https://api.twilio.com/2010-04-01/Accounts/<%= @twilio_account %>/Calls.json"
+identifier="<%= @twilio_account %>:<%= @twilio_identifier %>"
+from="From=<%= @twilio_from %>"
+to="To=<%= @twilio_to %>"
 message1="http://twimlets.com/echo?Twiml=%3CResponse%3E%3CSay%3E"
 message2=`echo "$1"`
 message3="%3C%2FSay%3E%3C%2FResponse%3E"

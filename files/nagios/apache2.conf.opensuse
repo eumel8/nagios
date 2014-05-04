@@ -4,7 +4,7 @@
 #	backwards compatibility with bookmarks/config for older nagios versios.
 #	simply look for lines following "nagios 1.x:" and "nagios 2.x" comments.
 
-# ScriptAlias /cgi-bin/nagios /usr/lib/nagios/cgi
+# related to opensuse 12.3
 ScriptAlias /nagios/cgi-bin /usr/lib/nagios/cgi
 ScriptAlias /nagios3/cgi-bin /usr/lib/nagios/cgi
 
