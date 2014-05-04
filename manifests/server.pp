@@ -23,7 +23,7 @@
 # String of pnp4nagios service (1,0)
 #
 # [*pnp4nagios_rrdbase*]
-# String of path for rrd file performed by  pnp4nagios 
+# String of path for rrd file performed by  pnp4nagios
 #
 # [*distribution*]
 # Hash of distrubtion service (client, master)
@@ -66,7 +66,7 @@ class nagios::server (
   $nd                 = {},
   $engine             = undef,
   $pnp4nagios         = undef,
-  $pnp4nagios_rrdbase = "/var/lib/pnp4nagios/perfdata/",
+  $pnp4nagios_rrdbase = '/var/lib/pnp4nagios/perfdata/',
   $notesurl           = undef,
   $distribution       = {},
   $http_users         = {},
@@ -127,7 +127,7 @@ case $engine {
               require => Package['pnp4nagios'],
 #              notify  => Service['apache2'];
             }
-            file { "/etc/apache2/conf.d/pnp4nagios.conf":
+            file {'/etc/apache2/conf.d/pnp4nagios.conf':
               ensure  => 'link',
               target  => '/etc/pnp4nagios/apache2.conf',
 #              notify  => Service['apache2'];
@@ -135,23 +135,23 @@ case $engine {
           }
           case $distribution['member'] {
             'client': {
-              package { 'nagios-nsca-client':
+              package {'nagios-nsca-client':
                 ensure   => present,
               }
-              file {"/etc/$target/send_nsca.cfg":
+              file {"/etc/${target}/send_nsca.cfg":
                 ensure  => file,
                 content => template('nagios/nagios/send_nsca_cfg.erb'),
                 force   => true,
                 require => Package['nagios-nsca-client'];
               }
-              file {"/etc/$target/submit_service_check":
+              file {"/etc/${target}/submit_service_check":
                 ensure  => file,
                 mode    => '0755',
                 content => template('nagios/nagios/submit_service_check_opensuse.erb'),
                 force   => true,
                 require => Package['nagios-nsca-client'];
               }
-              file {"/etc/$target/submit_host_check":
+              file {"/etc/${target}/submit_host_check":
                 ensure  => file,
                 mode    => '0755',
                 content => template('nagios/nagios/submit_host_check_opensuse.erb'),
@@ -170,7 +170,7 @@ case $engine {
                 ensure  => running,
                 require => Package['xinetd'];
               }
-              file {"/etc/$target/nsca.cfg":
+              file {"/etc/${target}/nsca.cfg":
                 ensure  => file,
                 content => template('nagios/nagios/nsca_cfg.erb'),
                 force   => true,
@@ -222,7 +222,7 @@ case $engine {
               require => Package['pnp4nagios'],
 #              notify  => Service['apache2'];
             }
-            file { "/etc/apache2/conf.d/pnp4nagios.conf":
+            file {'/etc/apache2/conf.d/pnp4nagios.conf':
               ensure  => 'link',
               target  => '/etc/pnp4nagios/apache.conf',
 #              notify  => Service['apache2'];
@@ -247,20 +247,20 @@ case $engine {
               package { 'nsca-client':
                 ensure   => present,
               }
-              file {"/etc/$target/send_nsca.cfg":
+              file {"/etc/${target}/send_nsca.cfg":
                 ensure  => file,
                 content => template('nagios/nagios/send_nsca_cfg.erb'),
                 force   => true,
                 require => Package['nsca-client'];
               }
-              file {"/etc/nagios/submit_service_check":
+              file {'/etc/nagios/submit_service_check':
                 ensure  => file,
                 mode    => '0755',
                 content => template('nagios/nagios/submit_service_check_ubuntu.erb'),
                 force   => true,
                 require => Package['nsca-client'];
               }
-              file {"/etc/nagios/submit_host_check":
+              file {'/etc/nagios/submit_host_check':
                 ensure  => file,
                 mode    => '0755',
                 content => template('nagios/nagios/submit_host_check_ubuntu.erb'),
@@ -279,7 +279,7 @@ case $engine {
                 ensure  => running,
                 require => Package['xinetd'];
               }
-              file {"/etc/$target/nsca.cfg":
+              file {"/etc/${target}/nsca.cfg":
                 ensure  => file,
                 content => template('nagios/nagios/nsca_cfg.erb'),
                 force   => true,
@@ -305,60 +305,60 @@ case $engine {
       }
 
       file {
-        "/usr/share/nagios":
+        '/usr/share/nagios':
           ensure  => directory;
 
-        "/var/cache/$target/":
+        "/var/cache/${target}/":
           ensure  => directory,
           require => Package[nagios],
 #          owner   => nagios,
 #          group   => nagios,
           mode    => '0777';
 
-        "/var/lib/$target/rw":
+        "/var/lib/${target}/rw":
           ensure  => directory,
           require => Package[nagios],
           owner   => nagios,
           group   => nagios,
           mode    => '0777';
 
-        "/var/lib/$target":
+        "/var/lib/${target}":
           ensure  => directory,
           require => Package[nagios],
           owner   => nagios,
           group   => nagios,
           mode    => '0750';
 
-        "/var/lib/$target/spool":
+        "/var/lib/${target}/spool":
           ensure  => directory,
           require => Package[nagios],
           owner   => nagios,
           group   => nagios,
           mode    => '0750';
 
-        "/var/lib/$target/spool/checkresults":
+        "/var/lib/${target}/spool/checkresults":
           ensure  => directory,
-          require => File["/var/lib/$target/spool"],
+          require => File["/var/lib/${target}/spool"],
           owner   => nagios,
           group   => nagios,
           mode    => '0750',
           notify  => Service['nagios'];
 
-        "/etc/$target/nagios.cfg":
+        "/etc/${target}/nagios.cfg":
           ensure  => file,
           content => template('nagios/nagios/nagios_cfg.erb'),
           force   => true,
           require => Package['nagios'],
           notify  => Service['nagios'];
 
-        "/etc/$target/resource.cfg":
+        "/etc/${target}/resource.cfg":
           ensure  => file,
           source  => 'puppet:///modules/nagios/nagios/resource.cfg',
           force   => true,
           require => Package['nagios'];
 #          notify  => Service['nagios'];
 
-        "/etc/$target/cgi.cfg":
+        "/etc/${target}/cgi.cfg":
           ensure  => file,
           content => template('nagios/nagios/cgi_cfg.erb'),
           force   => true,
@@ -393,21 +393,21 @@ case $engine {
           package { 'nagios-nsca-client':
             ensure   => present,
           }
-          file {"/etc/$target/send_nsca.cfg":
+          file {"/etc/${target}/send_nsca.cfg":
             ensure  => file,
             content => template('nagios/nagios/send_nsca_cfg.erb'),
             force   => true,
             require => Package['nagios-nsca-client'];
           }
-          file {"/etc/$target/submit_service_check":
+          file {"/etc/${target}/submit_service_check":
             ensure  => file,
             mode    => '0755',
             content => template('nagios/nagios/submit_service_check_opensuse.erb'),
             force   => true,
             require => Package['nagios-nsca-client'];
           }
-          file {"/etc/$target/submit_host_check":
-            ensure  => file, 
+          file {"/etc/${target}/submit_host_check":
+            ensure  => file,
             mode    => '0755',
             content => template('nagios/nagios/submit_host_check_opensuse.erb'),
             force   => true,
@@ -418,7 +418,7 @@ case $engine {
           package { 'nagios-nsca':
             ensure   => present,
           }
-          file {"/etc/$target/nsca.cfg":
+          file {"/etc/${target}/nsca.cfg":
             ensure  => file,
             content => template('nagios/nagios/nsca_cfg.erb'),
             force   => true,
@@ -469,7 +469,7 @@ case $engine {
             require => Package['pnp4nagios'],
 #            notify  => Service['apache2'];
           }
-          file { "/etc/apache2/conf.d/pnp4nagios.conf":
+          file {'/etc/apache2/conf.d/pnp4nagios.conf':
             ensure  => 'link',
             target  => '/etc/pnp4nagios/apache2.conf',
 #            notify  => Service['apache2'];
@@ -477,23 +477,23 @@ case $engine {
         }
         case $distribution['member'] {
           'client': {
-            package { 'nagios-nsca-client':
+            package {'nagios-nsca-client':
               ensure   => present,
             }
-            file {"/etc/$target/send_nsca.cfg":
+            file {"/etc/${target}/send_nsca.cfg":
               ensure  => file,
               content => template('nagios/nagios/send_nsca_cfg.erb'),
               force   => true,
               require => Package['nagios-nsca-client'];
             }
-            file {"/etc/$target/submit_service_check":
+            file {"/etc/${target}/submit_service_check":
               ensure  => file,
               mode    => '0755',
               content => template('nagios/nagios/submit_service_check_opensuse.erb'),
               force   => true,
               require => Package['nagios-nsca-client'];
             }
-            file {"/etc/$target/submit_host_check":
+            file {"/etc/${target}/submit_host_check":
               ensure  => file,
               mode    => '0755',
               content => template('nagios/nagios/submit_host_check_opensuse.erb'),
@@ -505,7 +505,7 @@ case $engine {
             package { 'nagios-nsca':
               ensure   => present,
             }
-            file {"/etc/$target/nsca.cfg":
+            file {"/etc/${target}/nsca.cfg":
               ensure  => file,
               content => template('nagios/nagios/nsca_cfg.erb'),
               force   => true,
@@ -557,7 +557,7 @@ case $engine {
             require => Package['pnp4nagios'],
 #            notify  => Service['apache2'];
           }
-          file { "/etc/apache2/conf.d/pnp4nagios.conf":
+          file {'/etc/apache2/conf.d/pnp4nagios.conf':
             ensure  => 'link',
             target  => '/etc/pnp4nagios/apache.conf',
 #            notify  => Service['apache2'];
@@ -579,20 +579,20 @@ case $engine {
             package { 'nsca-client':
               ensure   => present,
             }
-            file {"/etc/$target/send_nsca.cfg":
+            file {"/etc/${target}/send_nsca.cfg":
               ensure  => file,
               content => template('nagios/nagios/send_nsca_cfg.erb'),
               force   => true,
               require => Package['nsca-client'];
             }
-            file {"/etc/nagios/submit_service_check":
+            file {'/etc/nagios/submit_service_check':
               ensure  => file,
               mode    => '0755',
               content => template('nagios/nagios/submit_service_check_ubuntu.erb'),
               force   => true,
               require => Package['nsca-client'];
             }
-            file {"/etc/nagios/submit_host_check":
+            file {'/etc/nagios/submit_host_check':
               ensure  => file,
               mode    => '0755',
               content => template('nagios/nagios/submit_host_check_ubuntu.erb'),
@@ -604,7 +604,7 @@ case $engine {
             package { 'nsca':
               ensure   => present,
             }
-            file {"/etc/$target/nsca.cfg":
+            file {"/etc/${target}/nsca.cfg":
               ensure  => file,
               content => template('nagios/nagios/nsca_cfg.erb'),
               force   => true,
@@ -752,63 +752,63 @@ case $engine {
 #    require => Package['apache2'];
 #  }
 
-  file { "/etc/$target/nagios_host.cfg":
+  file { "/etc/${target}/nagios_host.cfg":
     ensure  => file,
     content => template('nagios/nagios/nagios_host.erb'),
     force   => true,
     notify  => Service['nagios']
   }
 
-  file { "/etc/$target/nagios_hostgroups.cfg":
+  file { "/etc/${target}/nagios_hostgroups.cfg":
     ensure  => file,
     content => template('nagios/nagios/nagios_hostgroups.erb'),
     force   => true,
     notify  => Service['nagios']
   }
 
-  file { "/etc/$target/nagios_service.cfg":
+  file { "/etc/${target}/nagios_service.cfg":
     ensure  => file,
     content => template('nagios/nagios/nagios_service.erb'),
     force   => true,
     notify  => Service['nagios']
   }
 
-  file { "/etc/$target/nagios_servicegroups.cfg":
+  file { "/etc/${target}/nagios_servicegroups.cfg":
     ensure  => file,
     content => template('nagios/nagios/nagios_servicegroups.erb'),
     force   => true,
     notify  => Service['nagios']
   }
 
-  file { "/etc/$target/nagios_contactgroup.cfg":
+  file { "/etc/${target}/nagios_contactgroup.cfg":
     ensure  => file,
     content => template('nagios/nagios/nagios_contactgroup.erb'),
     force   => true,
     notify  => Service['nagios']
   }
 
-  file { "/etc/$target/nagios_contact.cfg":
+  file { "/etc/${target}/nagios_contact.cfg":
     ensure  => file,
     content => template('nagios/nagios/nagios_contact.erb'),
     force   => true,
     notify  => Service['nagios']
   }
 
-  file { "/etc/$target/nagios_timeperiod.cfg":
+  file { "/etc/${target}/nagios_timeperiod.cfg":
     ensure  => file,
     content => template('nagios/nagios/nagios_timeperiod.erb'),
     force   => true,
     notify  => Service['nagios']
   }
 
-#  file { "/etc/$target/nagios_hostextinfo.cfg":
+#  file { "/etc/${target}/nagios_hostextinfo.cfg":
 #    ensure  => file,
 #    content => template('nagios/nagios/nagios_hostextinfo.erb'),
 #    force   => true,
 #    notify  => Service['nagios']
 #  }
 
-  file { "/etc/$target/nagios_command.cfg":
+  file { "/etc/${target}/nagios_command.cfg":
     ensure  => file,
     content => template('nagios/nagios/nagios_command.erb'),
     force   => true,
@@ -818,55 +818,55 @@ case $engine {
   if ($pnp4nagios == 1) {
 
     package { 'pnp4nagios':
-      ensure   => present,
+      ensure  => present,
     }
 
-    service  { 'npcd':
+    service { 'npcd':
       ensure  => running,
       require => Package['pnp4nagios'];
     }
 
-    file { "/etc/pnp4nagios":
+    file {'/etc/pnp4nagios':
       ensure  => directory,
       owner   => nagios,
       group   => nagios,
-      require => File ["/etc/$target/nagios_host.cfg"];
+      require => File ["/etc/${target}/nagios_host.cfg"];
     }
 
-    file { [ "/var/log/pnp4nagios", "/var/spool/pnp4nagios" ]:
+    file { ['/var/log/pnp4nagios', '/var/spool/pnp4nagios' ]:
       ensure  => directory,
       owner   => nagios,
       group   => nagios,
-      require => [Package['pnp4nagios'],File["/etc/$target/nagios_host.cfg"]];
+      require => [Package['pnp4nagios'],File["/etc/${target}/nagios_host.cfg"]];
     }
 
     exec { 'mkdir_pnp4nagios_rrdbase':
       path    => [ '/bin', '/usr/bin' ],
-      command => "mkdir -p $pnp4nagios_rrdbase",
-      unless  => "test -d $pnp4nagios_rrdbase",
+      command => "mkdir -p ${pnp4nagios_rrdbase}",
+      unless  => "test -d ${pnp4nagios_rrdbase}",
     }
 
     file { $pnp4nagios_rrdbase:
       ensure  => directory,
       owner   => nagios,
       group   => nagios,
-      require => [Exec['mkdir_pnp4nagios_rrdbase'],File["/etc/$target/nagios_host.cfg"]];
+      require => [Exec['mkdir_pnp4nagios_rrdbase'],File["/etc/${target}/nagios_host.cfg"]];
     }
 
-    file { "/etc/pnp4nagios/process_perfdata.cfg":
+    file {'/etc/pnp4nagios/process_perfdata.cfg':
       ensure  => file,
       content => template('nagios/pnp4nagios/process_perfdata_cfg.erb'),
       force   => true,
       notify  => Service['nagios']
     }
-    
-    file { "/etc/pnp4nagios/config_local.php":
+
+    file {'/etc/pnp4nagios/config_local.php':
       ensure  => file,
       content => template('nagios/pnp4nagios/config_php.erb'),
       force   => true,
     }
-    
-    file { "/etc/pnp4nagios/config.php":
+
+    file {'/etc/pnp4nagios/config.php':
       ensure  => file,
       content => template('nagios/pnp4nagios/config_php.erb'),
       force   => true,

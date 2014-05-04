@@ -40,7 +40,7 @@ case $::operatingsystem {
         /12.2|12.3|13.1/ => 'nrpe',
       }
 
-      package { "nrpe_package":
+      package { 'nrpe_package':
         ensure   => present,
         name     => $nrpe_package,
       }
