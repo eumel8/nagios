@@ -830,13 +830,14 @@ case $engine {
       ensure  => directory,
       owner   => nagios,
       group   => nagios,
+      require => File ["/etc/$target/nagios_host.cfg"];
     }
 
     file { [ "/var/log/pnp4nagios", "/var/spool/pnp4nagios" ]:
       ensure  => directory,
       owner   => nagios,
       group   => nagios,
-      require => Package['pnp4nagios'];
+      require => [Package['pnp4nagios'],File["/etc/$target/nagios_host.cfg"]];
     }
 
     exec { 'mkdir_pnp4nagios_rrdbase':
@@ -849,7 +850,7 @@ case $engine {
       ensure  => directory,
       owner   => nagios,
       group   => nagios,
-      require => Exec['mkdir_pnp4nagios_rrdbase'],
+      require => [Exec['mkdir_pnp4nagios_rrdbase'],File["/etc/$target/nagios_host.cfg"]];
     }
 
     file { "/etc/pnp4nagios/process_perfdata.cfg":
@@ -870,7 +871,5 @@ case $engine {
       content => template('nagios/pnp4nagios/config_php.erb'),
       force   => true,
     }
-    
   }
-
 }
