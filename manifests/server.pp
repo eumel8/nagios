@@ -25,6 +25,9 @@
 # [*pnp4nagios_rrdbase*]
 # String of path for rrd file performed by  pnp4nagios
 #
+# [*icli*]
+# String of install icinga command line tool icli (1,0)
+#
 # [*distribution*]
 # Hash of distrubtion service (client, master)
 #   [*member*]
@@ -68,6 +71,7 @@ class nagios::server (
   $pnp4nagios         = undef,
   $pnp4nagios_rrdbase = '/var/lib/pnp4nagios/perfdata/',
   $notesurl           = undef,
+  $icli               = undef,
   $distribution       = {},
   $http_users         = {},
   $twilio_account     = undef,
@@ -869,6 +873,7 @@ case $engine {
       content => template('nagios/pnp4nagios/config_php.erb'),
       force   => true,
     }
+
     if ($::operatingsystem == 'Ubuntu') {
       file_line { 'npcd_default':
         path    => '/etc/default/npcd',
@@ -877,5 +882,33 @@ case $engine {
         notify  => Service['npcd'],
       }
     }
+
+  }
+  if ($icli == 1) {
+
+    case $::operatingsystem {
+      'OpenSuSE': {
+
+        package { 'perl-Term-Size':
+          ensure  => present,
+        }
+      }
+      'Ubuntu': {
+        package { 'libterm-size-perl':
+          ensure  => present,
+        }
+      }
+      default: {
+        error('No supported operating system')
+      }
+    }
+
+    file {'/usr/local/bin/icli':
+      ensure  => file,
+      source  => 'puppet:///modules/nagios/nagios/icli',
+      force   => true,
+      mode    => '0755',
+    }
+
   }
 }

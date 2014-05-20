@@ -112,6 +112,12 @@ Describe the service in an external Wiki or link to an existing operation manual
       notesurl           => 'http://wiki.example.de/index.php/?host=$HOSTNAME$&srv=$SERVICEDESC$'
     }
 
+Install Icinga Command Line Interface (icli):
+
+    class {'nagios::server':
+      icli         => 1,
+    }
+
 Testing
 -------
 
