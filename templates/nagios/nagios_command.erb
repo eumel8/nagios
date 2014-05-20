@@ -17,6 +17,11 @@ define command {
 }
 
 define command {
+        command_line                   /usr/lib/nagios/plugins/check_nrpe -H $HOSTADDRESS$ -p $ARG1$
+        command_name                   check_nrpe_service
+}
+
+define command {
         command_line                   /usr/lib/nagios/plugins/check_nrpe -H $HOSTADDRESS$ -c $ARG1$
         command_name                   check_nrpe_1arg
 }
