@@ -869,5 +869,13 @@ case $engine {
       content => template('nagios/pnp4nagios/config_php.erb'),
       force   => true,
     }
+    if ($::operatingsystem == 'Ubuntu') {
+      file_line { 'npcd_default':
+        path    => '/etc/default/npcd',
+        line    => 'RUN="yes"',
+        match   => '^RUN=.*',
+        notify  => Service['npcd'],
+      }
+    }
   }
 }
