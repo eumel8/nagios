@@ -33,6 +33,7 @@ command[check_tcp]=/usr/lib/nagios/plugins/check_tcp -H $ARG4$ -p $ARG1$ -w $ARG
 command[check_dns]=/usr/lib/nagios/plugins/check_dns -s $ARG1$ -H $ARG2$
 command[check_log]=/usr/lib/nagios/plugins/check_log -F $ARG1$ -O $ARG2$ -q $ARG3$
 command[check_http]=/usr/lib/nagios/plugins/check_http -I $ARG1$ -p $ARG2$ -w $ARG3$ -c $ARG4$ -u $ARG5$ -s $ARG6$
+command[check_http_expect]=/usr/lib/nagios/plugins/check_http -I $ARG1$ -p $ARG2$ -w $ARG3$ -c $ARG4$ -u $ARG5$ -e $ARG6$
 command[check_http_vhost]=/usr/lib/nagios/plugins/check_http -I $ARG1$ -H $ARG2$ -p $ARG3$ -w $ARG4$ -c $ARG5$ -u $ARG6$ -s $ARG7$
 command[check_http_type]=/usr/lib/nagios/plugins/check_http -I $ARG1$ -p $ARG2$ -w $ARG3$ -c $ARG4$ -u $ARG5$ -T $ARG6$
 command[check_http_ssl]=/usr/lib/nagios/plugins/check_http -I $ARG1$ -p $ARG2$ -w $ARG3$ -c $ARG4$ -u $ARG5$ --ssl
