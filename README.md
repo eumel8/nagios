@@ -118,6 +118,14 @@ Install Icinga Command Line Interface (icli):
       icli         => 1,
     }
 
+Usage:
+    # icli
+    # icli -z \!o
+    # icli -z \!oA
+    # icli -s Load
+    # icli -h host.beispiel.de
+    # icli -g hostgruppe.beispiel.de
+
 Testing
 -------
 
