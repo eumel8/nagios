@@ -113,7 +113,7 @@ enable_event_handlers=1
 event_broker_options=-1
 
 <% if @pnp4nagios == '1' %>
-<% if @operatingsystem == 'OpenSuSE' %>
+<% if @operatingsystem =~ /OpenSuSE|SLES/ %>
 broker_module=/usr/lib/npcdmod.o config_file=/etc/pnp4nagios/npcd.cfg
 <% end %>
 <% if @operatingsystem == 'Ubuntu' %>
@@ -169,7 +169,7 @@ high_host_flap_threshold=20.0
 
 date_format=iso8601
 
-p1_file=<% case @operatingsystem when "Ubuntu" then %>/usr/lib/icinga/p1.pl<% when "OpenSuSE" then %>/usr/share/icinga/p1.pl<% end %>
+p1_file=<% case @operatingsystem when "Ubuntu" then %>/usr/lib/icinga/p1.pl<% when /^OpenSuSE|SLES+$/ then %>/usr/share/icinga/p1.pl<% end %>
 
 enable_embedded_perl=1
 use_embedded_perl_implicitly=1

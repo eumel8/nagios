@@ -87,7 +87,7 @@ notification_timeout=30
 ocsp_timeout=5
 
 retain_state_information=1
-<% if @operatingsystem == 'OpenSuSE' %>
+<% if @operatingsystem =~ /OpenSuSE|SLES/ %>
 state_retention_file=/var/lib/nagios/retention.dat
 <% end %>
 <% if @operatingsystem == 'Ubuntu' %>
@@ -115,7 +115,7 @@ enable_notifications=1
 enable_event_handlers=1
 
 <% if @pnp4nagios == '1' %>
-<% if @operatingsystem == 'OpenSuSE' %>
+<% if @operatingsystem =~ /OpenSuSE|SLES/ %>
 broker_module=/usr/lib/npcdmod.o config_file=/etc/pnp4nagios/npcd.cfg
 <% end %>
 <% if @operatingsystem == 'Ubuntu' %>

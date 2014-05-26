@@ -97,9 +97,8 @@ file {'/etc/nagios/scripts':
 case $engine {
     'nagios': {
 
-      case $::operatingsystem {
+      if ($::operatingsystem in ['OpenSuSE', 'SLES']) {
 
-        'OpenSuSE': {
           $target = 'nagios'
 
           package { 'nagios':
@@ -121,7 +120,6 @@ case $engine {
             source  => 'puppet:///modules/nagios/nagios/apache2.conf.opensuse',
             force   => true,
             require => Package['nagios'],
-#            notify  => Service['apache2'];
           }
           if ($pnp4nagios == 1) {
             file {'/etc/pnp4nagios/apache2.conf':
@@ -129,12 +127,10 @@ case $engine {
               source  => 'puppet:///modules/nagios/nagios/pnp4nagios.conf.opensuse',
               force   => true,
               require => Package['pnp4nagios'],
-#              notify  => Service['apache2'];
             }
             file {'/etc/apache2/conf.d/pnp4nagios.conf':
               ensure  => 'link',
               target  => '/etc/pnp4nagios/apache2.conf',
-#              notify  => Service['apache2'];
             }
           }
           case $distribution['member'] {
@@ -192,10 +188,9 @@ case $engine {
             }
           }
 
-
         }
+        elsif ($::operatingsystem == 'Ubuntu') {
 
-        'Ubuntu': {
           $target = 'nagios3'
 
           package { 'nagios3':
@@ -216,7 +211,6 @@ case $engine {
             source  => 'puppet:///modules/nagios/nagios/apache2.conf.ubuntu',
             force   => true,
             require => Package['nagios'],
-#            notify  => Service['apache2'];
           }
           if ($pnp4nagios == 1) {
             file {'/etc/pnp4nagios/apache.conf':
@@ -224,12 +218,10 @@ case $engine {
               source  => 'puppet:///modules/nagios/nagios/pnp4nagios.conf.ubuntu',
               force   => true,
               require => Package['pnp4nagios'],
-#              notify  => Service['apache2'];
             }
             file {'/etc/apache2/conf.d/pnp4nagios.conf':
               ensure  => 'link',
               target  => '/etc/pnp4nagios/apache.conf',
-#              notify  => Service['apache2'];
             }
           }
           exec { 'run_nagiosfile1_purger':
@@ -303,8 +295,8 @@ case $engine {
 
         }
 
-        default: {
-          error('No supported operating system')
+        else {
+          fail('No supported operating system')
         }
       }
 
@@ -315,8 +307,6 @@ case $engine {
         "/var/cache/${target}/":
           ensure  => directory,
           require => Package[nagios],
-#          owner   => nagios,
-#          group   => nagios,
           mode    => '0777';
 
         "/var/lib/${target}/rw":
@@ -360,7 +350,6 @@ case $engine {
           source  => 'puppet:///modules/nagios/nagios/resource.cfg',
           force   => true,
           require => Package['nagios'];
-#          notify  => Service['nagios'];
 
         "/etc/${target}/cgi.cfg":
           ensure  => file,
@@ -389,7 +378,6 @@ case $engine {
         '/etc/apache2/conf.d/nagios.conf':
           ensure  => 'link',
           target  => '/etc/nagios/apache2.conf',
-#          notify  => Service['apache2'];
       }
 
       case $distribution['member'] {
@@ -442,9 +430,8 @@ case $engine {
 
   'icinga': {
 
-    case $::operatingsystem {
+      if ($::operatingsystem in ['OpenSuSE', 'SLES']) {
 
-      'OpenSuSE': {
         $target = 'nagios'
 
         package { 'icinga':
@@ -463,7 +450,6 @@ case $engine {
           source  => 'puppet:///modules/nagios/icinga/apache2.conf.opensuse',
           force   => true,
           require => Package['icinga'],
-#          notify  => Service['apache2'];
         }
         if ($pnp4nagios == 1) {
           file {'/etc/pnp4nagios/apache2.conf':
@@ -471,12 +457,10 @@ case $engine {
             source  => 'puppet:///modules/nagios/icinga/pnp4nagios.conf.opensuse',
             force   => true,
             require => Package['pnp4nagios'],
-#            notify  => Service['apache2'];
           }
           file {'/etc/apache2/conf.d/pnp4nagios.conf':
             ensure  => 'link',
             target  => '/etc/pnp4nagios/apache2.conf',
-#            notify  => Service['apache2'];
           }
         }
         case $distribution['member'] {
@@ -528,7 +512,8 @@ case $engine {
 
       }
 
-      'Ubuntu': {
+      elsif ($::operatingsystem == 'Ubuntu') {
+
         $target = 'nagios3'
 
         file {'/etc/nagios3':
@@ -551,7 +536,6 @@ case $engine {
           source  => 'puppet:///modules/nagios/icinga/apache2.conf.ubuntu',
           force   => true,
           require => Package['icinga'],
-#          notify  => Service['apache2'];
         }
         if ($pnp4nagios == 1) {
           file {'/etc/pnp4nagios/apache.conf':
@@ -559,12 +543,10 @@ case $engine {
             source  => 'puppet:///modules/nagios/icinga/pnp4nagios.conf.ubuntu',
             force   => true,
             require => Package['pnp4nagios'],
-#            notify  => Service['apache2'];
           }
           file {'/etc/apache2/conf.d/pnp4nagios.conf':
             ensure  => 'link',
             target  => '/etc/pnp4nagios/apache.conf',
-#            notify  => Service['apache2'];
           }
         }
         exec { 'run_icingafile1_purger':
@@ -627,8 +609,8 @@ case $engine {
 
       }
 
-      default: {
-        error('No supported operating system')
+      else {
+        fail('No supported operating system')
       }
     }
 
@@ -740,7 +722,7 @@ case $engine {
 
   }
   default: {
-    warning('You have to define an engine')
+    fail('You have to define an engine')
   }
 }
 
@@ -886,19 +868,17 @@ case $engine {
   }
   if ($icli == 1) {
 
-    case $::operatingsystem {
-      'OpenSuSE': {
-
+    if ($::operatingsystem in ['OpenSuSE', 'SLES']) {
         package { 'perl-Term-Size':
           ensure  => present,
         }
-      }
-      'Ubuntu': {
+    }
+    elsif ($::operatingsystem == 'Ubuntu') {
         package { 'libterm-size-perl':
           ensure  => present,
         }
-      }
-      default: {
+    }
+    else {
         error('No supported operating system')
       }
     }
@@ -909,6 +889,5 @@ case $engine {
       force   => true,
       mode    => '0755',
     }
-
   }
 }
