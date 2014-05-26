@@ -188,8 +188,8 @@ case $engine {
             }
           }
 
-        }
-        elsif ($::operatingsystem == 'Ubuntu') {
+      }
+      elsif ($::operatingsystem == 'Ubuntu') {
 
           $target = 'nagios3'
 
@@ -292,12 +292,9 @@ case $engine {
             default: {
             }
           }
-
-        }
-
-        else {
-          fail('No supported operating system')
-        }
+      }
+      else {
+        fail('No supported operating system')
       }
 
       file {
@@ -606,14 +603,10 @@ case $engine {
           default: {
           }
         }
-
-      }
-
-      else {
-        fail('No supported operating system')
-      }
     }
-
+    else {
+      fail('No supported operating system')
+    }
 
     service {
       'icinga':
@@ -879,8 +872,7 @@ case $engine {
         }
     }
     else {
-        error('No supported operating system')
-      }
+      fail('No supported operating system')
     }
 
     file {'/usr/local/bin/icli':
