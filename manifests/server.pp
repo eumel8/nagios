@@ -41,6 +41,9 @@
 # [*http_users*]
 # Hash of username/password combinations to use the web frontend
 #
+# [*httpd_user*]
+# String of username which is running httpd service (default: wwwrun)
+#
 # [*twilio_account*]
 # String of the account name for Twilio service (SMS/Voice notifications)
 #
@@ -78,7 +81,8 @@ class nagios::server (
   $twilio_identifier  = undef,
   $twilio_from        = undef,
   $twilio_to          = undef,
-  $notification       = 'root@localhost'
+  $notification       = 'root@localhost',
+  $httpd_user         = 'wwwrun'
 ) {
 
 file {
@@ -234,8 +238,9 @@ case $engine {
           }
           exec { 'run_nagiosgroup_purger':
             path    => '/bin:/usr/bin:/usr/sbin',
-            command => 'usermod -a -G nagios `getent passwd $(ps axhno user,comm|grep -E \'httpd|apache\'|uniq|grep -v root|awk \'{if ($1) print $1}\')|awk -F: \'{print $1}\'`',
-            unless  => 'id `getent passwd $(ps axhno user,comm|grep -E \'httpd|apache\'|uniq|grep -v root|awk \'{if ($1) print $1}\') | awk -F: \'{print $1}\'|uniq` | grep -c nagios',
+            command => "usermod -a -G nagios ${httpd_user}",
+            onlyif  => "id ${httpd_user}",
+            unless  => "id ${httpd_user} | grep -c nagios",
             require => Package['nagios'];
           }
           case $distribution['member'] {
@@ -552,8 +557,9 @@ case $engine {
         }
         exec { 'run_icingagroup_purger':
           path    => '/bin:/usr/bin:/usr/sbin',
-          command => 'usermod -a -G nagios `getent passwd $(ps axhno user,comm|grep -E \'httpd|apache\'|uniq|grep -v root|awk \'{if ($1) print $1}\')|awk -F: \'{print $1}\'`',
-          unless  => 'id `getent passwd $(ps axhno user,comm|grep -E \'httpd|apache\'|uniq|grep -v root|awk \'{if ($1) print $1}\') | awk -F: \'{print $1}\'|uniq` | grep -c nagios',
+          command => "usermod -a -G nagios ${httpd_user}",
+          onlyif  => "id ${httpd_user}",
+          unless  => "id ${httpd_user} | grep -c nagios",
           require => Package['icinga'],
         }
 
