@@ -861,6 +861,7 @@ case $engine {
         line    => 'RUN="yes"',
         match   => '^RUN=.*',
         notify  => Service['npcd'],
+        require => Package['pnp4nagios'],
       }
     }
 

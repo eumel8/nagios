@@ -30,6 +30,7 @@ Install server and setup http authentication user:
 
     class {'nagios::server':
       engine     => 'icinga',
+      httpd_user => 'www-run',
       http_users => {
         admin => { 'password' => '$apr1$x6DQznUt$hh05hGiXnBzfi4m0iKlty1' },
         peter => { 'password' => '$apr1$Pm4kjpYB$8KGIuRB49Skdf/5/nWfUN1' },
