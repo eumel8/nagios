@@ -124,17 +124,18 @@ broker_module=/usr/lib/pnp4nagios/npcdmod.o config_file=/etc/pnp4nagios/npcd.cfg
 process_performance_data=1
 perfdata_timeout=5
 
-service_perfdata_file=/var/log/pnp4nagios/service-perfdata
-service_perfdata_file_template=DATATYPE::SERVICEPERFDATA\tTIMET::$TIMET$\tHOSTNAME::$HOSTNAME$\tSERVICEDESC::$SERVICEDESC$\tSERVICEPERFDATA::$SERVICEPERFDATA$\tSERVICECHECKCOMMAND::$SERVICECHECKCOMMAND$\tHOSTSTATE::$HOSTSTATE$\tHOSTSTATETYPE::$HOSTSTATETYPE$\tSERVICESTATE::$SERVICESTATE$\tSERVICESTATETYPE::$SERVICESTATETYPE$
-service_perfdata_file_mode=a
-service_perfdata_file_processing_interval=15
-service_perfdata_file_processing_command=process-service-perfdata-file
-
-host_perfdata_file=/var/log/pnp4nagios/host-perfdata
-host_perfdata_file_template=DATATYPE::HOSTPERFDATA\tTIMET::$TIMET$\tHOSTNAME::$HOSTNAME$\tHOSTPERFDATA::$HOSTPERFDATA$\tHOSTCHECKCOMMAND::$HOSTCHECKCOMMAND$\tHOSTSTATE::$HOSTSTATE$\tHOSTSTATETYPE::$HOSTSTATETYPE$
-host_perfdata_file_mode=a
-host_perfdata_file_processing_interval=15
-host_perfdata_file_processing_command=process-host-perfdata-file
+# only for file bases pnp4nagios service
+# service_perfdata_file=/var/spool/pnp4nagios/service-perfdata
+# service_perfdata_file_template=DATATYPE::SERVICEPERFDATA\tTIMET::$TIMET$\tHOSTNAME::$HOSTNAME$\tSERVICEDESC::$SERVICEDESC$\tSERVICEPERFDATA::$SERVICEPERFDATA$\tSERVICECHECKCOMMAND::$SERVICECHECKCOMMAND$\tHOSTSTATE::$HOSTSTATE$\tHOSTSTATETYPE::$HOSTSTATETYPE$\tSERVICESTATE::$SERVICESTATE$\tSERVICESTATETYPE::$SERVICESTATETYPE$
+# service_perfdata_file_mode=a
+# service_perfdata_file_processing_interval=15
+# service_perfdata_file_processing_command=process-service-perfdata-file
+# 
+# host_perfdata_file=/var/spool/pnp4nagios/host-perfdata
+# host_perfdata_file_template=DATATYPE::HOSTPERFDATA\tTIMET::$TIMET$\tHOSTNAME::$HOSTNAME$\tHOSTPERFDATA::$HOSTPERFDATA$\tHOSTCHECKCOMMAND::$HOSTCHECKCOMMAND$\tHOSTSTATE::$HOSTSTATE$\tHOSTSTATETYPE::$HOSTSTATETYPE$
+# host_perfdata_file_mode=a
+# host_perfdata_file_processing_interval=15
+# host_perfdata_file_processing_command=process-host-perfdata-file
 <%   else %>
 process_performance_data=0
 <% end %>
