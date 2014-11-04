@@ -41,6 +41,9 @@
 # [*http_users*]
 # Hash of username/password combinations to use the web frontend
 #
+# [*httpd_user*]
+# String of username which is running httpd service (default: wwwrun)
+#
 # [*twilio_account*]
 # String of the account name for Twilio service (SMS/Voice notifications)
 #
@@ -78,7 +81,8 @@ class nagios::server (
   $twilio_identifier  = undef,
   $twilio_from        = undef,
   $twilio_to          = undef,
-  $notification       = 'root@localhost'
+  $notification       = 'root@localhost',
+  $httpd_user         = 'wwwrun'
 ) {
 
 file {
@@ -97,9 +101,8 @@ file {'/etc/nagios/scripts':
 case $engine {
     'nagios': {
 
-      case $::operatingsystem {
+      if ($::operatingsystem in ['OpenSuSE', 'SLES']) {
 
-        'OpenSuSE': {
           $target = 'nagios'
 
           package { 'nagios':
@@ -121,7 +124,6 @@ case $engine {
             source  => 'puppet:///modules/nagios/nagios/apache2.conf.opensuse',
             force   => true,
             require => Package['nagios'],
-#            notify  => Service['apache2'];
           }
           if ($pnp4nagios == 1) {
             file {'/etc/pnp4nagios/apache2.conf':
@@ -129,12 +131,10 @@ case $engine {
               source  => 'puppet:///modules/nagios/nagios/pnp4nagios.conf.opensuse',
               force   => true,
               require => Package['pnp4nagios'],
-#              notify  => Service['apache2'];
             }
             file {'/etc/apache2/conf.d/pnp4nagios.conf':
               ensure  => 'link',
               target  => '/etc/pnp4nagios/apache2.conf',
-#              notify  => Service['apache2'];
             }
           }
           case $distribution['member'] {
@@ -192,10 +192,9 @@ case $engine {
             }
           }
 
+      }
+      elsif ($::operatingsystem == 'Ubuntu') {
 
-        }
-
-        'Ubuntu': {
           $target = 'nagios3'
 
           package { 'nagios3':
@@ -216,7 +215,6 @@ case $engine {
             source  => 'puppet:///modules/nagios/nagios/apache2.conf.ubuntu',
             force   => true,
             require => Package['nagios'],
-#            notify  => Service['apache2'];
           }
           if ($pnp4nagios == 1) {
             file {'/etc/pnp4nagios/apache.conf':
@@ -224,12 +222,10 @@ case $engine {
               source  => 'puppet:///modules/nagios/nagios/pnp4nagios.conf.ubuntu',
               force   => true,
               require => Package['pnp4nagios'],
-#              notify  => Service['apache2'];
             }
             file {'/etc/apache2/conf.d/pnp4nagios.conf':
               ensure  => 'link',
               target  => '/etc/pnp4nagios/apache.conf',
-#              notify  => Service['apache2'];
             }
           }
           exec { 'run_nagiosfile1_purger':
@@ -242,8 +238,9 @@ case $engine {
           }
           exec { 'run_nagiosgroup_purger':
             path    => '/bin:/usr/bin:/usr/sbin',
-            command => 'usermod -a -G nagios `getent passwd $(ps axhno user,comm|grep -E \'httpd|apache\'|uniq|grep -v root|awk \'{if ($1) print $1}\')|awk -F: \'{print $1}\'`',
-            unless  => 'id `getent passwd $(ps axhno user,comm|grep -E \'httpd|apache\'|uniq|grep -v root|awk \'{if ($1) print $1}\') | awk -F: \'{print $1}\'` | grep -c nagios',
+            command => "usermod -a -G nagios ${httpd_user}",
+            onlyif  => "id ${httpd_user}",
+            unless  => "id ${httpd_user} | grep -c nagios",
             require => Package['nagios'];
           }
           case $distribution['member'] {
@@ -300,12 +297,9 @@ case $engine {
             default: {
             }
           }
-
-        }
-
-        default: {
-          error('No supported operating system')
-        }
+      }
+      else {
+        fail('No supported operating system')
       }
 
       file {
@@ -315,8 +309,6 @@ case $engine {
         "/var/cache/${target}/":
           ensure  => directory,
           require => Package[nagios],
-#          owner   => nagios,
-#          group   => nagios,
           mode    => '0777';
 
         "/var/lib/${target}/rw":
@@ -360,7 +352,6 @@ case $engine {
           source  => 'puppet:///modules/nagios/nagios/resource.cfg',
           force   => true,
           require => Package['nagios'];
-#          notify  => Service['nagios'];
 
         "/etc/${target}/cgi.cfg":
           ensure  => file,
@@ -389,7 +380,6 @@ case $engine {
         '/etc/apache2/conf.d/nagios.conf':
           ensure  => 'link',
           target  => '/etc/nagios/apache2.conf',
-#          notify  => Service['apache2'];
       }
 
       case $distribution['member'] {
@@ -442,9 +432,8 @@ case $engine {
 
   'icinga': {
 
-    case $::operatingsystem {
+      if ($::operatingsystem in ['OpenSuSE', 'SLES']) {
 
-      'OpenSuSE': {
         $target = 'nagios'
 
         package { 'icinga':
@@ -463,7 +452,6 @@ case $engine {
           source  => 'puppet:///modules/nagios/icinga/apache2.conf.opensuse',
           force   => true,
           require => Package['icinga'],
-#          notify  => Service['apache2'];
         }
         if ($pnp4nagios == 1) {
           file {'/etc/pnp4nagios/apache2.conf':
@@ -471,12 +459,10 @@ case $engine {
             source  => 'puppet:///modules/nagios/icinga/pnp4nagios.conf.opensuse',
             force   => true,
             require => Package['pnp4nagios'],
-#            notify  => Service['apache2'];
           }
           file {'/etc/apache2/conf.d/pnp4nagios.conf':
             ensure  => 'link',
             target  => '/etc/pnp4nagios/apache2.conf',
-#            notify  => Service['apache2'];
           }
         }
         case $distribution['member'] {
@@ -528,7 +514,8 @@ case $engine {
 
       }
 
-      'Ubuntu': {
+      elsif ($::operatingsystem == 'Ubuntu') {
+
         $target = 'nagios3'
 
         file {'/etc/nagios3':
@@ -551,7 +538,6 @@ case $engine {
           source  => 'puppet:///modules/nagios/icinga/apache2.conf.ubuntu',
           force   => true,
           require => Package['icinga'],
-#          notify  => Service['apache2'];
         }
         if ($pnp4nagios == 1) {
           file {'/etc/pnp4nagios/apache.conf':
@@ -559,12 +545,10 @@ case $engine {
             source  => 'puppet:///modules/nagios/icinga/pnp4nagios.conf.ubuntu',
             force   => true,
             require => Package['pnp4nagios'],
-#            notify  => Service['apache2'];
           }
           file {'/etc/apache2/conf.d/pnp4nagios.conf':
             ensure  => 'link',
             target  => '/etc/pnp4nagios/apache.conf',
-#            notify  => Service['apache2'];
           }
         }
         exec { 'run_icingafile1_purger':
@@ -573,8 +557,9 @@ case $engine {
         }
         exec { 'run_icingagroup_purger':
           path    => '/bin:/usr/bin:/usr/sbin',
-          command => 'usermod -a -G nagios `getent passwd $(ps axhno user,comm|grep -E \'httpd|apache\'|uniq|grep -v root|awk \'{if ($1) print $1}\')|awk -F: \'{print $1}\'`',
-          unless  => 'id `getent passwd $(ps axhno user,comm|grep -E \'httpd|apache\'|uniq|grep -v root|awk \'{if ($1) print $1}\') | awk -F: \'{print $1}\'` | grep -c nagios',
+          command => "usermod -a -G nagios ${httpd_user}",
+          onlyif  => "id ${httpd_user}",
+          unless  => "id ${httpd_user} | grep -c nagios",
           require => Package['icinga'],
         }
 
@@ -624,14 +609,10 @@ case $engine {
           default: {
           }
         }
-
-      }
-
-      default: {
-        error('No supported operating system')
-      }
     }
-
+    else {
+      fail('No supported operating system')
+    }
 
     service {
       'icinga':
@@ -740,7 +721,7 @@ case $engine {
 
   }
   default: {
-    warning('You have to define an engine')
+    fail('You have to define an engine')
   }
 }
 
@@ -880,27 +861,25 @@ case $engine {
         line    => 'RUN="yes"',
         match   => '^RUN=.*',
         notify  => Service['npcd'],
+        require => Package['pnp4nagios'],
       }
     }
 
   }
   if ($icli == 1) {
 
-    case $::operatingsystem {
-      'OpenSuSE': {
-
+    if ($::operatingsystem in ['OpenSuSE', 'SLES']) {
         package { 'perl-Term-Size':
           ensure  => present,
         }
-      }
-      'Ubuntu': {
+    }
+    elsif ($::operatingsystem == 'Ubuntu') {
         package { 'libterm-size-perl':
           ensure  => present,
         }
-      }
-      default: {
-        error('No supported operating system')
-      }
+    }
+    else {
+      fail('No supported operating system')
     }
 
     file {'/usr/local/bin/icli':
@@ -909,6 +888,5 @@ case $engine {
       force   => true,
       mode    => '0755',
     }
-
   }
 }

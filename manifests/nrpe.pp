@@ -58,6 +58,27 @@ case $::operatingsystem {
       }
     }
 
+    'SLES': {
+      $nrpe_package = 'nagios-nrpe'
+
+      package { 'nrpe_package':
+        ensure   => present,
+        name     => $nrpe_package,
+      }
+      package {
+      [ 'nagios-plugins-mem','nagios-plugins-disk','nagios-plugins-dns','nagios-plugins-http','nagios-plugins-load','nagios-plugins-mailq','nagios-plugins-mysql','nagios-plugins-ntp_peer','nagios-plugins-ntp_time','nagios-plugins-procs','nagios-plugins-tcp','nagios-plugins-time','nagios-plugins-users','nagios-plugins-smtp','nagios-plugins-swap','nagios-plugins-log' ]:
+        ensure   => installed,
+        require  => Package['nagios-plugins'],
+      }
+
+      service { 'nrpe':
+        ensure   => running,
+        enable   => true,
+        require  => Package['nrpe_package'],
+        alias    => 'nagios-nrpe-server',
+      }
+    }
+
     'Ubuntu': {
       package { 'nrpe_package':
         ensure   => present,
@@ -77,7 +98,7 @@ case $::operatingsystem {
     }
 
     default: {
-    warning('No supported operating system')
+      fail('No supported operating system')
   }
 }
 

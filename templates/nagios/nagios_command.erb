@@ -38,24 +38,24 @@ define command {
 
 # PNP4NAGIOS Default mode
 define command {
-       command_name    process-service-perfdata
-       command_line    $USER1$/process_perfdata.pl
+       command_name    			process-service-perfdata
+       command_line    			$USER1$/process_perfdata.pl
 }
 
 define command {
-       command_name    process-host-perfdata
-       command_line    $USER1$/process_perfdata.pl -d HOSTPERFDATA
+       command_name    			process-host-perfdata
+       command_line    			$USER1$/process_perfdata.pl -d HOSTPERFDATA
 }
 
 # PNP4NAGIOS Bulk mode
 define command {
-        command_name    process-service-perfdata-file
-        command_line /bin/mv /var/spool/pnp4nagios/service-perfdata /var/spool/pnp4nagios/service-perfdata.$TIMET$
+        command_name    		process-service-perfdata-file
+        command_line 			/bin/mv /var/spool/pnp4nagios/service-perfdata /var/spool/pnp4nagios/service-perfdata.$TIMET$
 }
 
 define command {
-        command_name    process-host-perfdata-file
-        command_line /bin/mv /var/spool/pnp4nagios/host-perfdata /var/spool/pnp4nagios/host-perfdata.$TIMET$
+        command_name    		process-host-perfdata-file
+        command_line 			/bin/mv /var/spool/pnp4nagios/host-perfdata /var/spool/pnp4nagios/host-perfdata.$TIMET$
 }
 
 define command {

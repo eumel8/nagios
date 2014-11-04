@@ -7,3 +7,6 @@
 [submodule "files/plugins/remote/nagios-plugin-activemq"]
 	path = files/plugins/remote/nagios-plugin-activemq
 	url = https://github.com/ranl/monitor-utils
+[submodule "files/plugins/remote/nagios-plugin-check_mem"]
+	path = files/plugins/remote/nagios-plugin-check_mem
+	url = https://github.com/justintime/nagios-plugins
