@@ -65,6 +65,7 @@ This version doesn't use exported resources in puppet. So all hosts must configu
       'ns.beispiel.de' => {
         'ip'       => '192.168.0.10',
         'domain'   => 'beispiel.de',
+        'notes'    => 'group_voice',
         'services' => {
           'Ping' => { check => 'check_ping!200.0,60%!500.0,95%'},
         },
