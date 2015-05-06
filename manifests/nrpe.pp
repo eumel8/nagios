@@ -36,8 +36,8 @@ case $::operatingsystem {
 
     'OpenSuSE': {
       $nrpe_package = $::operatingsystemrelease ? {
-        /12.1/           => 'nagios-nrpe',
-        /12.2|12.3|13.1/ => 'nrpe',
+        /12.1/                => 'nagios-nrpe',
+        /12.2|12.3|13.1|13.2/ => 'nrpe',
       }
 
       package { 'nrpe_package':
