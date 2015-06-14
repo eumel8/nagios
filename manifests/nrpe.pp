@@ -65,6 +65,9 @@ case $::operatingsystem {
             ensure   => installed,
             require  => Package['monitoring-plugins'],
           }
+          file { '/etc/nagios':
+            ensure => 'directory',
+          }
         }
         default: {
           fail('No supported operating system')
