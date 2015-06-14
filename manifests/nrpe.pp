@@ -57,6 +57,7 @@ case $::operatingsystem {
         }
         /13.*/: {
           package { 'monitoring-plugins':
+              alias    => 'nagios-plugins',
               ensure   => present,
           }
           package {
