@@ -65,87 +65,87 @@ case $::operatingsystem {
             ensure   => installed,
             require  => Package['monitoring-plugins'],
           }
-          file { '/etc/nagios':
-            ensure => 'directory',
-          }
-        }
-        default: {
-          fail('No supported operating system')
-        }
-      }
+#          file { '/etc/nagios':
+#            ensure => 'directory',
+#	  }
+		}
+		default: {
+		  fail('No supported operating system')
+		}
+	      }
 
-      service { 'nrpe':
-        ensure   => running,
-        enable   => true,
-        require  => Package['nrpe_package'],
-        alias    => 'nagios-nrpe-server',
-      }
-    }
+	      service { 'nrpe':
+		ensure   => running,
+		enable   => true,
+		require  => Package['nrpe_package'],
+		alias    => 'nagios-nrpe-server',
+	      }
+	    }
 
-    'SLES': {
-      $nrpe_package = 'nagios-nrpe'
+	    'SLES': {
+	      $nrpe_package = 'nagios-nrpe'
 
-      package { 'nrpe_package':
-        ensure   => present,
-        name     => $nrpe_package,
-      }
-      package { 'nagios-plugins':
-          ensure   => present,
-      }
-      package {
-      [ 'nagios-plugins-mem','nagios-plugins-disk','nagios-plugins-dns','nagios-plugins-http','nagios-plugins-load','nagios-plugins-mailq','nagios-plugins-mysql','nagios-plugins-ntp_peer','nagios-plugins-ntp_time','nagios-plugins-procs','nagios-plugins-tcp','nagios-plugins-time','nagios-plugins-users','nagios-plugins-smtp','nagios-plugins-swap','nagios-plugins-log' ]:
-        ensure   => installed,
-        require  => Package['nagios-plugins'],
-      }
+	      package { 'nrpe_package':
+		ensure   => present,
+		name     => $nrpe_package,
+	      }
+	      package { 'nagios-plugins':
+		  ensure   => present,
+	      }
+	      package {
+	      [ 'nagios-plugins-mem','nagios-plugins-disk','nagios-plugins-dns','nagios-plugins-http','nagios-plugins-load','nagios-plugins-mailq','nagios-plugins-mysql','nagios-plugins-ntp_peer','nagios-plugins-ntp_time','nagios-plugins-procs','nagios-plugins-tcp','nagios-plugins-time','nagios-plugins-users','nagios-plugins-smtp','nagios-plugins-swap','nagios-plugins-log' ]:
+		ensure   => installed,
+		require  => Package['nagios-plugins'],
+	      }
 
-      service { 'nrpe':
-        ensure   => running,
-        enable   => true,
-        require  => Package['nrpe_package'],
-        alias    => 'nagios-nrpe-server',
-      }
-    }
+	      service { 'nrpe':
+		ensure   => running,
+		enable   => true,
+		require  => Package['nrpe_package'],
+		alias    => 'nagios-nrpe-server',
+	      }
+	    }
 
-    'Ubuntu': {
-      package { 'nrpe_package':
-        ensure   => present,
-        name     => 'nagios-nrpe-server'
-      }
-      package { 'libnagios-plugin-perl':
-        ensure   => present,
-      }
-      package { 'logaricheck':
-        ensure   => present,
-      }
-      package { 'nagios-plugins':
-          ensure   => present,
-      }
-      service { 'nagios-nrpe-server':
-        ensure   => running,
-        enable   => true,
-        require  => Package['nagios-nrpe-server'],
-      }
-    }
+	    'Ubuntu': {
+	      package { 'nrpe_package':
+		ensure   => present,
+		name     => 'nagios-nrpe-server'
+	      }
+	      package { 'libnagios-plugin-perl':
+		ensure   => present,
+	      }
+	      package { 'logaricheck':
+		ensure   => present,
+	      }
+	      package { 'nagios-plugins':
+		  ensure   => present,
+	      }
+	      service { 'nagios-nrpe-server':
+		ensure   => running,
+		enable   => true,
+		require  => Package['nagios-nrpe-server'],
+	      }
+	    }
 
-    default: {
-      fail('No supported operating system')
-  }
-}
-
-
+	    default: {
+	      fail('No supported operating system')
+	  }
+	}
 
 
-  file { '/usr/lib/nagios/plugins':
-      ensure   => directory,
-      source   => 'puppet:///modules/nagios/plugins',
-      recurse  => true,
-      purge    => false,
-      force    => true,
-      require  => Package['nagios-plugins'],
-  }
 
-  file { '/etc/nrpe.cfg':
-    ensure => 'link',
+
+	  file { '/usr/lib/nagios/plugins':
+	      ensure   => directory,
+	      source   => 'puppet:///modules/nagios/plugins',
+	      recurse  => true,
+	      purge    => false,
+	      force    => true,
+	      require  => Package['nagios-plugins'],
+	  }
+
+	  file { '/etc/nrpe.cfg':
+	    ensure => 'link',
     target => '/etc/nagios/nrpe.cfg',
   }
 
