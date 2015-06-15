@@ -114,7 +114,11 @@ event_broker_options=-1
 
 <% if @pnp4nagios == '1' %>
 <% if @operatingsystem =~ /OpenSuSE|SLES/ %>
+<% if @architecture =~ /x86_64/ %>
+broker_module=/usr/lib64/npcdmod.o config_file=/etc/pnp4nagios/npcd.cfg
+<% else %>
 broker_module=/usr/lib/npcdmod.o config_file=/etc/pnp4nagios/npcd.cfg
+<% end %>
 <% end %>
 <% if @operatingsystem == 'Ubuntu' %>
 broker_module=/usr/lib/pnp4nagios/npcdmod.o config_file=/etc/pnp4nagios/npcd.cfg
@@ -143,7 +147,7 @@ ocsp_command=submit_service_check
 ochp_command=submit_host_check
 obsess_over_services=1
 obsess_over_hosts=1
-<%   else %>
+<% else %>
 # ocsp_command=submit_service_check
 # ocsp_command=submit_host_check
 obsess_over_services=0
