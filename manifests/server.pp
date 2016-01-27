@@ -85,10 +85,7 @@ class nagios::server (
   $httpd_user         = 'wwwrun'
 ) {
 
-file {
-  [ '/tmp/nagios3',
-    '/etc/nagios',
-  ]:
+file {'/etc/nagios':
     ensure  => directory,
     force   => true,
 }
