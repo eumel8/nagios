@@ -10,3 +10,6 @@
 [submodule "files/plugins/remote/nagios-plugin-check_mem"]
 	path = files/plugins/remote/nagios-plugin-check_mem
 	url = https://github.com/justintime/nagios-plugins
+[submodule "files/plugins/remote/nagios-plugin-duply"]
+	path = files/plugins/remote/nagios-plugin-duply
+	url = https://github.com/feraudet/check_duply.git
