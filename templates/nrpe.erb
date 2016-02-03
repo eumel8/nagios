@@ -77,5 +77,10 @@ command[check_mongodb_query]=/usr/lib/nagios/plugins/remote/nagios-plugin-mongod
 # Nagios-ActiveMQ
 # files/plugins/remote/nagios-plugin-activemq/nagios/check_activemq.py
 command[check_activemq_queue]=/usr/lib/nagios/plugins/remote/nagios-plugin-activemq/nagios/check_activemq.py -H $ARG1$ -p $ARG2$ -U $ARG3$ -P $ARG4$ -T queues
+#
+## Nagios-Duply
+## duplycheck.py -w 10 -W 12 -c 7 -C 10 -P mongodb
+#command[check_duply]=/usr/lib/nagios/plugins/remote/nagios-plugin-duply/check_duply -w $ARG1$ -W $ARG2$ -c $ARG3$ -C $ARG4$ -P $ARG5$
+#
 ##########################################################################
 
