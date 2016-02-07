@@ -83,48 +83,21 @@ command[check_activemq_queue]=/usr/lib/nagios/plugins/remote/nagios-plugin-activ
 #command[check_duply]=/usr/lib/nagios/plugins/remote/nagios-plugin-duply/check_duply -w $ARG1$ -W $ARG2$ -c $ARG3$ -C $ARG4$ -P $ARG5$
 #
 ##########################################################################
-# nrpe checks for OPenStack
-command[check_nova_scheduler_proc]=/usr/lib/nagios/plugins/check_procs -w $ARG1$ -c $ARG2$ -a nova-scheduler
-command[check_nova_conductor_proc]=/usr/lib/nagios/plugins/check_procs -w $ARG1$ -c $ARG2$ -a nova-conductor
-command[check_nova_objectstore_proc]=/usr/lib/nagios/plugins/check_procs -w $ARG1$ -c $ARG2$ -a nova-objectstore
-command[check_nova_api_proc]=/usr/lib/nagios/plugins/check_procs -w $ARG1$ -c $ARG2$ -a nova-api
+# nrpe checks for OpenStack
 command[check_nova_api]=/usr/lib/nagios/plugins/remote/nagios-openstack-monitoring/check_nova_api --auth_url $ARG1$ --username $ARG2$ --tenant $ARG3$ --password $ARG4$ --req_count 1
-command[check_cinder_volume_proc]=/usr/lib/nagios/plugins/check_procs -w $ARG1$ -c $ARG2$ -a cinder-volume
-command[check_quantum_server_proc]=/usr/lib/nagios/plugins/check_procs -w $ARG1$ -c $ARG2$ -a quantum-server
 command[check_neutron_api]=/usr/lib/nagios/plugins/remote/nagios-openstack-monitoring/check_neutron_api --auth_url $ARG1$ --username $ARG2$ --tenant $ARG3$ --password $ARG4$ --req_count 1
-command[check_swift_proxy_server_proc]=/usr/lib/nagios/plugins/check_procs -w $ARG1$ -c $ARG2$ -a '/usr/bin/swift-proxy-server'
 command[check_swift_api]=/usr/lib/nagios/plugins/remote/nagios-openstack-monitoring/check_swift_api --auth_url $ARG1$ --username $ARG2$ --tenant $ARG3$ --password $ARG4$ --container_name $ARG5$
 command[check_swift_ring_md5]=/usr/lib/nagios/plugins/remote/nagios-openstack-monitoring/check_swift_object_servers
 command[check_swift_dispersion_report]=/usr/lib/nagios/plugins/remote/nagios-openstack-monitoring/check_swift_dispersion
 command[check_swift_du]=/usr/lib/nagios/plugins/remote/nagios-openstack-monitoring/check_swift_du -c $ARG2$ -w $ARG1$
-command[check_swift_account_server_proc]=/usr/lib/nagios/plugins/check_procs -w $ARG1$ -c $ARG2$ -a '/usr/bin/swift-account-server'
-command[check_swift_container_server_proc]=/usr/lib/nagios/plugins/check_procs -w $ARG1$ -c $ARG2$ -a '/usr/bin/swift-container-server'
-command[check_swift_object_server_proc]=/usr/lib/nagios/plugins/check_procs -w $ARG1$ -c $ARG2$ -a '/usr/bin/swift-object-server'
-command[check_keystone_proc]=/usr/lib/nagios/plugins/check_procs -w $ARG1$ -c $ARG2$ -C keystone-all
 command[check_keystone_api]=/usr/lib/nagios/plugins/remote/nagios-openstack-monitoring/check_keystone --auth_url $ARG1$ --username $ARG2$ --tenant $ARG3$ --password $ARG4$
-command[check_cinder_api_proc]=/usr/lib/nagios/plugins/check_procs -w $ARG1$ -c $ARG2$ -a cinder-api
-command[check_cinder_scheduler_proc]=/usr/lib/nagios/plugins/check_procs -w $ARG1$ -c $ARG2$ -a cinder-scheduler
 command[check_cinder_api]=/usr/lib/nagios/plugins/remote/nagios-openstack-monitoring/check_cinder_api --auth_url $ARG1$ --username $ARG2$ --tenant $ARG3$ --password $ARG4$ 
 command[check_cinder_scheduler_connectivity]=/usr/lib/nagios/plugins/remote/nagios-openstack-monitoring/check_cinder-scheduler.sh 
 command[check_kvm_instances]=/usr/lib/nagios/plugins/remote/nagios-openstack-monitoring/check_kvm_instance -s crashed
 command[check_kvm_memory]=/usr/lib/nagios/plugins/remote/nagios-openstack-monitoring/check_kvm_memstats -c $ARG2$ -w $ARG1$
 command[check_kvm_cpu]=/usr/lib/nagios/plugins/remote/nagios-openstack-monitoring/check_kvm_cpustats -c $ARG2$ -w $ARG1$
-command[check_quantum_agent_proc]=/usr/lib/nagios/plugins/check_procs -w $ARG1$ -c $ARG2$ -a quantum-plugin-openvswitch-agent
-command[check_nova_compute_proc]=/usr/lib/nagios/plugins/check_procs -w $ARG1$ -c $ARG2$ -a nova-compute
-command[check_nova_network_proc]=/usr/lib/nagios/plugins/check_procs -w $ARG1$ -c $ARG2$ -a nova-network
-command[check_nova_api_metadata_proc]=/usr/lib/nagios/plugins/check_procs -w $ARG1$ -c $ARG2$ -a nova-api-metadata
-command[check_quantum_agent_proc]=/usr/lib/nagios/plugins/check_procs -w $ARG1$ -c $ARG2$ -a quantum-plugin-openvswitch-agent
 command[check_nova_api]=/usr/lib/nagios/plugins/remote/nagios-openstack-monitoring/check_nova_api --auth_url $ARG1$ --username $ARG2$ --tenant $ARG3$ --password $ARG4$ --req_count 1
-command[check_glance_registry_proc]=/usr/lib/nagios/plugins/check_procs -w $ARG1$ -c $ARG2$ -a glance-registry
-command[check_glance_api_proc]=/usr/lib/nagios/plugins/check_procs -w $ARG1$ -c $ARG2$ -a glance-api
 command[check_glance_api]=/usr/lib/nagios/plugins/remote/nagios-openstack-monitoring/check_glance_api --auth_url $ARG1$ --username $ARG2$ --tenant $ARG3$ --password $ARG4$ --req_count 1
-command[check_quantum_agent_proc]=/usr/lib/nagios/plugins/check_procs -w $ARG1$ -c $ARG2$ -a quantum-openvswitch-agent
-command[check_quantum_metadata_agent_proc]=/usr/lib/nagios/plugins/check_procs -w $ARG1$ -c $ARG2$ -a quantum-metadata-agent
-command[check_quantum_dhcp_agent_proc]=/usr/lib/nagios/plugins/check_procs -w $ARG1$ -c $ARG2$ -a quantum-dhcp-agent
-command[check_quantum_l3_agent_proc]=/usr/lib/nagios/plugins/check_procs -w $ARG1$ -c $ARG2$ -a quantum-l3-agent
-
-command[check_heat_api_proc]=/usr/lib/nagios/plugins/check_procs -w $ARG1$ -c $ARG2$ -a heat-api
-command[check_heat_engine_proc]=/usr/lib/nagios/plugins/check_procs -w $ARG1$ -c $ARG2$ -a heat-engine
 command[check_heat_api]=/usr/lib/nagios/plugins/remote/nagios-openstack-monitoring/check_heat_api --auth_url $ARG1$ --username $ARG2$ --tenant $ARG3$ --password $ARG4$
 ############
 
