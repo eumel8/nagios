@@ -108,7 +108,7 @@ case $engine {
           package { 'nagios-www':
             ensure   => present,
           }
-          package { 'nagios-plugins-nrpe':
+          package { 'monitoring-plugins-nrpe':
             ensure   => present,
           }
           service { 'nagios':
@@ -442,7 +442,7 @@ case $engine {
         [ 'icinga-doc', 'icinga-www' ]:
           ensure  => installed,
         }
-        package { 'nagios-plugins-nrpe':
+        package { 'monitoring-plugins-nrpe':
           ensure   => present,
         }
         file {'/etc/icinga/apache2.conf':
