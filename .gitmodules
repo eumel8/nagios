@@ -13,3 +13,7 @@
 [submodule "files/plugins/remote/nagios-plugin-duply"]
 	path = files/plugins/remote/nagios-plugin-duply
 	url = https://github.com/feraudet/check_duply.git
+[submodule "files/plugins/remote/nagios-openstack-monitoring"]
+	path = files/plugins/remote/nagios-openstack-monitoring
+	url = https://github.com/eumel8/nagios-openstack-monitoring.git
+	branch = nrpe-plugins

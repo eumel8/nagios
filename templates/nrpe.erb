@@ -83,4 +83,21 @@ command[check_activemq_queue]=/usr/lib/nagios/plugins/remote/nagios-plugin-activ
 #command[check_duply]=/usr/lib/nagios/plugins/remote/nagios-plugin-duply/check_duply -w $ARG1$ -W $ARG2$ -c $ARG3$ -C $ARG4$ -P $ARG5$
 #
 ##########################################################################
+# nrpe checks for OpenStack
+command[check_nova_api]=/usr/lib/nagios/plugins/remote/nagios-openstack-monitoring/check_nova_api --auth_url $ARG1$ --username $ARG2$ --tenant $ARG3$ --password $ARG4$ --req_count 1
+command[check_neutron_api]=/usr/lib/nagios/plugins/remote/nagios-openstack-monitoring/check_neutron_api --auth_url $ARG1$ --username $ARG2$ --tenant $ARG3$ --password $ARG4$ --req_count 1
+command[check_swift_api]=/usr/lib/nagios/plugins/remote/nagios-openstack-monitoring/check_swift_api --auth_url $ARG1$ --username $ARG2$ --tenant $ARG3$ --password $ARG4$ --container_name $ARG5$
+command[check_swift_ring_md5]=/usr/lib/nagios/plugins/remote/nagios-openstack-monitoring/check_swift_object_servers
+command[check_swift_dispersion_report]=/usr/lib/nagios/plugins/remote/nagios-openstack-monitoring/check_swift_dispersion
+command[check_swift_du]=/usr/lib/nagios/plugins/remote/nagios-openstack-monitoring/check_swift_du -c $ARG2$ -w $ARG1$
+command[check_keystone_api]=/usr/lib/nagios/plugins/remote/nagios-openstack-monitoring/check_keystone --auth_url $ARG1$ --username $ARG2$ --tenant $ARG3$ --password $ARG4$
+command[check_cinder_api]=/usr/lib/nagios/plugins/remote/nagios-openstack-monitoring/check_cinder_api --auth_url $ARG1$ --username $ARG2$ --tenant $ARG3$ --password $ARG4$ 
+command[check_cinder_scheduler_connectivity]=/usr/lib/nagios/plugins/remote/nagios-openstack-monitoring/check_cinder-scheduler.sh 
+command[check_kvm_instances]=/usr/lib/nagios/plugins/remote/nagios-openstack-monitoring/check_kvm_instance -s crashed
+command[check_kvm_memory]=/usr/lib/nagios/plugins/remote/nagios-openstack-monitoring/check_kvm_memstats -c $ARG2$ -w $ARG1$
+command[check_kvm_cpu]=/usr/lib/nagios/plugins/remote/nagios-openstack-monitoring/check_kvm_cpustats -c $ARG2$ -w $ARG1$
+command[check_nova_api]=/usr/lib/nagios/plugins/remote/nagios-openstack-monitoring/check_nova_api --auth_url $ARG1$ --username $ARG2$ --tenant $ARG3$ --password $ARG4$ --req_count 1
+command[check_glance_api]=/usr/lib/nagios/plugins/remote/nagios-openstack-monitoring/check_glance_api --auth_url $ARG1$ --username $ARG2$ --tenant $ARG3$ --password $ARG4$ --req_count 1
+command[check_heat_api]=/usr/lib/nagios/plugins/remote/nagios-openstack-monitoring/check_heat_api --auth_url $ARG1$ --username $ARG2$ --tenant $ARG3$ --password $ARG4$
+############
 
