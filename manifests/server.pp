@@ -434,6 +434,15 @@ case $engine {
 
         $target = 'nagios'
 
+
+        user { 'nagios':
+          ensure => present,
+        }
+
+        group { "nagios":
+          ensure => present,
+        }
+
         package { 'icinga':
           ensure  => installed,
           alias   => 'nagios',
