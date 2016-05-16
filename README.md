@@ -133,6 +133,12 @@ Testing
 
 Developed for Ubuntu and OpenSUSE, will be expand. 
 
+required packages can be found in:
+
+    zypper addrepo http://download.opensuse.org/repositories/server:monitoring/openSUSE_13.2/server:monitoring.repo
+    zypper refresh
+
+
 
 Contributing
 ------------
