@@ -554,9 +554,16 @@ case $engine {
             force   => true,
             require => Package['pnp4nagios'],
           }
-          file {'/etc/apache2/conf.d/pnp4nagios.conf':
-            ensure  => 'link',
-            target  => '/etc/pnp4nagios/apache.conf',
+          if ($::operatingsystemrelease == '16.04') {
+            file {'/etc/apache2/conf-enabled/pnp4nagios.conf':
+              ensure  => 'link',
+              target  => '/etc/pnp4nagios/apache.conf',
+            }
+          } else {
+            file {'/etc/apache2/conf.d/pnp4nagios.conf':
+              ensure  => 'link',
+              target  => '/etc/pnp4nagios/apache.conf',
+            }
           }
         }
         exec { 'run_icingafile1_purger':
@@ -720,13 +727,19 @@ case $engine {
         content => template('nagios/twilio_voice_sh.erb'),
         mode    => '0755',
         force   => true;
+    }
 
-
-      '/etc/apache2/conf.d/icinga.conf':
-        ensure  => 'link',
+    if ($::operatingsystemrelease == '16.04') {
+      file { "/etc/apache2/conf-enabled/icinga.conf":
+        ensure  => link,
         target  => '/etc/icinga/apache2.conf',
-#        notify  => Service['apache2'];
       }
+    } else {
+      file { "/etc/apache2/conf.d/icinga.conf":
+        ensure  => link,
+        target  => '/etc/icinga/apache2.conf',
+      }
+    }
 
   }
   default: {
@@ -808,6 +821,10 @@ case $engine {
   }
 
   if ($pnp4nagios == 1) {
+
+    if ($::operatingsystemrelease == '16.04') {
+      warning('pnp4nagios is unsupported in Xenial. Please set pnp4nagios = 0 and refere to https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=821518 and https://launchpad.net/ubuntu/+source/pnp4nagios/+changelog')
+    }
 
     package { 'pnp4nagios':
       ensure  => present,
