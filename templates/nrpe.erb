@@ -22,6 +22,7 @@ command[check_load]=/usr/lib/nagios/plugins/check_load -w $ARG1$,$ARG2$,$ARG3$ -
 command[check_users]=/usr/lib/nagios/plugins/check_users -w $ARG1$ -c $ARG2$
 command[check_memory]=/usr/lib/nagios/plugins/check_mem -u -C -w $ARG1$ -c $ARG2$
 command[check_remotemem]=/usr/lib/nagios/plugins/remote/nagios-plugin-check_mem/check_mem/check_mem.pl -u -C -w $ARG1$ -c $ARG2$
+command[check_localmemory]=/usr/lib/nagios/plugins/local/check_memory -w $ARG1$ -c $ARG2$
 command[check_logarimem]=/usr/lib/nagios/plugins/check_logaricheck mem
 command[check_apt]=/usr/lib/nagios/plugins/check_apt
 command[check_conn]=/usr/lib/nagios/plugins/local/check_conn  -w $ARG1$ -c $ARG2$
