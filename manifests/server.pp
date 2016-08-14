@@ -554,13 +554,13 @@ case $engine {
             force   => true,
             require => Package['pnp4nagios'],
           }
-          if ($::operatingsystemrelease == '16.04') {
-            file {'/etc/apache2/conf-enabled/pnp4nagios.conf':
+          if ($::operatingsystemrelease == '12.04') {
+            file {'/etc/apache2/conf.d/pnp4nagios.conf':
               ensure  => 'link',
               target  => '/etc/pnp4nagios/apache.conf',
             }
           } else {
-            file {'/etc/apache2/conf.d/pnp4nagios.conf':
+            file {'/etc/apache2/conf-enabled/pnp4nagios.conf':
               ensure  => 'link',
               target  => '/etc/pnp4nagios/apache.conf',
             }
@@ -729,13 +729,13 @@ case $engine {
         force   => true;
     }
 
-    if ($::operatingsystemrelease == '16.04') {
-      file { "/etc/apache2/conf-enabled/icinga.conf":
+    if ($::operatingsystemrelease == '12.04') {
+      file { "/etc/apache2/conf.d/icinga.conf":
         ensure  => link,
         target  => '/etc/icinga/apache2.conf',
       }
     } else {
-      file { "/etc/apache2/conf.d/icinga.conf":
+      file { "/etc/apache2/conf-enabled/icinga.conf":
         ensure  => link,
         target  => '/etc/icinga/apache2.conf',
       }
