@@ -139,6 +139,17 @@ required packages can be found in:
     zypper refresh
 
 
+Hints for Ubuntu 16.04:
+
+- nagios-nrpe-server haven't support for command arguments anmore (https://bugs.launchpad.net/ubuntu/+source/nagios-nrpe/+bug/1555258)
+  workaround would recompile package with this option or use a ppa:
+
+    add-apt-repository -y ppa:richardmoe/ppa
+
+- icinga has another bug in the html source tree (https://bugs.launchpad.net/ubuntu/+source/icinga/+bug/1593319)
+  workaround is another ppa:
+
+    add-apt-repository -y ppa:nacc/lp1593319
 
 Contributing
 ------------
