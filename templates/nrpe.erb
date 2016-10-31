@@ -46,6 +46,7 @@ command[check_mysql]=/usr/lib/nagios/plugins/check_mysql -H $ARG1$ -P $ARG2$  -w
 command[check_mysql_replication]=/usr/lib/nagios/plugins/local/check_replication.pl -s $ARG1$ -m '$ARG2$' -u '$ARG3$' -p '$ARG4$'
 command[check_mysql_query]=/usr/lib/nagios/plugins/check_mysql_query -h $ARG1$ -P $ARG2$ -w $ARG3$ -c $ARG4$ -u '$ARG5$' -p '$ARG6$' -d '$ARG7$' -q '$ARG8$ $ARG9$ $ARG10$ $ARG11$ $ARG12$ $ARG13$'
 command[check_proc]=/usr/lib/nagios/plugins/check_procs -w $ARG1$ -c $ARG2$ -a '$ARG3$ $ARG4$ $ARG5$'
+command[check_proc_cmd_arg]=/usr/lib/nagios/plugins/check_procs -w $ARG1$ -c $ARG2$ -C '$ARG3$' -a '$ARG4$'
 command[check_proc_1arg]=/usr/lib/nagios/plugins/check_procs -w $ARG1$ -c $ARG2$ -a $ARG3$
 command[check_proc_cpu]=/usr/lib/nagios/plugins/check_procs -w $ARG1$ -c $ARG2$ --metric=CPU -C '$ARG3$'
 command[check_proc_user]=/usr/lib/nagios/plugins/check_procs -w $ARG1$ -c $ARG2$ -a $ARG3$ -u $ARG4$
