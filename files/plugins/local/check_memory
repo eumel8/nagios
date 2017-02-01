@@ -3,6 +3,7 @@
 # check_memory  -  Check free(1) data against given tresholds
 #
 # Copyright (C) 2007 Thomas Guyot-Sionnest <tguyot@gmail.com>
+# Copyright (C) 2017 Frank Kloeker <f.kloeker@t-online.de>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -105,12 +106,19 @@ open(RESULT, "$FREECMD -b |")
   or $np->nagios_exit('CRITICAL', "Could not run $FREECMD");
 
 warn("Output from $FREECMD:\n") if ($verbose > 1);
-my ($used, $free);
+my ($used, $free, $cached);
 while (<RESULT>) {
   warn("  $_") if ($verbose > 1);
-  next unless (m#^\-/\+\ buffers/cache:\s*(\d+)\s+(\d+)#);
-  $used = $1;
-  $free = $2;
+  if (m#^\-/\+\ buffers/cache:\s*(\d+)\s+(\d+)#) {
+    $used = $1;
+    $free = $2;
+  }
+  if (m#^Mem:\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)#) {
+    $used = $2;
+    $free = $3;
+    $cached = $5;
+    $free -= $cached;
+  }
 }
 
 close(RESULT);
