@@ -111,7 +111,7 @@ case $::operatingsystem {
 		ensure   => present,
 		name     => 'nagios-nrpe-server'
 	      }
-	      package { 'libnagios-plugin-perl':
+	      package { 'libmonitoring-plugin-perl':
 		ensure   => present,
 	      }
 	      package { 'logaricheck':
@@ -123,7 +123,7 @@ case $::operatingsystem {
 	      service { 'nagios-nrpe-server':
 		ensure   => running,
 		enable   => true,
-		require  => Package['nagios-nrpe-server'],
+		require  => Package['nrpe_package'],
 	      }
 	    }
 
