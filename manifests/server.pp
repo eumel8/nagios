@@ -839,7 +839,7 @@ case $engine {
       ensure  => directory,
       owner   => nagios,
       group   => nagios,
-      require => File ["/etc/${target}/nagios_host.cfg"];
+      require => File["/etc/${target}/nagios_host.cfg"];
     }
 
     file { ['/var/log/pnp4nagios', '/var/spool/pnp4nagios' ]:
