@@ -120,6 +120,9 @@ case $::operatingsystem {
 	      package { 'nagios-plugins':
 		  ensure   => present,
 	      }
+	      package { 'nagios-plugins-contrib':
+		  ensure   => present,
+	      }
 	      service { 'nagios-nrpe-server':
 		ensure   => running,
 		enable   => true,
