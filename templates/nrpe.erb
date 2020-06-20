@@ -39,6 +39,7 @@ command[check_http]=/usr/lib/nagios/plugins/check_http -I $ARG1$ -p $ARG2$ -w $A
 command[check_http_expect]=/usr/lib/nagios/plugins/check_http -I $ARG1$ -p $ARG2$ -w $ARG3$ -c $ARG4$ -u $ARG5$ -e $ARG6$
 command[check_http_regex]=/usr/lib/nagios/plugins/check_http -I $ARG1$ -p $ARG2$ -w $ARG3$ -c $ARG4$ -u $ARG5$ -r $ARG6$
 command[check_http_vhost]=/usr/lib/nagios/plugins/check_http -I $ARG1$ -H $ARG2$ -p $ARG3$ -w $ARG4$ -c $ARG5$ -u $ARG6$ -s $ARG7$
+command[check_http_vhost_ssl]=/usr/lib/nagios/plugins/check_http -I $ARG1$ -H $ARG2$ -p $ARG3$ -w $ARG4$ -c $ARG5$ -u $ARG6$ -s $ARG7$ --ssl
 command[check_http_type]=/usr/lib/nagios/plugins/check_http -I $ARG1$ -p $ARG2$ -w $ARG3$ -c $ARG4$ -u $ARG5$ -T $ARG6$
 command[check_http_ssl]=/usr/lib/nagios/plugins/check_http -I $ARG1$ -p $ARG2$ -w $ARG3$ -c $ARG4$ -u $ARG5$ --ssl
 command[check_http_cert]=/usr/lib/nagios/plugins/check_http -I $ARG1$ -p $ARG2$ -w $ARG3$ -c $ARG4$ -u $ARG5$ -C $ARG6$ --ssl
