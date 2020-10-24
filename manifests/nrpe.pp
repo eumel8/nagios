@@ -95,7 +95,7 @@ case $::operatingsystem {
 	      package {
 	      [ 'nagios-plugins-mem','nagios-plugins-disk','nagios-plugins-dns','nagios-plugins-http','nagios-plugins-load','nagios-plugins-mailq','nagios-plugins-mysql','nagios-plugins-ntp_peer','nagios-plugins-ntp_time','nagios-plugins-procs','nagios-plugins-tcp','nagios-plugins-time','nagios-plugins-users','nagios-plugins-smtp','nagios-plugins-swap','nagios-plugins-log' ]:
 		ensure   => installed,
-		require  => Package['nagios-plugins'],
+		require  => Package['monitoring-plugins'],
 	      }
 
 	      service { 'nrpe':
@@ -117,7 +117,7 @@ case $::operatingsystem {
 	      package { 'logaricheck':
 		ensure   => present,
 	      }
-	      package { 'nagios-plugins':
+	      package { 'monitoring-plugins':
 		  ensure   => present,
 	      }
 	      package { 'nagios-plugins-contrib':
