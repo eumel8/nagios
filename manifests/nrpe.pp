@@ -144,7 +144,7 @@ case $::operatingsystem {
 	      recurse  => true,
 	      purge    => false,
 	      force    => true,
-	      require  => Package['nagios-plugins'],
+	      require  => Package['monitoring-plugins'],
 	  }
 
 	  file { '/etc/nrpe.cfg':
